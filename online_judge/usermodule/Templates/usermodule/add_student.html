@@ -1,0 +1,9 @@
+<html>
+<body>
+  {{message}}
+    <form action="/usermodule/addstudent" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
+      <input type="file" name="studentfile" id="studentfile"/>
+      <button type="submit" value="upload">Upload</button>
+    </form>
+  </body>
+</html>

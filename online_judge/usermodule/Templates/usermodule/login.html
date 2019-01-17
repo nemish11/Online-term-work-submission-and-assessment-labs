@@ -1,0 +1,9 @@
+<html>
+<body>
+    <form action="/usermodule/auth" method = "POST" >{% csrf_token %}
+      <input type="text" name="username" id="username"/>
+      <input type="password" name="password" id="password"/>
+      <button type="submit" value="login">Login</button>
+    </form>
+  </body>
+</html>
