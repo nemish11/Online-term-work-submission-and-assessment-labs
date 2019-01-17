@@ -1,0 +1,72 @@
+-----------------------------------------------------1)usermodule----------------------------------------------------------------------------------------
+
+
+
+-----------------------------------------------------2)leaderboard----------------------------------------------------------------------------------------
+	
+	class leaderboard(models.Model):
+		
+
+
+-----------------------------------------------------3)profile---------------------------------------------------------------------------------------------
+
+	class Student(models.Model):
+		user = models.OneToOne(User,on_delete = models.CASCADE)
+		year = models.IntegerField()
+		roll_no = models.CharField(max_length = 20)
+		phone_no = models.CharField(max_length = 15)
+		dob = models.DateField()
+		
+	class Faculty(models.Model):
+		user = models.OneToOne(User,on_delete = models.CASCADE)
+		phone_no = models.CharField(max_length = 15)
+		is_active = models.BooleanField(default = True)
+		
+-----------------------------------------------------4)assignment-----------------------------------------------------------------------------------------
+
+	class Week(models.Model):
+		subject = models.ForeignKey(Subject,on_delete = models.CASCADE,related_name = 'week_subject')
+		name = models.CharField(max_length = 20)
+		is_locked = models.BooleanField(default = False) 
+	
+	class Assignment(models.Model):
+		week = models.ForeignKey(Week,on_delete = models.CASCADE,related_name = 'assignment_week')
+		title = models.CharField(max_length = 100)
+		question = models.CharFeild(max_length = 1000)
+		deadline = models.DateField()
+	
+	class Assignment_files(models.Model):
+		assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='assignmentfiles_assignment')
+    	type = models.CharField(max_length = 20)
+    	errortype = models.CharField(max_length=100,null=True)
+    	runtime = models.CharField(max_length=20,null=True)
+    	memoryused = models.CharField(max_length=20,null=True)
+		filepath = models.CharField(max_length = 100)
+	
+	class Submission(models.Model):
+		user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='submission_user')
+		assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='submission_assignment')
+		score = models.IntegerField()
+		status = models.CharField(max_length = 20)
+		
+	class Submission_files(models.Model):
+		submission = models.ForeignKey(submission, on_delete=models.CASCADE, related_name='submissionfiles_submission')
+    	type = models.CharField(max_length = 20)
+    	errortype = models.CharField(max_length=100,null=True)
+    	runtime = models.CharField(max_length=20,null=True)
+    	memoryused = models.CharField(max_length=20,null=True)
+		filepath = models.CharField(max_length = 100)
+
+-----------------------------------------------------------5)subject---------------------------------------------------------------------------------------
+	
+	class Subject(models.Model):
+		name = models.CharField(max_length = 50)
+		subject_code = models.CharField(max_length = 20)
+		 status = models.BooleanField(default = True)
+		 
+	class Request(models.Model):
+		faculty = models.ForeignKey(Faculty,on_delete = models.CASCADE,related_name = 'request_faculty')
+		student = models.ForeignKey(Student,on_delete = models.CASCADE,related_name = 'request_student')
+		subject = models.ForeignKey(Subject,on_delete = models.CASCADE,related_name = 'request_subject')
+		status = models.CharField(max_length = 15)
+			
