@@ -1,7 +1,7 @@
 {% extends "userprofile/base.html" %}
 {% block body%}
 <body>
-  student<br/>
+  role : student<br/>
   <a href = "/userprofile/updateStudent" >edit profile</a> <br/>
   username : {{request.user.username}}<br/>
   roll_no : {{request.user.student.roll_no}}<br/>
