@@ -1,4 +1,6 @@
-<html>
+{% extends "usermodule/base.html" %}
+{% block body%}
+
 <body>
   {{message}}
     <form action="/usermodule/addfaculty" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
@@ -6,4 +8,4 @@
       <button type="submit" value="upload">Upload</button>
     </form>
   </body>
-</html>
+{% endblock %}

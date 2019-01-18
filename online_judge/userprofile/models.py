@@ -7,9 +7,10 @@ class Student(models.Model):
     year = models.IntegerField()
     roll_no = models.CharField(max_length = 20)
     phone_no = models.CharField(max_length = 15)
-    dob = models.DateField()
+    dob = models.DateField(null=True,blank=True)
 
 class Faculty(models.Model):
     user = models.OneToOneField(User,on_delete = models.CASCADE)
     phone_no = models.CharField(max_length = 15)
+    dob = models.DateField(null=True,blank=True)
     is_active = models.BooleanField(default = True)

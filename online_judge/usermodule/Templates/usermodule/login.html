@@ -1,9 +1,75 @@
+{% load static %}
 <html>
-<body>
-    <form action="/usermodule/auth" method = "POST" >{% csrf_token %}
-      <input type="text" name="username" id="username"/>
-      <input type="password" name="password" id="password"/>
-      <button type="submit" value="login">Login</button>
-    </form>
+
+  <head>
+    <title>{% block title %} {% endblock %}</title>
+    <!--<link rel="icon" href="imageset/favicon.png">-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="{% static "css/materialize.min.css" %}" >
+
+    <script src="{% static "js/jquery-3.2.1.min.js" %}" ></script>
+    <script src="{% static "js/materialize.min.js" %}" ></script>
+
+    <script src="{% static "js/script.js" %}"></script>
+  </head>
+
+  <body>
+
+    <nav>
+		<div class="nav-wrapper teal">
+			<a href="#" class="brand-logo">Online Judge</a>
+			<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+  			<!--	<li><a href="#">Home</a></li>
+  				<li><a href="#">News</a></li>
+  				<li><a href="#">Contact us</a></li>
+  				<li><a href="#">About us</a></li>
+  				<li><a href="#">FAQ</a></li> -->
+  			</ul>
+			<ul class="side-nav" id="mobile-demo">
+        <!--<li><a href="#">Home</a></li>
+        <li><a href="#">News</a></li>
+        <li><a href="#">Contact us</a></li>
+        <li><a href="#">About us</a></li>
+        <li><a href="#">FAQ</a></li>-->
+			</ul>
+		</div>
+  	</nav>
+
+    <div class="container center-align">
+      <h1>Login</h1>
+
+       <h5>
+         {% if messages %}
+           {% for message in messages %}
+
+               {{ message }}
+               <br/>
+           {% endfor %}
+         {% endif %}
+      </h5>
+			<div class="row">
+				<form action="/usermodule/auth" method="POST" class="col s12">{% csrf_token %}
+					<div class="row">
+						<div class="input-field col s6 offset-s3">
+							<i class="material-icons prefix">account_circle</i>
+		        	<input type="text" name="username" id="username" class="validate">
+							<label for="username">Username</label>
+						</div>
+						<div class="input-field col s6 offset-s3">
+							<i class="material-icons prefix">vpn_key</i>
+							<input type="password" name="password" class="validate" id="password">
+							<label for="password">Password</label>
+						</div>
+						<div class="input-field col s6 offset-s3">
+		        	<button type="submit" class="btn">Login</button>
+						</div>
+					</div>
+      	</form>
+			</div>
+    </div>
   </body>
 </html>

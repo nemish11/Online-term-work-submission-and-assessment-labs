@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
+from userprofile.models import Faculty,Student
 
 def login(request):
     try:
@@ -39,7 +40,8 @@ def auth_view(request):
                 return render(request,'usermodule/index.html')
             return HttpResponseRedirect('/subject/')
         else:
-            return HttpResponseRedirect('/loginmodule/login')
+            messages.add_message(request, messages.WARNING, 'Incorect Username or Password')
+            return HttpResponseRedirect('/usermodule/login')
     except:
         return render(request,'usermodule/login.html')
 
@@ -48,7 +50,7 @@ def logout(request):
 		auth.logout(request)
 	messages.add_message(request, messages.INFO, 'You are Successfully Logged Out')
 	messages.add_message(request, messages.INFO, 'Thanks for visiting.')
-	return HttpResponseRedirect('/loginmodule/login/')
+	return HttpResponseRedirect('/usermodule/login/')
 
 def add_faculty(request):
     return render(request,'usermodule/add_faculty.html')
@@ -83,6 +85,9 @@ def addfaculty(request):
                 password = data['password'][i]
                 faculty = User.objects.create_user(username=username,password=password)
                 faculty.save()
+                faculty.faculty = Faculty(is_active = True)
+                faculty.faculty.save()
+
             c['message'] = "User Added Successfully"
             return render(request, 'usermodule/add_faculty.html', c)
     except:
@@ -118,10 +123,12 @@ def addstudent(request):
                 roll_no = data['roll_no'][i]
                 year = data['year'][i]
                 student = User.objects.create_user(username = username, password = password)
-                student.student = Student(roll_no = roll_no, year = year)
                 student.save()
+                student.student = Student(roll_no = roll_no, year = int(year))
+                student.student.save()
+
             c['message'] = "User Added Successfully"
             return render(request, 'usermodule/add_student.html', c)
     except:
-        c['message'] = "Exception Occured"
-        return render(request, 'usermodule/add_student.html', c)
+            c['message'] = "Exception Occured"
+            return render(request, 'usermodule/add_student.html', c)
