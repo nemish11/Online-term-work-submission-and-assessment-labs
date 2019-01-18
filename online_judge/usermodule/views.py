@@ -5,11 +5,12 @@ from django.contrib import auth
 from django.template.context_processors import csrf
 from django.contrib import messages
 import pandas as pd
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
 from userprofile.models import Faculty,Student
+import datetime
 
 def login(request):
     try:
@@ -85,8 +86,12 @@ def addfaculty(request):
                 password = data['password'][i]
                 faculty = User.objects.create_user(username=username,password=password)
                 faculty.save()
-                faculty.faculty = Faculty(is_active = True)
+                faculty.faculty = Faculty(is_active = True,dob=datetime.date.today())
                 faculty.faculty.save()
+
+                group = Group.objects.get(name='faculty')
+                group.user_set.add(faculty)
+                group.save()
 
             c['message'] = "User Added Successfully"
             return render(request, 'usermodule/add_faculty.html', c)
@@ -97,38 +102,40 @@ def addfaculty(request):
 
 def addstudent(request):
     c = {}
-    try:
-        if not request.user.is_superuser:
-            return HttpResponseRedirect('/admin/')
-        else:
-            csv_file = request.FILES["studentfile"]
-            if not csv_file.name.endswith('.csv'):
-                c['message'] = "please upload .csv file"
-                return render(request, 'usermodule/add_student.html', c)
-
-            if csv_file.multiple_chunks():
-                c['message'] = "File is Too large!"
-                return render(request, 'usermodule/add_student.html', c)
-
-            data = pd.read_csv(csv_file, names=['username', 'password','roll_no','year'])
-            x, y = data.shape
-
-            if y != int(4):
-                c['message'] = "File Format is not correct"
-                return render(request, 'usermodule/add_student.html', c)
-
-            for i in range(x):
-                username = data['username'][i]
-                password = data['password'][i]
-                roll_no = data['roll_no'][i]
-                year = data['year'][i]
-                student = User.objects.create_user(username = username, password = password)
-                student.save()
-                student.student = Student(roll_no = roll_no, year = int(year))
-                student.student.save()
-
-            c['message'] = "User Added Successfully"
+    if not request.user.is_superuser:
+        return HttpResponseRedirect('/admin/')
+    else:
+        csv_file = request.FILES["studentfile"]
+        if not csv_file.name.endswith('.csv'):
+            c['message'] = "please upload .csv file"
             return render(request, 'usermodule/add_student.html', c)
-    except:
-            c['message'] = "Exception Occured"
+
+        if csv_file.multiple_chunks():
+            c['message'] = "File is Too large!"
             return render(request, 'usermodule/add_student.html', c)
+
+        data = pd.read_csv(csv_file, names=['username', 'password','roll_no','year'])
+        x, y = data.shape
+
+        if y != int(4):
+            c['message'] = "File Format is not correct"
+            return render(request, 'usermodule/add_student.html', c)
+
+        for i in range(x):
+            username = data['username'][i]
+            password = data['password'][i]
+            roll_no = data['roll_no'][i]
+            year = data['year'][i]
+            student = User.objects.create_user(username = username, password = password)
+            student.save()
+            student.student = Student(roll_no = roll_no, year = int(year),dob = datetime.date.today())
+            student.student.save()
+            group = Group.objects.get(name='student')
+            group.user_set.add(student)
+            group.save()
+
+        c['message'] = "User Added Successfully"
+        return render(request, 'usermodule/add_student.html', c)
+
+        c['message'] = "Exception Occured"
+        return render(request, 'usermodule/add_student.html', c)

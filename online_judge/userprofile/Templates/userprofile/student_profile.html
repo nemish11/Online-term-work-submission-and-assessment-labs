@@ -1,0 +1,15 @@
+{% extends "userprofile/base.html" %}
+{% block body%}
+<body>
+  student<br/>
+  <a href = "/userprofile/updateStudent" >edit profile</a> <br/>
+  username : {{request.user.username}}<br/>
+  roll_no : {{request.user.student.roll_no}}<br/>
+  year : {{request.user.student.year}}<br/>
+  first_name : {{request.user.first_name}}<br/>
+  last_name : {{request.user.last_name}}<br/>
+  date of birth : {{request.user.student.dob}}<br/>
+  emailId : {{request.user.email}}<br/>
+  phone_no : {{request.user.student.phone_no}}<br/>
+</body>
+{% endblock %}

@@ -25,12 +25,14 @@ class Assignment_files(models.Model):
 class Submission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='submission_user')
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='submission_assignment')
-    score = models.IntegerField()
-    status = models.CharField(max_length = 20)
+    totalscore = models.IntegerField()
+    datetime = models.DateTimeField(null=True,blank=True)
+    isrunning = models.CharField(max_length = 20)
 
 class Submission_files(models.Model):
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE, related_name='submissionfiles_submission')
     type = models.CharField(max_length = 20)
+    score = models.IntegerField()
     errortype = models.CharField(max_length=100,null=True)
     runtime = models.CharField(max_length=20,null=True)
     memoryused = models.CharField(max_length=20,null=True)
