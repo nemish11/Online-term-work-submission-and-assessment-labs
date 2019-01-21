@@ -1,0 +1,11 @@
+{% extends "usermodule/base.html" %}
+{% block body%}
+
+<body>
+  {{message}}
+    <form action="/usermodule/addfaculty" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
+      <input type="file" name="facultyfile" id="facultyfile"/>
+      <button type="submit" value="upload">Upload</button>
+    </form>
+  </body>
+{% endblock %}

@@ -59,7 +59,9 @@ ROOT_URLCONF = 'online_judge.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'usermodule/Templates'),os.path.join(BASE_DIR,'subject/Templates'),
+                os.path.join(BASE_DIR,'userprofile/Templates'), os.path.join(BASE_DIR,'assignment/Templates'),
+                os.path.join(BASE_DIR,'leaderboard/Templates') ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,8 +82,12 @@ WSGI_APPLICATION = 'online_judge.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'online_judge',
+        'USER':'root',
+        'PASSWORD':'',
+        'HOST' : '127.0.0.1',
+        'PORT' : '3306'
     }
 }
 

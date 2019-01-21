@@ -1,0 +1,11 @@
+{% extends "userprofile/base.html" %}
+{% block body%}
+<body>
+  role : Admin<br/>
+  <a href = "/userprofile/updateAdmin" >edit profile</a> <br/>
+  username : {{request.user.username}}<br/>
+  first_name : {{request.user.first_name}}<br/>
+  last_name : {{request.user.last_name}}<br/>
+  emailId : {{request.user.email}}<br/>
+</body>
+{% endblock %}
