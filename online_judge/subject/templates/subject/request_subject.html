@@ -1,0 +1,21 @@
+{% extends "subject/base.html" %}
+{% block body %}
+<div >
+    {% if hasgroup(request.user,'student') %}
+
+        <form action="/subject/pending_request" method="POST" class="col s12"> {% csrf_token %}
+            <select name="subject" id="subject">
+            {% for s in sub_list %}
+                <option value="{{ s.pk }}">{{ s.name }}</option>
+            {% endfor %}
+            <select name="faculty" id="faculty">
+            {% for f in faculty %}
+                <option value="{{ f.pk }}">{{ f.user.name }}</option>
+            {% endfor %}
+            <button type="submit" class="btn">Request</button>
+        </form>
+    {% endif %}
+
+</div>
+
+{% endblock %}
