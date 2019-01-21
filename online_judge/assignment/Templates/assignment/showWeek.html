@@ -1,0 +1,36 @@
+{% extends "assignment/base.html" %}
+{% block body%}
+
+hhee<br/>
+<script>
+  $(document).ready( function(){
+    $("#addweek").click(function(){
+      $("#add_week").html('<form action="/assignment/addweek" method = "POST"> {% csrf_token %} Enter a week Name : <input type="text" id="weekname" name="weekname"/><button type="submit">Add</button></form>');
+      $("#addweek").remove();
+    });
+  });
+</script>
+
+ All week of C subject <br/>
+ <ul class="collapsible">
+   {% for week in all_week %}
+    <li>
+      <div class="collapsible-header"><i class="material-icons"> {{week.name}} </i></div>
+      <div class="collapsible-body">
+          {% for assignment in all_assignment %}
+            {% ifequal assignment.week.id week.id %}
+              <a href = "/assignment/showAssignment/?id={{assignment.id}}" >{{assignment.title}} </a><br/>
+            {% endifequal %}
+          {% endfor %}
+
+          <a href="assignment/new_assignment" > add new </a>
+      </div>
+    </li>
+    {% endfor %}
+    <li>
+      <div class="collapsible-header"><i class="material-icons">Addweek</i></div>
+      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+    </li>
+  </ul>
+
+{% endblock %}

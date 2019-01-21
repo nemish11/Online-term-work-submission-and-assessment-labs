@@ -118,7 +118,7 @@ def addstudent(request):
         x, y = data.shape
 
         if y != int(4):
-            c['message'] = "File Format is not correct"
+            c['message'] = "File Format is not Correct"
             return render(request, 'usermodule/add_student.html', c)
 
         for i in range(x):

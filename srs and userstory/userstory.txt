@@ -64,18 +64,3 @@ User stories:
 23) Student can take part in any live contest.
 
 24) Student can start virtual contest at any time.
-
-02 Jan 2019 comments:
-You need to put date against each story in p0 and p1 priority, by that date implementation of that story should be complete
-You need to be ready with the SRS by next lab
-All these changes should be reflected in this document only. So you can clone this repo, create new branch, push it to remote repo and start new pull request.
-By next reporting (16th Jan) you should have one or two stories implemented.
-SRS document should be updated under srs_doc directory which is under parent of your project file in this repo
-
-16 Jan 2019 comments:
-SRS completed.
-Send Pull request to add SRS to master on origin
-No stories completed by date. By next week 2-3 stories should be completed.
-Backend APIs for following functionalities are ready.
-Compile, run, other stats
-Very good progress!

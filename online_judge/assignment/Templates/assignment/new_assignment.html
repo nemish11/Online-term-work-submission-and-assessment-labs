@@ -1,0 +1,12 @@
+{% extends "assignment/base.html" %}
+{% block body%}
+  enter a questions : <br/>
+  <body>
+      <form action="/assignment/newassignment" method = "POST">{% csrf_token %}
+        <input type="text" name="title" id="title"/>
+        <input type="text" name="question" id="question" />
+        <input type="number" name="total_inputfiles" id="total_inputfiles" />
+        <button type="submit">submit</button>
+      </form>
+   </body>
+{% endblock %}
