@@ -1,7 +1,16 @@
 {% extends "subject/base.html" %}
 {% block body %}
 <div >
-    {% if request.user.has_Group('faculty') %}
+    <div class="col s8 m8 l8 ">
+        {% if messages %}
+            {% for m in messages %}
+                    <script>
+						Materialize.toast('{{ m }}', 3000);
+					</script>
+            {% endfor %}
+        {% endif%}
+    </div>
+    {% if role == 'faculty'%}
 
         <form action="/subject/approved_request" method="POST" class="col s12"> {% csrf_token %}
 
@@ -17,7 +26,7 @@
                 {% for r in req_list %}
                     <tr>
                         <td><input type="hidden" value={{ r.pk }} name="id">$</td>
-                        <td>{{ r.student.user,name }}</td>
+                        <td>{{ r.student.user }}</td>
                         <td>{{ r.subject.name }}</td>
                         <td>
                             <button type="submit" class="btn" name="status" value="approved">Approved</button>
@@ -27,6 +36,7 @@
                     </tr>
                 {% endfor %}
             </tbody>
+            </table>
        </form>
     {% endif %}
 

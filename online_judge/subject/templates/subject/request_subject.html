@@ -1,18 +1,65 @@
 {% extends "subject/base.html" %}
 {% block body %}
-<div >
-    {% if hasgroup(request.user,'student') %}
 
+
+<div class="row container">
+    <div class="col s8 m8 l8 ">
+        {% if messages %}
+            {% for m in messages %}
+                    <script>
+						Materialize.toast('{{ m }}', 3000);
+					</script>
+            {% endfor %}
+        {% endif%}
+    </div>
+    {% if role == "student" %}
         <form action="/subject/pending_request" method="POST" class="col s12"> {% csrf_token %}
-            <select name="subject" id="subject">
-            {% for s in sub_list %}
+          <!--  <select class="dropdown" name="subject" id="subject">
+            {% for s in req_subject %}
                 <option value="{{ s.pk }}">{{ s.name }}</option>
             {% endfor %}
+            </select>
             <select name="faculty" id="faculty">
             {% for f in faculty %}
                 <option value="{{ f.pk }}">{{ f.user.name }}</option>
             {% endfor %}
+            </select>
             <button type="submit" class="btn">Request</button>
+
+
+
+
+        <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>Subject</a>
+
+        <ul id='dropdown1' class='dropdown-content'>
+            {% for s in req_subject %}
+            <li><a href="#!">{{ s.name }}</a></li>
+            {% endfor %}
+        </ul>-->
+            <div class="row">
+            <div class="col s12 m6 l6 left">
+                {% for s in req_subject %}
+                <p>
+                    <label>
+                        <input class="with-gap" name="subject" type="radio"  value="{{ s.pk }}"/>
+                        <span>{{ s.name }}</span>
+                    </label>
+                </p>
+
+                {% endfor %}
+            </div>
+            <div class="col s12 m6 l6 right">
+                {% for f in faculty_list %}
+                <p>
+                    <label>
+                        <input class="with-gap" name="faculty" type="radio" value="{{ f.pk }}" />
+                        <span>{{ f.user }}</span>
+                    </label>
+                </p>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn">Request</button>
+            </div>
         </form>
     {% endif %}
 
