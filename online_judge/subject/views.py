@@ -40,6 +40,7 @@ def add_subject(request):
 def addsubject(request):
     if request.user.is_superuser:
         name = request.POST.get("name")
+        print("okrokad  ")
         subject_code = request.POST.get("subject_code")
         s = Subject(name=name, subject_code=subject_code,status=True)
         s.save()
@@ -61,7 +62,7 @@ def removesubject(request):
         name = request.POST.get("name")
         subject_code = request.POST.get("subject_code")
         Subject.objects.filter(name=name, subject_code=subject_code).update(status=False)
-        return render(request, 'subject/all_subject.html')
+        return HttpResponseRedirect('/subject/all_subject')
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/all_subject')
