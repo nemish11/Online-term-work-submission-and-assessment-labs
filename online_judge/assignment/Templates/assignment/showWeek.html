@@ -1,7 +1,5 @@
 {% extends "assignment/base.html" %}
 {% block body%}
-
-hhee<br/>
 <script>
   $(document).ready( function(){
     $("#addweek").click(function(){
@@ -19,18 +17,31 @@ hhee<br/>
       <div class="collapsible-body">
           {% for assignment in all_assignment %}
             {% ifequal assignment.week.id week.id %}
-              <a href = "/assignment/showAssignment/?id={{assignment.id}}" >{{assignment.title}} </a><br/>
+             <form action = "/assignment/showAssignment" method="POST" > {% csrf_token %}
+              <div class = "row" >
+                <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
+                <button type="submit" name="button">{{assignment.title}}</button>
+              </div>
+              </form>
             {% endifequal %}
           {% endfor %}
 
-          <a href="assignment/new_assignment" > add new </a>
+      {% ifequal usertype faculty %}
+      <form action="/assignment/new_assignment" method="post">{% csrf_token %}
+            <input type="hidden" name="weekid" value="{{week.id}}">
+            <button type="submit" name="button">add new</button>
+      </form>
+      {% endifequal %}
       </div>
     </li>
     {% endfor %}
+
+    {% ifequal usertype faculty %}
     <li>
       <div class="collapsible-header"><i class="material-icons">Addweek</i></div>
       <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
     </li>
+    {% endifequal %}
   </ul>
 
 {% endblock %}

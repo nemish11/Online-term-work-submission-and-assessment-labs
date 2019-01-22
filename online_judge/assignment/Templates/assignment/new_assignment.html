@@ -1,10 +1,13 @@
 {% extends "assignment/base.html" %}
 {% block body%}
+  {{week.name}}<br/>
   enter a questions : <br/>
   <body>
-      <form action="/assignment/newassignment" method = "POST">{% csrf_token %}
+      <form action="/assignment/newassignment" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
+        <input type="hidden" name="weekid" value="{{week.id}}" />
         <input type="text" name="title" id="title"/>
         <input type="text" name="question" id="question" />
+        <input type="file" name="codefile" id="codefile" />
         <input type="number" name="total_inputfiles" id="total_inputfiles" />
         <button type="submit">submit</button>
       </form>

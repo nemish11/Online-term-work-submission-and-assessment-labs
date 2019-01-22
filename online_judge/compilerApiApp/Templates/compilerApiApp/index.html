@@ -1,0 +1,25 @@
+{% extends "assignment/base.html" %}
+{% block body%}
+  <style>
+    textarea {
+        width:600px;
+        height: 400px;
+          }
+  </style>
+  <body>
+    <form action="/compilerApiApp/submitcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
+      Enter a your name : <input type="text" name="username" required/><br/><br/>
+      Enter a language : <input type="text" name="language" required/><br/><br/>
+      Upload input file : <input type="file" name = "inputfile_1" required/><br/><br/>
+      Upload input file : <input type="file" name = "inputfile_2" required/><br/><br/>
+      Upload input file : <input type="file" name = "inputfile_3" required/><br/><br/>
+      Enter a Code : <textarea name = "code"> </textarea><br/><br/>
+      <button type="submit">submit</button>
+    </form>
+    message is : {{message}}<br/>
+    time : {{time_taken}}<br/>
+    memory : {{memory_used}}<br/>
+    code is : {{code}}<br/>
+
+  </body>
+{% endblock %}

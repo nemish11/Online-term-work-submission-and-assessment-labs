@@ -1,5 +1,18 @@
 {% extends "assignment/base.html" %}
 {% block body%}
-Title :{{title}}<br/>
-question is : {{question}}
+<style>
+  textarea {
+      width:600px;
+      height: 400px;
+        }
+</style>
+
+  Title :{{assignment.title}}<br/>
+  question is : {{assignment.question}} </br> </br>
+ <form action = "/assignment/submitcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
+   <input type = "hidden" name="assignmentid" value="{{assignment.id}}" />
+   Enter a Code : <br/><br/>
+   <textarea name = "code"> </textarea><br/>
+   <button type="submit"> submit </button>
+ </form>
 {% endblock %}
