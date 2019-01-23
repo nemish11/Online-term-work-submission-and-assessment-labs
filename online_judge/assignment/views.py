@@ -16,6 +16,7 @@ import datetime
 import subprocess,threading,os,shutil
 from multiprocessing import Pool
 from online_judge.settings import *
+from compilerApiApp.views import submit_code
 
 def showWeek(request):
     c={}
@@ -138,4 +139,29 @@ def submitcode(request):
     c = {}
     c['assignment'] = assignment
     c['subject'] = subject
-    return HttpResponseRedirect('/compilerApiApp/submitcode/',c)
+
+    total_inputfiles = assignment.total_inputfiles
+    total_inputfiles = int(total_inputfiles)
+
+    inputfiles = ["" for i in range(total_inputfiles)]
+    outputfiles = ["" for i in range(total_inputfiles)]
+    errorfiles = ["" for i in range(total_inputfiles)]
+    errortypes = ["" for i in range(total_inputfiles)]
+    runtimes = ["" for i in range(total_inputfiles)]
+    memoryused = ["" for i in range(total_inputfiles)]
+
+    for i in range(0,int(total_inputfiles)):
+        inputfiles[i] = 'assignment/all_files/all_assignment/assignment_'+str(assignment.id)+'/inputfile_'+str(i+1)+".txt"
+
+    username = request.user.username
+    language = 'C'
+
+    output = submit_code(request,inputfiles,outputfiles,username,language,code,total_inputfiles,errorfiles,errortypes,runtimes,memoryused)
+
+    c['outputfiles'] = outputfiles
+    c['errortypes'] = errortypes
+    c['errorfiles'] = errorfiles
+    c['runtimes'] = runtimes
+    c['memoryused'] = memoryused
+
+    return render(request,'assignment/showAssignment.html',c)
