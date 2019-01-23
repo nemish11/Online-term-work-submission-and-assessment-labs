@@ -10,8 +10,10 @@ class Week(models.Model):
 
 class Assignment(models.Model):
     week = models.ForeignKey(Week,on_delete = models.CASCADE,related_name = 'assignment_week')
+    subject = models.ForeignKey(Subject,on_delete = models.CASCADE,related_name = 'assignment_subject',null=True,blank=True)
     title = models.CharField(max_length = 100)
     question = models.CharField(max_length = 1000)
+    total_inputfiles = models.IntegerField(null=True)
     deadline = models.DateField()
 
 class Assignment_files(models.Model):

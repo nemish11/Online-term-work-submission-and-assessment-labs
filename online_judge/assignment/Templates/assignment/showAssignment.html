@@ -1,0 +1,28 @@
+{% extends "assignment/base.html" %}
+{% block body%}
+<style>
+  textarea {
+      width:300px;
+      height: 200px;
+        }
+</style>
+
+  Title :{{assignment.title}}<br/>
+  question is : {{assignment.question}} </br> </br>
+ <form action = "/assignment/submitcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
+   <input type = "hidden" name="assignmentid" value="{{assignment.id}}" />
+   Enter a Code : <br/><br/>
+   <textarea name = "code"> </textarea><br/>
+   <button type="submit"> submit </button>
+ </form>
+  <h2>OUTPUTS :</h2>
+  RUNTIME:
+  {% for o in runtimes %}
+     {{o}}
+  {% endfor %}
+  memoryused :
+  {% for e in errortypes %}
+     {{e}}
+  {% endfor %}
+  
+{% endblock %}

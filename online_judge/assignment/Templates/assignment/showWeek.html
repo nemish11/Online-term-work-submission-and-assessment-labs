@@ -1,0 +1,47 @@
+{% extends "assignment/base.html" %}
+{% block body%}
+<script>
+  $(document).ready( function(){
+    $("#addweek").click(function(){
+      $("#add_week").html('<form action="/assignment/addweek" method = "POST"> {% csrf_token %} Enter a week Name : <input type="text" id="weekname" name="weekname"/><button type="submit">Add</button></form>');
+      $("#addweek").remove();
+    });
+  });
+</script>
+
+ All week of C subject <br/>
+ <ul class="collapsible">
+   {% for week in all_week %}
+    <li>
+      <div class="collapsible-header"><i class="material-icons"> {{week.name}} </i></div>
+      <div class="collapsible-body">
+          {% for assignment in all_assignment %}
+            {% ifequal assignment.week.id week.id %}
+             <form action = "/assignment/showAssignment" method="POST" > {% csrf_token %}
+              <div class = "row" >
+                <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
+                <button type="submit" name="button">{{assignment.title}}</button>
+              </div>
+              </form>
+            {% endifequal %}
+          {% endfor %}
+
+      {% ifequal usertype faculty %}
+      <form action="/assignment/new_assignment" method="post">{% csrf_token %}
+            <input type="hidden" name="weekid" value="{{week.id}}">
+            <button type="submit" name="button">add new</button>
+      </form>
+      {% endifequal %}
+      </div>
+    </li>
+    {% endfor %}
+
+    {% ifequal usertype faculty %}
+    <li>
+      <div class="collapsible-header"><i class="material-icons">Addweek</i></div>
+      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+    </li>
+    {% endifequal %}
+  </ul>
+
+{% endblock %}

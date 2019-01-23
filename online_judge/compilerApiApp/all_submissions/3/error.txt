@@ -1,0 +1,3 @@
+/media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/compilerApiApp/all_submissions/3/codefile_3.cpp:1:2: error: ‘Submissions_all_files’ does not name a type
+  Submissions_all_files
+  ^~~~~~~~~~~~~~~~~~~~~
