@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import render,render_to_response
+from django.template.context_processors import csrf
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -7,9 +8,12 @@ from django.contrib import messages
 from .models import *
 from userprofile.models import Faculty, Student
 
+
+
 @login_required()
 def all_subject(request):
-    try:
+    '''try:
+        print(request.user)
         if request.user.is_superuser :
             rmlist=[]
             subject_list=[]
@@ -22,15 +26,37 @@ def all_subject(request):
             subject_list = Subject.objects.filter(status=True)
             return render(request, 'subject/all_subject.html', {'subject_list': subject_list,'role':"faculty"})
         elif request.user.groups.all()[0].name == 'student':
-            print("okrokad")
+            #print("okrokad")
+            print("above student")
             s=Student.objects.get(user=request.user)
+            print("above aubject list")
             subject_list = Request.objects.filter(student=s,status="approved")
             print(subject_list)
-            return render(request,'subject/all_subject.html', {'subject_list': subject_list,'role':"student"})
+            return render(request, 'subject/all_subject.html', {'subject_list': subject_list,'role':"student"})
         else:
             return HttpResponseRedirect('/usermodule/')
     except:
-        return render(request,'subject/all_subject.html', {'subject_list': None})
+        print("in except")
+        return render(request,'subject/all_subject.html', {'subject_list': None})'''
+    if request.user.is_superuser:
+        rmlist = []
+        subject_list = []
+        subject = Subject.objects.all()
+        for s in subject:
+            if s.status == 1:
+                subject_list.append(s)
+            else:
+                rmlist.append(s)
+        return render(request, 'subject/all_subject.html', {'subject_list': subject_list, 'remove_list': rmlist})
+    elif request.user.groups.all()[0].name == 'faculty':
+        subject_list = Subject.objects.filter(status=True)
+        return render(request, 'subject/all_subject.html', {'subject_list': subject_list, 'role': "faculty"})
+    elif request.user.groups.all()[0].name == 'student':
+        s = Student.objects.get(user=request.user)
+        subject_list = Request.objects.filter(student=s, status="approved")
+        return render(request, 'subject/all_subject.html', {'subject_list': subject_list, 'role': "student"})
+    else:
+        return HttpResponseRedirect('/usermodule/')
 
 @login_required()
 def add_subject(request):
@@ -74,6 +100,10 @@ def removesubject(request):
 @login_required()
 def request_subject(request):
     #print(request.user.groups.all())
+    if request.user.is_superuser:
+        messages.add_message(request, messages.WARNING, 'You are not authorized!!')
+        return HttpResponseRedirect('/subject/all_subject')
+
     if request.user.groups.all()[0].name == 'student':
         subjects=Subject.objects.filter(status=True)
         #print(subjects)
@@ -97,7 +127,7 @@ def request_subject(request):
             else:block_list.append(r)
 
 
-        sub_list=[]
+        sub_list = []
         if r_subject is None:
             sub_list=subjects
         else:
@@ -112,18 +142,41 @@ def request_subject(request):
 def pending_request(request):
     f = request.POST.get('faculty')
     s = request.POST.get('subject')
+    if s is None or f is None:
+        messages.add_message(request, messages.WARNING, "Please select both faculty as well as subject")
+        return HttpResponseRedirect('/subject/request_subject')
     fobj = Faculty.objects.get(id=f)
     sobj = Subject.objects.get(id=s)
     stuobj = Student.objects.get(user=request.user)
-    r = Request(faculty=fobj,student=stuobj,subject=sobj,status="pending")
+    try:
+        checkobj=Request.objects.get(faculty=fobj,student=stuobj,subject=sobj)
+    except:
+        checkobj=None
+    if checkobj is not None:
+        if checkobj.status == "pending" or checkobj.status=="approved":
+            messages.add_message(request, messages.WARNING, "Subject is already requested or approved !!")
+            return HttpResponseRedirect('/subject/request_subject')
+        elif checkobj.status == "decline":
+            Request.objects.get(faculty=fobj, student=stuobj, subject=sobj).update(status="pending")
+            messages.add_message(request, messages.WARNING, "Subject is again requested!!")
+            return HttpResponseRedirect('/subject/request_subject')
+        else:
+            messages.add_message(request, messages.WARNING, "You can't request this subject!!")
+            return HttpResponseRedirect('/subject/request_subject')
+    r = Request(faculty=fobj, student=stuobj, subject=sobj, status="pending")
     r.save()
     messages.add_message(request, messages.INFO, "Subject is requested to faculty "+str(fobj.user))
     return HttpResponseRedirect('/subject/request_subject')
 
 @login_required()
 def request_list(request):
+    if request.user.is_superuser:
+        messages.add_message(request, messages.WARNING, 'You are not authorized!!')
+        return HttpResponseRedirect('/subject/all_subject')
+
     if request.user.groups.all()[0].name == 'faculty':
-        req_list=Request.objects.filter(status="pending")
+        faculty=Faculty.objects.get(user=request.user)
+        req_list=Request.objects.filter(faculty=faculty,status="pending")
         return render(request,'subject/request_list.html',{'req_list':req_list,'role':"faculty"})
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
@@ -135,9 +188,19 @@ def approved_request(request):
     s=request.POST['status']
     #print(s)
     Request.objects.filter(id=stu).update(status=s)
-    messages.add_message(request,messages.INFO, "Request is "+s)
+    messages.add_message(request, messages.INFO, "Request is "+s)
     return HttpResponseRedirect('/subject/request_list')
 
 
+@login_required()
+def go_next(request, s_id):
+    if request.user.is_superuser:
+        messages.add_message(request, messages.WARNING, 'You are not authorized!!')
+        return HttpResponseRedirect('/subject/all_subject')
 
 
+    s = Subject.objects.get(id = s_id)
+    c = {}
+    c.update(csrf(request))
+    c['subject'] = s
+    return HttpResponseRedirect('/assignment')

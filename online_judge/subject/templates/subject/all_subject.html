@@ -43,10 +43,19 @@
                                 {{ s.name }}
                             {% endif %}
                         </td>
+
                         {% if request.user.is_superuser %}
 
                         <td><button type="submit" class="btn" name="status" value="remove">Remove</button></td>
                         <td><input type="hidden" value={{ s.pk }} name="id"></td>
+                        <!-- {% else%}
+                           <td><button type="submit" class="btn" name="subject" value={{ s.pk }}><i class="material-icons">send</i></button></td>
+                            <td><input type="hidden" value={{ s.pk }} name="id"></td>-->
+                                    <li class="collection-item">
+                                        <div><a href={% url go_next s.id %} class="secondary-content">
+                                            <i class="material-icons">send</i></a>
+                                        </div>
+                                    </li>
 
                         {% endif %}
                     </tr>
