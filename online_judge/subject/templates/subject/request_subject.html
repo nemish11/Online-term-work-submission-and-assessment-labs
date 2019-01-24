@@ -36,8 +36,11 @@
             <li><a href="#!">{{ s.name }}</a></li>
             {% endfor %}
         </ul>-->
+            <section>
             <div class="row">
+
             <div class="col s12 m6 l6 left">
+                <h5>Select Subject</h5>
                 {% for s in req_subject %}
                 <p>
                     <label>
@@ -49,6 +52,7 @@
                 {% endfor %}
             </div>
             <div class="col s12 m6 l6 right">
+                <h5>Select Subject</h5>
                 {% for f in faculty_list %}
                 <p>
                     <label>
@@ -58,11 +62,123 @@
                 </p>
                 {% endfor %}
             </div>
-            <button type="submit" class="btn">Request</button>
             </div>
+            </section>
+
+                <section>
+                    <div class="center">
+                        <button type="submit" class="btn ">Request</button>
+                    </div>
+                </section>
+
         </form>
     {% endif %}
 
 </div>
+<div class="row">
+    <div class="col s8 m8 l8">
+    <h5>Pending Request</h5>
+    <table class="highlight centered responsive-table col s8 m8 l8" >
 
+            <tbody>
+            {% if not pending_list|length%}
+            <h5>No Request.</h5>
+            {% else %}
+                <thead>
+                  <tr>
+                      <th>Subject name</th>
+                      <th>Faculty name</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+                {% for s in pending_list %}
+                    <tr>
+                        <td>{{ s.subject.name }}</td>
+                        <td>{{ s.faculty.user }}</td>
+                        <td>{{ s.status }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col s8 m8 l8">
+    <h5>Approved Request</h5>
+    <table class="highlight centered responsive-table col s8 m8 l8" >
+
+            <tbody>
+                {% if not approved_list|length%}
+                <h5>No Request.</h5>
+                {% else %}
+                    <thead>
+                  <tr>
+                      <th>Subject name</th>
+                      <th>Faculty name</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+                {% for s in approved_list %}
+                        <tr>
+                            <td>{{ s.subject.name }}</td>
+                            <td>{{ s.faculty.user }}</td>
+                            <td>{{ s.status }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col s8 m8 l8">
+    <h5>Decline Request</h5>
+    <table class="highlight centered responsive-table col s8 m8 l8" >
+
+            <tbody>
+                {% if not decline_list|length%}
+                <h5>No Request.</h5>
+            {% else %}
+                <thead>
+                  <tr>
+                      <th>Subject name</th>
+                      <th>Faculty name</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+                {% for s in decline_list %}
+                    <tr>
+                        <td>{{ s.subject.name }}</td>
+                        <td>{{ s.faculty.user }}</td>
+                        <td>{{ s.status }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col s8 m8 l8">
+    <h5>Block Request</h5>
+    <table class="highlight centered responsive-table col s8 m8 l8" >
+
+                {% if not block_list|length%}
+            <h5>No Request.</h5>
+            {% else %}
+                <thead>
+                  <tr>
+                      <th>Subject name</th>
+                      <th>Faculty name</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+            <tbody>
+                {% for s in block_list %}
+                    <tr>
+                        <td>{{ s.subject.name }}</td>
+                        <td>{{ s.faculty.user }}</td>
+                        <td>{{ s.status }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

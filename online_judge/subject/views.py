@@ -62,9 +62,9 @@ def remove_subject(request):
 @login_required()
 def removesubject(request):
     if request.user.is_superuser:
-        name = request.POST.get("name")
-        subject_code = request.POST.get("subject_code")
-        Subject.objects.filter(name=name, subject_code=subject_code).update(status=False)
+        name = request.POST.get('id')
+        #subject_code = request.POST.get("subject_code")
+        Subject.objects.filter(id=name).update(status=False)
         return HttpResponseRedirect('/subject/all_subject')
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
@@ -81,9 +81,20 @@ def request_subject(request):
         #print(faculty)
         student=Student.objects.get(user=request.user)
         try:
-            r_subject=Request.objects.filter(request_student=student, status="approved")
+            r_subject=Request.objects.filter(student=student)
         except:
             r_subject=None
+
+        pending_list=[]
+        approved_list=[]
+        decline_list=[]
+        block_list=[]
+
+        for r in r_subject:
+            if r.status=="pending":pending_list.append(r)
+            elif r.status=="approved":approved_list.append(r)
+            elif r.status=="decline":decline_list.append(r)
+            else:block_list.append(r)
 
 
         sub_list=[]
@@ -91,9 +102,9 @@ def request_subject(request):
             sub_list=subjects
         else:
             for s in subjects:
-                if s not in r_subject:sub_list.append(s)
+                if s not in approved_list:sub_list.append(s)
         #print(len(sub_list))
-        return render(request,'subject/request_subject.html',{'req_subject': sub_list,'faculty_list':faculty,'role':"student"})
+        return render(request,'subject/request_subject.html',{'req_subject': sub_list,'faculty_list':faculty,'role':"student",'pending_list':pending_list,'approved_list':approved_list,'decline_list':decline_list,'block_list':block_list})
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/all_subject')
