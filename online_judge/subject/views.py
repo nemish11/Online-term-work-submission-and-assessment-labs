@@ -193,13 +193,15 @@ def approved_request(request):
 
 
 @login_required()
-def go_next(request, s_id):
+def go_next(request):
+    print("go-next")
     if request.user.is_superuser:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/all_subject')
 
-
-    s = Subject.objects.get(id = s_id)
+    idd=request.GET.get('id')
+    print(idd)
+    s = Subject.objects.get(id = idd)
     c = {}
     c.update(csrf(request))
     c['subject'] = s
