@@ -1,0 +1,184 @@
+{% extends "subject/base.html" %}
+{% block body %}
+
+
+<div class="row container">
+    <div class="col s8 m8 l8 ">
+        {% if messages %}
+            {% for m in messages %}
+                    <script>
+						Materialize.toast('{{ m }}', 3000);
+					</script>
+            {% endfor %}
+        {% endif%}
+    </div>
+    {% if role == "student" %}
+        <form action="/subject/pending_request" method="POST" class="col s12"> {% csrf_token %}
+          <!--  <select class="dropdown" name="subject" id="subject">
+            {% for s in req_subject %}
+                <option value="{{ s.pk }}">{{ s.name }}</option>
+            {% endfor %}
+            </select>
+            <select name="faculty" id="faculty">
+            {% for f in faculty %}
+                <option value="{{ f.pk }}">{{ f.user.name }}</option>
+            {% endfor %}
+            </select>
+            <button type="submit" class="btn">Request</button>
+
+
+
+
+        <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>Subject</a>
+
+        <ul id='dropdown1' class='dropdown-content'>
+            {% for s in req_subject %}
+            <li><a href="#!">{{ s.name }}</a></li>
+            {% endfor %}
+        </ul>-->
+            <section>
+            <div class="row">
+
+            <div class="col s12 m6 l6 left">
+                <h5>Select Subject</h5>
+                {% for s in req_subject %}
+                <p>
+                    <label>
+                        <input class="with-gap" name="subject" type="radio"  value="{{ s.pk }}"/>
+                        <span>{{ s.name }}</span>
+                    </label>
+                </p>
+
+                {% endfor %}
+            </div>
+            <div class="col s12 m6 l6 right">
+                <h5>Select Subject</h5>
+                {% for f in faculty_list %}
+                <p>
+                    <label>
+                        <input class="with-gap" name="faculty" type="radio" value="{{ f.pk }}" />
+                        <span>{{ f.user }}</span>
+                    </label>
+                </p>
+                {% endfor %}
+            </div>
+            </div>
+            </section>
+
+                <section>
+                    <div class="center">
+                        <button type="submit" class="btn ">Request</button>
+                    </div>
+                </section>
+
+        </form>
+    {% endif %}
+
+</div>
+<div class="row">
+    <div class="col s8 m8 l8">
+    <h5>Pending Request</h5>
+    <table class="highlight centered responsive-table col s8 m8 l8" >
+
+            <tbody>
+            {% if not pending_list|length%}
+            <h5>No Request.</h5>
+            {% else %}
+                <thead>
+                  <tr>
+                      <th>Subject name</th>
+                      <th>Faculty name</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+                {% for s in pending_list %}
+                    <tr>
+                        <td>{{ s.subject.name }}</td>
+                        <td>{{ s.faculty.user }}</td>
+                        <td>{{ s.status }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col s8 m8 l8">
+    <h5>Approved Request</h5>
+    <table class="highlight centered responsive-table col s8 m8 l8" >
+
+            <tbody>
+                {% if not approved_list|length%}
+                <h5>No Request.</h5>
+                {% else %}
+                    <thead>
+                  <tr>
+                      <th>Subject name</th>
+                      <th>Faculty name</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+                {% for s in approved_list %}
+                        <tr>
+                            <td>{{ s.subject.name }}</td>
+                            <td>{{ s.faculty.user }}</td>
+                            <td>{{ s.status }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col s8 m8 l8">
+    <h5>Decline Request</h5>
+    <table class="highlight centered responsive-table col s8 m8 l8" >
+
+            <tbody>
+                {% if not decline_list|length%}
+                <h5>No Request.</h5>
+            {% else %}
+                <thead>
+                  <tr>
+                      <th>Subject name</th>
+                      <th>Faculty name</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+                {% for s in decline_list %}
+                    <tr>
+                        <td>{{ s.subject.name }}</td>
+                        <td>{{ s.faculty.user }}</td>
+                        <td>{{ s.status }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col s8 m8 l8">
+    <h5>Block Request</h5>
+    <table class="highlight centered responsive-table col s8 m8 l8" >
+
+                {% if not block_list|length%}
+            <h5>No Request.</h5>
+            {% else %}
+                <thead>
+                  <tr>
+                      <th>Subject name</th>
+                      <th>Faculty name</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+            <tbody>
+                {% for s in block_list %}
+                    <tr>
+                        <td>{{ s.subject.name }}</td>
+                        <td>{{ s.faculty.user }}</td>
+                        <td>{{ s.status }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

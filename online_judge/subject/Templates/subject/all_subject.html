@@ -1,0 +1,98 @@
+{% extends "subject/base.html" %}
+{% block body %}
+
+
+<div class="row container">
+    <div class="col s8 m8 l8 ">
+        {% if messages %}
+            {% for m in messages %}
+                    <script>
+						Materialize.toast('{{ m }}', 3000);
+					</script>
+            {% endfor %}
+        {% endif%}
+    </div>
+    {% if not subject_list|length %}
+    <div class="col s8 m8 l8"><h4>There is No subjects.</h4></div>
+    {% else %}
+    <div class="col s8 m8 l8"><h4>Subjects</h4></div>
+    <div >
+    <form action="/subject/removesubject" method="POST" class="col s12"> {% csrf_token %}
+        <table class="highlight centered responsive-table col s8 m8 l8" >
+            <thead>
+              <tr>
+                  <th>subject code</th>
+                  <th>subject name</th>
+                  {% if request.user.is_superuser %}
+                  <th>Action</th>
+                  {% endif %}
+              </tr>
+            </thead>
+            <tbody>
+                {% for s in subject_list %}
+                    <tr>
+                        <td>{% if role == "student" %}
+                                {{ s.subject.subject_code }}
+                            {% else %}
+                                {{ s.subject_code }}
+                            {% endif %}
+                        </td>
+                        <td>{% if role == "student" %}
+                                {{ s.subject.name }}
+                            {% else %}
+                                {{ s.name }}
+                            {% endif %}
+                        </td>
+
+                        {% if request.user.is_superuser %}
+
+                        <td><button type="submit" class="btn" name="status" value="remove">Remove</button></td>
+                        <td><input type="hidden" value={{ s.pk }} name="id"></td>
+                         {% else%}
+                           <td><button type="submit" class="btn" name="subject" value={{ s.pk }}><i class="material-icons">send</i></button></td>
+                            <td><input type="hidden" value="{{ s.pk }}" name="id"></td>
+                                    <li class="collection-item">
+                                        <div><a href="/go_next/id={{s.pk}}" class="secondary-content">
+                                            <i class="material-icons">send</i></a>
+                                        </div>
+                                    </li>
+
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </form>
+    </div>
+    <div class="divider col s8 m8 l8"></div>
+    {% endif %}
+    {% if request.user.is_superuser %}
+        {% if not remove_list|length %}
+            <div class="col s8 m8 l8"><h4>There is No Removed Subjects.</h4></div>
+        {% else %}
+            <div >
+                <div class="col s8 m8 l8"><h4>Removed Subject</h4></div>
+                <table class="highlight centered responsive-table col s8 m8 l8" >
+                    <thead>
+                      <tr>
+                          <th>subject code</th>
+                          <th>subject name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in remove_list %}
+                            <tr>
+                                <td>{{ s.subject_code }}</td>
+                                <td>{{ s.name }} </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="divider col s8 m8 l8"></div>
+        {% endif%}
+    {% endif%}
+
+</div>
+
+{% endblock %}
