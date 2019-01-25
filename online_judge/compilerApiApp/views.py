@@ -109,7 +109,14 @@ def run_input_files(request,counter,dirname,c,fs,filename,submission,inputfiles,
             c['time_taken'] =  time_taken1
 
             memory_used = int(data.find("Maximum resident set size (kbytes)"))
-            memory_used1 = data[memory_used+36:memory_used+41] +"kb"
+            memory_used1 = ""
+            pointer = memory_used + 36
+
+            while data[pointer]!='\n':
+                memory_used1 = memory_used1 + data[pointer]
+                pointer = pointer + 1
+
+            memory_used1 = memory_used1 + "kb"
             memoryused[counter-1] = memory_used1
             c['memory_used'] = memory_used1
 
@@ -119,7 +126,7 @@ def run_input_files(request,counter,dirname,c,fs,filename,submission,inputfiles,
             output_f = Submissions_all_files(type='outputfile',submission=submission,filepath=outputfilename,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
             output_f.save()
 
-def submit_code(request,inputfiles,outputfiles,username,language,code,inputfilecount,errorfiles,errortypes,runtimes,memoryused):
+def submit_code(request,inputfiles,outputfiles,username,language,code,inputfilecount,errorfiles,errortypes,runtimes,memoryused,codefile):
     c = {}
     submission = Submissions_all(username=username,language=language,datetime=datetime.now(),isRunning='YES')
     submission.save()
@@ -138,12 +145,13 @@ def submit_code(request,inputfiles,outputfiles,username,language,code,inputfilec
     counter = 1
     #inputfilecount = 3#request.POST.get['inputfilecount']
 
-    codefile = dirname + "/codefile.cpp"
-    codefile_handler=open(codefile,'w+')
+    codefile[0] = dirname + "/codefile.cpp"
+    print(codefile[0])
+    codefile_handler=open(codefile[0],'w+')
     codefile_handler.write(code)
     codefile_handler.close()
 
-    code_file_object = Submissions_all_files(type='codefile',submission=submission,filepath=codefile,errortype='-',runtime='-',memoryused='-')
+    code_file_object = Submissions_all_files(type='codefile',submission=submission,filepath=codefile[0],errortype='-',runtime='-',memoryused='-')
     code_file_object.save()
 
     thread_arr = []

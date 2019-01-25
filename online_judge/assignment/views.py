@@ -11,12 +11,13 @@ from django.core.files.storage import FileSystemStorage
 import pandas as pd
 from userprofile.models import Faculty,Student
 from subject.models import Subject
-from assignment.models import Week,Submission,Assignment,Assignment_files
-import datetime
+from assignment.models import Week,Submission,Assignment,Assignment_files,Submission_files
+from datetime import datetime
 import subprocess,threading,os,shutil
 from multiprocessing import Pool
 from online_judge.settings import *
 from compilerApiApp.views import submit_code
+import filecmp
 
 def showWeek(request):
     c={}
@@ -106,6 +107,7 @@ def uploadfiles(request):
     for i in range(1,int(total_inputfiles)+1):
         inputfile = request.FILES["inputfile_"+str(i)]
         outputfile = request.FILES["outputfile_"+str(i)]
+        score = request.POST.get("score_"+str(i))
 
         fs = FileSystemStorage()
         dirname = BASE_DIR + "/assignment/all_files/all_assignment/assignment_"+str(assignment.id)
@@ -116,7 +118,7 @@ def uploadfiles(request):
         inp = fs.save(inputfilename,inputfile)
         inp = fs.save(outputfilename,outputfile)
 
-        assignment_files = Assignment_files(assignment = assignment, type='inputfile',filepath=inputfilename)
+        assignment_files = Assignment_files(assignment = assignment, type='inputfile',filepath=inputfilename,score=score)
         assignment_files.save()
 
         assignment_files = Assignment_files(assignment = assignment, type='outputfile', filepath=outputfilename, errortype='', runtime='',memoryused='')
@@ -129,6 +131,14 @@ def showAssignment(request):
     id = request.POST.get('assignmentid')
     assignment = Assignment.objects.filter(id = int(id))[0]
     c['assignment'] = assignment
+    submission = Submission.objects.filter(user = request.user,assignment = assignment).last()
+    submission_files = Submission_files.objects.filter(submission = submission,type = 'codefile')[0]
+
+    fhandler = open(submission_files.filepath,'r')
+    previous_code = fhandler.read()
+    fhandler.close()
+
+    c['previous_code'] = previous_code
     return render(request,'assignment/showAssignment.html',c)
 
 def submitcode(request):
@@ -149,6 +159,8 @@ def submitcode(request):
     errortypes = ["" for i in range(total_inputfiles)]
     runtimes = ["" for i in range(total_inputfiles)]
     memoryused = ["" for i in range(total_inputfiles)]
+    score = [0 for i in range(total_inputfiles)]
+    codefile = [""]
 
     for i in range(0,int(total_inputfiles)):
         inputfiles[i] = 'assignment/all_files/all_assignment/assignment_'+str(assignment.id)+'/inputfile_'+str(i+1)+".txt"
@@ -156,7 +168,8 @@ def submitcode(request):
     username = request.user.username
     language = 'C'
 
-    output = submit_code(request,inputfiles,outputfiles,username,language,code,total_inputfiles,errorfiles,errortypes,runtimes,memoryused)
+    submission = Submission(user=request.user,assignment=assignment,datetime=datetime.now(),isrunning='YES')
+    output = submit_code(request,inputfiles,outputfiles,username,language,code,total_inputfiles,errorfiles,errortypes,runtimes,memoryused,codefile)
 
     c['outputfiles'] = outputfiles
     c['errortypes'] = errortypes
@@ -164,4 +177,30 @@ def submitcode(request):
     c['runtimes'] = runtimes
     c['memoryused'] = memoryused
 
+    totalscore = 0
+    for i in range(0,int(total_inputfiles)):
+        assignment_outputfilepath = BASE_DIR + "/assignment/all_files/all_assignment/assignment_"+str(assignment.id)+"/outputfile_"+str(i+1)+".txt"
+        print(outputfiles[i])
+        print(assignment_outputfilepath)
+        if filecmp.cmp(outputfiles[i], assignment_outputfilepath, shallow=True):
+            score[i] = 5
+        else:
+            score[i] = 0
+        totalscore = totalscore + int(score[i])
+
+    submission.totalscore = totalscore
+    submission.save()
+
+    submission_files = Submission_files(submission=submission,type='codefile',score=int(totalscore),filepath=codefile[0])
+    submission_files.save()
+
+    for i in range(0,int(total_inputfiles)):
+        submission_files = Submission_files(submission=submission,type='inputfile',score=int(score[i]),runtime=runtimes[i],errortype=errortypes[i],memoryused=memoryused[i],filepath=inputfiles[i])
+        submission_files.save()
+
+        submission_files = Submission_files(submission=submission,type='outputfile',score=int(score[i]),runtime=runtimes[i],errortype=errortypes[i],memoryused=memoryused[i],filepath=outputfiles[i])
+        submission_files.save()
+
+    c['previous_code'] = code
+    c['totalscore'] = totalscore
     return render(request,'assignment/showAssignment.html',c)

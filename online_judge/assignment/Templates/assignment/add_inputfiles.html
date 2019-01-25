@@ -5,7 +5,8 @@ please upload all input and output files:
   <input type="hidden" name="assignmentid" value="{{assignment.id}}" />
   {% for file in total_inputfiles %}
     <input type="file" name="inputfile_{{file}}" id=inputfile_{{file}} />
-    <input type="file" name="outputfile_{{file}}" id="outputfile_{{file}}" /><br/>
+    <input type="file" name="outputfile_{{file}}" id="outputfile_{{file}}" />
+    <input type="text" name="score_{{file}}" id="score_{{file}}" /><br/>
   {% endfor %}
   <button type="submit" >submit</button>
 </form>

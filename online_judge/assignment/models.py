@@ -19,6 +19,7 @@ class Assignment(models.Model):
 class Assignment_files(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='assignmentfiles_assignment')
     type = models.CharField(max_length = 20)
+    score = models.IntegerField(null=True,blank=True)
     errortype = models.CharField(max_length=100,null=True)
     runtime = models.CharField(max_length=20,null=True)
     memoryused = models.CharField(max_length=20,null=True)
@@ -38,4 +39,4 @@ class Submission_files(models.Model):
     errortype = models.CharField(max_length=100,null=True)
     runtime = models.CharField(max_length=20,null=True)
     memoryused = models.CharField(max_length=20,null=True)
-    filepath = models.CharField(max_length = 100)
+    filepath = models.CharField(max_length = 300)

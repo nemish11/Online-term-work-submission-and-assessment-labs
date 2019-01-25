@@ -12,7 +12,7 @@
  <form action = "/assignment/submitcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
    <input type = "hidden" name="assignmentid" value="{{assignment.id}}" />
    Enter a Code : <br/><br/>
-   <textarea name = "code"> </textarea><br/>
+   <textarea name = "code" value="{{previous_code}}"> {{previous_code}}</textarea><br/>
    <button type="submit"> submit </button>
  </form>
   <h2>OUTPUTS :</h2>
@@ -20,9 +20,12 @@
   {% for o in runtimes %}
      {{o}}
   {% endfor %}
+  <br/>/usr/local/lib/python3.6/dist-packages/django/db/backends/mysql/base.py:71: Warning: (1265, "Data truncated for column 'filepath' at row 1")
+
   memoryused :
-  {% for e in errortypes %}
+  {% for e in memoryused %}
      {{e}}
   {% endfor %}
-  
+ <br/>
+ total score is : {{totalscore}}
 {% endblock %}
