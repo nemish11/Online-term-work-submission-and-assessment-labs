@@ -69,7 +69,7 @@ def newassignment(request):
     week = Week.objects.filter(id = int(id))[0]
     subject = Subject.objects.all()[0]
 
-    assignment = Assignment(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question,deadline=datetime.date.today())
+    assignment = Assignment(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question,deadline=datetime.now())
     assignment.save()
 
     assignment = Assignment.objects.filter(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question).last()
@@ -170,7 +170,7 @@ def submitcode(request):
         inputfiles[i] = 'assignment/all_files/all_assignment/assignment_'+str(assignment.id)+'/inputfile_'+str(i+1)+".txt"
 
     username = request.user.username
-    language = 'C'
+    language = 'python'
 
     submission = Submission(user=request.user,assignment=assignment,datetime=datetime.now(),isrunning='YES')
     output = submit_code(request,inputfiles,outputfiles,username,language,code,total_inputfiles,errorfiles,errortypes,runtimes,memoryused,codefile)
@@ -181,6 +181,9 @@ def submitcode(request):
     c['runtimes'] = runtimes
     c['memoryused'] = memoryused
 
+    #print(errortypes)
+    #print(runtimes)
+    #print(memoryused)
     totalscore = 0
     for i in range(0,int(total_inputfiles)):
         assignment_outputfilepath = BASE_DIR + "/assignment/all_files/all_assignment/assignment_"+str(assignment.id)+"/outputfile_"+str(i+1)+".txt"
@@ -195,10 +198,12 @@ def submitcode(request):
 
         print(data1)
         print(data2)
+
         if data1 == data2:
             score[i] = 5
         else:
             score[i] = 0
+
         totalscore = totalscore + int(score[i])
 
     submission.totalscore = totalscore

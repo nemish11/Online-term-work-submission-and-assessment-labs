@@ -13,32 +13,6 @@ from userprofile.models import Faculty, Student
 
 @login_required()
 def all_subject(request):
-    '''try:
-        print(request.user)
-        if request.user.is_superuser :
-            rmlist=[]
-            subject_list=[]
-            subject=Subject.objects.all()
-            for s in subject:
-                if s.status==1:subject_list.append(s)
-                else:rmlist.append(s)
-            return render(request,'subject/all_subject.html', {'subject_list': subject_list,'remove_list':rmlist})
-        elif request.user.groups.all()[0].name == 'faculty':
-            subject_list = Subject.objects.filter(status=True)
-            return render(request, 'subject/all_subject.html', {'subject_list': subject_list,'role':"faculty"})
-        elif request.user.groups.all()[0].name == 'student':
-            #print("okrokad")
-            print("above student")
-            s=Student.objects.get(user=request.user)
-            print("above aubject list")
-            subject_list = Request.objects.filter(student=s,status="approved")
-            print(subject_list)
-            return render(request, 'subject/all_subject.html', {'subject_list': subject_list,'role':"student"})
-        else:
-            return HttpResponseRedirect('/usermodule/')
-    except:
-        print("in except")
-        return render(request,'subject/all_subject.html', {'subject_list': None})'''
     if request.user.is_superuser:
         rmlist = []
         subject_list = []
@@ -139,6 +113,7 @@ def request_subject(request):
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/all_subject')
+
 @login_required()
 def pending_request(request):
     f = request.POST.get('faculty')
@@ -195,13 +170,11 @@ def approved_request(request):
 
 @login_required()
 def go_next(request):
-    print("go-next")
     if request.user.is_superuser:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/all_subject')
 
     idd=request.GET.get('id')
-    print(idd)
     s = Subject.objects.get(id = idd)
     c = {}
     c.update(csrf(request))

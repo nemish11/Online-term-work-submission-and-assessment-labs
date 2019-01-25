@@ -1,0 +1,4 @@
+  File "/media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/compilerApiApp/all_submissions/102/codefile_1.py", line 1
+    n = int(input())
+    ^
+IndentationError: unexpected indent

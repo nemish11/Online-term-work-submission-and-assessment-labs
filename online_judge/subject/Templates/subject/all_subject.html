@@ -47,16 +47,14 @@
                         {% if request.user.is_superuser %}
 
                         <td><button type="submit" class="btn" name="status" value="remove">Remove</button></td>
-                        <td><input type="hidden" value={{ s.pk }} name="id"></td>
-                         {% else%}
-                           <td><button type="submit" class="btn" name="subject" value={{ s.pk }}><i class="material-icons">send</i></button></td>
+                        <td><input type="hidden" value="{{ s.pk }}" name="id"></td>
+                         {% else %}
                             <td><input type="hidden" value="{{ s.pk }}" name="id"></td>
-                                    <li class="collection-item">
-                                        <div><a href="/go_next/id={{s.pk}}" class="secondary-content">
+                                   <td>
+                                        <div class="collection-item"><a href="/assignment/" class="secondary-content">
                                             <i class="material-icons">send</i></a>
                                         </div>
-                                    </li>
-
+                                    </td>
                         {% endif %}
                     </tr>
                 {% endfor %}
