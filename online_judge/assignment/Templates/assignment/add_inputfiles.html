@@ -4,7 +4,7 @@ please upload all input and output files:
 <form action="/assignment/uploadfiles" method="POST" enctype="multipart/form-data" > {% csrf_token %}
   <input type="hidden" name="assignmentid" value="{{assignment.id}}" />
   {% for file in total_inputfiles %}
-    <input type="file" name="inputfile_{{file}}" id=inputfile_{{file}} />
+    <input type="file" name="inputfile_{{file}}" id="inputfile_{{file}}" />
     <input type="file" name="outputfile_{{file}}" id="outputfile_{{file}}" />
     <input type="text" name="score_{{file}}" id="score_{{file}}" /><br/>
   {% endfor %}

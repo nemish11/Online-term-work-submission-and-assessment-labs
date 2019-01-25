@@ -131,15 +131,19 @@ def showAssignment(request):
     id = request.POST.get('assignmentid')
     assignment = Assignment.objects.filter(id = int(id))[0]
     c['assignment'] = assignment
-    submission = Submission.objects.filter(user = request.user,assignment = assignment).last()
-    submission_files = Submission_files.objects.filter(submission = submission,type = 'codefile')[0]
 
-    fhandler = open(submission_files.filepath,'r')
-    previous_code = fhandler.read()
-    fhandler.close()
+    try:
+        submission = Submission.objects.filter(user = request.user,assignment = assignment).last()
+        submission_files = Submission_files.objects.filter(submission = submission,type = 'codefile')[0]
 
-    c['previous_code'] = previous_code
-    return render(request,'assignment/showAssignment.html',c)
+        fhandler = open(submission_files.filepath,'r')
+        previous_code = fhandler.read()
+        fhandler.close()
+
+        c['previous_code'] = previous_code
+        return render(request,'assignment/showAssignment.html',c)
+    except:
+        return render(request,'assignment/showAssignment.html',c)
 
 def submitcode(request):
     assignmentid = request.POST.get('assignmentid')
@@ -180,9 +184,18 @@ def submitcode(request):
     totalscore = 0
     for i in range(0,int(total_inputfiles)):
         assignment_outputfilepath = BASE_DIR + "/assignment/all_files/all_assignment/assignment_"+str(assignment.id)+"/outputfile_"+str(i+1)+".txt"
-        print(outputfiles[i])
-        print(assignment_outputfilepath)
-        if filecmp.cmp(outputfiles[i], assignment_outputfilepath, shallow=True):
+
+        fhandler = open(outputfiles[i],'r')
+        data1 = fhandler.readlines()
+        fhandler.close()
+
+        fhandler = open(assignment_outputfilepath)
+        data2 = fhandler.readlines()
+        fhandler.close()
+
+        print(data1)
+        print(data2)
+        if data1 == data2:
             score[i] = 5
         else:
             score[i] = 0
