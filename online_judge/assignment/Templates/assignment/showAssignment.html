@@ -15,16 +15,35 @@
    <textarea name = "code" value="{{previous_code}}"> {{previous_code}}</textarea><br/>
    <button type="submit"> submit </button>
  </form>
-  <h2>OUTPUTS :</h2>
-  RUNTIME:
-  {% for o in runtimes %}
-     {{o}}
-  {% endfor %}
- <br/>
-  memoryused :
-  {% for e in memoryused %}
-     {{e}}
-  {% endfor %}
- <br/>
- total score is : {{totalscore}}
-{% endblock %}
+  <h2>Results :</h2>
+  total score is : {{totalscore}}
+  <br/>
+
+  <table class="highlight centered responsive-table col s8 m8 l8" >
+      <thead>
+        <tr>
+            <th>inputfiles</th>
+            <th>outputfiles</th>
+            <th>runtimes</th>
+            <th>memoryused</th>
+            <th>errortypes</th>
+            <th>errorfiles</th>
+            <th>score</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for inputfile,outputfile,runtime,memoryused,errortype,errorfile,score in combinedlist %}
+              <tr>
+                  <td><a href="{{inputfile}}" download>inputfile</a></td>
+                  <td><a href="{{outputfile}}" download>outputfile</a></td>
+                  <td>{{runtime}}</td>
+                  <td>{{memoryused}}</td>
+                  <td>{{errortype}}</td>
+                  <td><a href="{{errorfile}}" download>errorfile</a></td>
+                  <td>{{score}}</td>
+              </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+
+ {% endblock %}

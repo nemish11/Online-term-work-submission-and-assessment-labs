@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'submitcode',submitcode),
     url(r'uploadfiles',uploadfiles),
     url(r'addweek',addweek),
+    url(r'showWeek',showWeek),
     url(r'',showWeek),
 ]

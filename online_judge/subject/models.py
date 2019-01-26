@@ -13,4 +13,4 @@ class Request(models.Model):
     faculty = models.ForeignKey(Faculty,on_delete = models.CASCADE,related_name = 'request_faculty')
     student = models.ForeignKey(Student,on_delete = models.CASCADE,related_name = 'request_student')
     subject = models.ForeignKey(Subject,on_delete = models.CASCADE,related_name = 'request_subject')
-    status = models.CharField(max_length = 15)
+    status = models.CharField(max_length = 35)

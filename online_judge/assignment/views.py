@@ -21,8 +21,10 @@ import filecmp
 
 def showWeek(request):
     c={}
-    subject = Subject.objects.get(pk=int(1))
+    subjectid = request.POST.get('subjectid')
+    subject = Subject.objects.get(pk=int(subjectid))
     all_week = Week.objects.filter(subject=subject)
+    c['subject'] = subject
     c['all_week'] = all_week
     all_assignment = Assignment.objects.filter(subject=subject)
     c['all_assignment'] = all_assignment
@@ -36,8 +38,9 @@ def showWeek(request):
 
 def addweek(request):
     c = {}
+    subjectid = request.POST.get('subjectid')
     weekname = request.POST.get('weekname')
-    subject = Subject.objects.get(pk=int(1))
+    subject = Subject.objects.get(pk=int(subjectid))
     week = Week(name=weekname,subject=subject)
     week.save()
     all_week = Week.objects.filter(subject=subject)
@@ -53,21 +56,23 @@ def addweek(request):
     return render(request,'assignment/showWeek.html',c)
 
 def new_assignment(request):
-    id = request.POST.get('weekid')
-    week = Week.objects.filter(id = int(id))[0]
+    weekid = request.POST.get('weekid')
+    week = Week.objects.filter(id = int(weekid))[0]
+    subject  = week.subject
     c = {}
     c['week'] = week
+    c['subject'] = subject
     return render(request,'assignment/new_assignment.html',c)
 
 def newassignment(request):
-    id = request.POST.get('weekid')
+    weekid = request.POST.get('weekid')
     title = request.POST.get('title')
     question = request.POST.get('question')
     codefile = request.FILES['codefile']
     total_inputfiles = request.POST.get('total_inputfiles')
 
-    week = Week.objects.filter(id = int(id))[0]
-    subject = Subject.objects.all()[0]
+    week = Week.objects.get(pk = int(weekid))
+    subject = week.subject
 
     assignment = Assignment(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question,deadline=datetime.now())
     assignment.save()
@@ -91,6 +96,7 @@ def newassignment(request):
 
     c = {}
     c['assignment'] = assignment
+    c['subject'] = subject
     total_inputfile = []
 
     for i in range(1,int(total_inputfiles)+1):
@@ -100,8 +106,9 @@ def newassignment(request):
     return render(request,'assignment/add_inputfiles.html',c)
 
 def uploadfiles(request):
-    id = request.POST.get('assignmentid')
-    assignment = Assignment.objects.filter(id = int(id))[0]
+    assignmentid = request.POST.get('assignmentid')
+    assignment = Assignment.objects.get(pk = int(assignmentid))
+    subject = assignment.subject
     total_inputfiles = assignment.total_inputfiles
 
     for i in range(1,int(total_inputfiles)+1):
@@ -118,18 +125,30 @@ def uploadfiles(request):
         inp = fs.save(inputfilename,inputfile)
         inp = fs.save(outputfilename,outputfile)
 
-        assignment_files = Assignment_files(assignment = assignment, type='inputfile',filepath=inputfilename,score=score)
+        assignment_files = Assignment_files(assignment = assignment, type='inputfile',filepath=inputfilename,score=int(score))
         assignment_files.save()
 
         assignment_files = Assignment_files(assignment = assignment, type='outputfile', filepath=outputfilename, errortype='', runtime='',memoryused='')
         assignment_files.save()
 
-    return HttpResponseRedirect('/assignment/showWeek')
+    c = {}
+    all_week = Week.objects.filter(subject=subject)
+    c['subject'] = subject
+    c['all_week'] = all_week
+    all_assignment = Assignment.objects.filter(subject=subject)
+    c['all_assignment'] = all_assignment
+    if request.user.is_superuser:
+        usertype = 'admin'
+    else:
+        usertype = request.user.groups.all()[0].name
+    c['usertype'] = usertype
+    c['faculty'] = 'faculty'
+    return render(request,'assignment/showWeek.html',c)
 
 def showAssignment(request):
     c = {}
-    id = request.POST.get('assignmentid')
-    assignment = Assignment.objects.filter(id = int(id))[0]
+    assignmentid = request.POST.get('assignmentid')
+    assignment = Assignment.objects.get(pk = int(assignmentid))
     c['assignment'] = assignment
 
     try:
@@ -148,7 +167,7 @@ def showAssignment(request):
 def submitcode(request):
     assignmentid = request.POST.get('assignmentid')
     code = request.POST.get('code')
-    assignment = Assignment.objects.filter(id = int(assignmentid))[0]
+    assignment = Assignment.objects.get(pk = int(assignmentid))
     subject = assignment.subject
     c = {}
     c['assignment'] = assignment
@@ -175,16 +194,11 @@ def submitcode(request):
     submission = Submission(user=request.user,assignment=assignment,datetime=datetime.now(),isrunning='YES')
     output = submit_code(request,inputfiles,outputfiles,username,language,code,total_inputfiles,errorfiles,errortypes,runtimes,memoryused,codefile)
 
-    c['outputfiles'] = outputfiles
-    c['errortypes'] = errortypes
-    c['errorfiles'] = errorfiles
-    c['runtimes'] = runtimes
-    c['memoryused'] = memoryused
-
     #print(errortypes)
     #print(runtimes)
     #print(memoryused)
     totalscore = 0
+
     for i in range(0,int(total_inputfiles)):
         assignment_outputfilepath = BASE_DIR + "/assignment/all_files/all_assignment/assignment_"+str(assignment.id)+"/outputfile_"+str(i+1)+".txt"
 
@@ -196,11 +210,12 @@ def submitcode(request):
         data2 = fhandler.readlines()
         fhandler.close()
 
-        print(data1)
-        print(data2)
+        #print(data1)
+        #print(data2)
 
+        assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])[0]
         if data1 == data2:
-            score[i] = 5
+            score[i] = int(assignment_file.score)
         else:
             score[i] = 0
 
@@ -221,4 +236,18 @@ def submitcode(request):
 
     c['previous_code'] = code
     c['totalscore'] = totalscore
+
+    '''c['inputfiles'] = inputfiles
+    c['outputfiles'] = outputfiles
+    c['runtimes'] = runtimes
+    c['memoryused'] = memoryused
+    c['errortypes'] = errortypes
+    c['errorfiles'] = errorfiles
+    c['score'] = score'''
+
+    #for i in range(0,int(total_inputfiles)):
+    #    inputfil
+    combinedlist = zip(inputfiles,outputfiles,runtimes,memoryused,errortypes,errorfiles,score)
+
+    c['combinedlist'] = combinedlist
     return render(request,'assignment/showAssignment.html',c)
