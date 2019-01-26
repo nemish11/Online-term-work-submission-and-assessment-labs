@@ -17,50 +17,66 @@
     {% else %}
     <div class="col s8 m8 l8"><h4>Subjects</h4></div>
     <div >
-    <form action="/subject/removesubject" method="POST" class="col s12"> {% csrf_token %}
-        <table class="highlight centered responsive-table col s8 m8 l8" >
-            <thead>
-              <tr>
-                  <th>subject code</th>
-                  <th>subject name</th>
-                  {% if request.user.is_superuser %}
-                  <th>Action</th>
-                  {% endif %}
-              </tr>
-            </thead>
-            <tbody>
-                {% for s in subject_list %}
-                    <tr>
-                        <td>{% if role == "student" %}
-                                {{ s.subject.subject_code }}
-                            {% else %}
-                                {{ s.subject_code }}
-                            {% endif %}
-                        </td>
-                        <td>{% if role == "student" %}
-                                {{ s.subject.name }}
-                            {% else %}
-                                {{ s.name }}
-                            {% endif %}
-                        </td>
+        {% if request.user.is_superuser %}
+            <form action="/subject/removesubject" method="POST" class="col s12"> {% csrf_token %}
+                <table class="highlight centered responsive-table col s8 m8 l8" >
+                    <thead>
+                      <tr>
+                          <th>subject code</th>
+                          <th>subject name</th>
+                          <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in subject_list %}
+                            <tr>
+                                <td>{{ s.subject_code }}</td>
+                                <td>{{ s.name }}</td>
+                                <td><button type="submit" class="btn" name="status" value="remove">Remove</button></td>
+                                <td><input type="hidden" value="{{ s.pk }}" name="id"></td>
 
-                        {% if request.user.is_superuser %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </form>
+        {% else %}
+            <form action="/assignment/" method="POST" class="col s12"> {% csrf_token %}
+                <table class="highlight centered responsive-table col s8 m8 l8" >
+                    <thead>
+                      <tr>
+                          <th>subject code</th>
+                          <th>subject name</th>
+                          <th>Go</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in subject_list %}
+                            <tr>
+                                <td>{% if role == "student" %}
+                                        {{ s.subject.subject_code }}
+                                    {% else %}
+                                        {{ s.subject_code }}
+                                    {% endif %}
+                                </td>
+                                <td>{% if role == "student" %}
+                                        {{ s.subject.name }}
+                                    {% else %}
+                                        {{ s.name }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn" name="send" value={{ s.pk }}>Send</button>
+                                    <input type="hidden" value="{{ s.pk }}" name="id">
 
-                        <td><button type="submit" class="btn" name="status" value="remove">Remove</button></td>
-                        <td><input type="hidden" value="{{ s.pk }}" name="id"></td>
-                         {% else %}
-                            <td><input type="hidden" value="{{ s.pk }}" name="id"></td>
-                                   <td>
-                                        <div class="collection-item"><a href="/assignment/" class="secondary-content">
-                                            <i class="material-icons">send</i></a>
-                                        </div>
-                                    </td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        </form>
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </form>
+        {% endif %}
     </div>
     <div class="divider col s8 m8 l8"></div>
     {% endif %}
