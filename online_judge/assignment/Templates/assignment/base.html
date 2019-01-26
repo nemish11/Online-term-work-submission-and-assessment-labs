@@ -4,20 +4,40 @@
 	<title>{% block title %}{% endblock %}</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<script src="{% static "js/jquery-3.2.1.min.js" %}" ></script>
+	<script type="text/javascript" src="{% static "codemirror-5.43.0/lib/codemirror.js" %}"></script>
+	<script type="text/javascript" src="{% static "codemirror-5.43.0/mode/python/python.js" %}"></script>
+	<script type="text/javascript" src="{% static "codemirror-5.43.0/mode/clike/clike.js" %}"></script>
 	<link type="text/css" rel="stylesheet" href="{% static "css/materialize.min.css" %}" >
+	<link type="text/css" rel="stylesheet" href="{% static "codemirror-5.43.0/lib/codemirror.css" %}" >
 	<script src="{% static "js/materialize.min.js" %}" ></script>
 </head>
 
 <body>
-	<nav>
-		<div class="nav-wrapper teal">
-			<ul id="nav-mobile" class="right">
-				<li><a href="/userprofile/profile" class="waves-effect waves-light ">Profile</a></li>
-        <li><a href="/usermodule/logout" class="waves-effect waves-light" >logout </a></li>
-			</ul>
-		</div>
-	</nav>
+		<nav>
+				<div class="nav-wrapper teal">
+						<ul id="nav-mobile" class="right">
+							 <li><a href="/subject/all_subject" class="waves-effect waves-light">All subject</a> </li>
+							 {% if request.user.is_superuser %}
+									 <li><a href="/subject/add_subject" class="waves-effect waves-light">Add subject</a> </li>
+									 <li><a href="/usermodule/add_faculty" class="waves-effect waves-light">Add Faculty</a> </li>
+									 <li><a href="/usermodule/add_student" class="waves-effect waves-light ">Add Student</a></li>
+							 {% endif %}
+									 {% ifequal request.session.usertype "faculty" %}
+											 <li><a href="/subject/request_list" class="waves-effect waves-light ">Request List</a></li>
+									 {% endifequal %}
+									 {% ifequal request.session.usertype "student" %}
+											 <li><a href="/subject/request_subject" class="waves-effect waves-light ">Request Subject</a></li>
+									 {% endifequal %}
 
-	{% block body %}{% endblock %}
-</body>
-</html>
+
+								<li><a href="/userprofile/profile" class="waves-effect waves-light ">Profile</a></li>
+								<li><a href="/usermodule/logout" class="waves-effect waves-light">Logout</a> </li>
+						</ul>
+				</div>
+		</nav>
+
+
+ {% block body %}
+ {% endblock %}
+
+</body></html>

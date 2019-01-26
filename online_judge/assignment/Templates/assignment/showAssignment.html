@@ -6,19 +6,48 @@
       height: 200px;
         }
 </style>
+<script>
+  $(document).ready(function(){
+	//code here...
+  var lang = "{{assignment.subject.name}}"
+  lang = lang.toLowerCase()
+  var mode = "python"
+  if( lang== 'c++' || lang=='cpp')
+     mode = "text/x-c++src"
+  if(lang=='c')
+     mode = "text/x-csrc"
+  if(lang == 'python')
+    mode = "python"
+  if(lang == 'java')
+    mode = "text/x-java"
+  if(lang == 'c#')
+    mode = "text/x-csharp"
 
+	var code = $(".codemirror-textarea")[0];
+	var editor = CodeMirror.fromTextArea(code, {
+    mode:mode,
+		lineNumbers : true,
+    spellcheck : true,
+    autocorrect : true,
+
+    matchBrackets : true,
+    lineWrapping: true,
+	});
+});
+</script>
   Title :{{assignment.title}}<br/>
   question is : {{assignment.question}} </br> </br>
  <form action = "/assignment/submitcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
    <input type = "hidden" name="assignmentid" value="{{assignment.id}}" />
    Enter a Code : <br/><br/>
-   <textarea name = "code" value="{{previous_code}}"> {{previous_code}}</textarea><br/>
+
+   <textarea class="codemirror-textarea" name = "code" value="{{previous_code}}"> {{previous_code}}</textarea><br/>
    <button type="submit"> submit </button>
  </form>
   <h2>Results :</h2>
   total score is : {{totalscore}}
   <br/>
-
+  <br/>
   <table class="highlight centered responsive-table col s8 m8 l8" >
       <thead>
         <tr>
@@ -27,20 +56,26 @@
             <th>runtimes</th>
             <th>memoryused</th>
             <th>errortypes</th>
-            <th>errorfiles</th>
+            <th>detailfiles</th>
             <th>score</th>
         </tr>
       </thead>
       <tbody>
+
           {% for inputfile,outputfile,runtime,memoryused,errortype,errorfile,score in combinedlist %}
+
               <tr>
-                  <td><a href="{{inputfile}}" download>inputfile</a></td>
-                  <td><a href="{{outputfile}}" download>outputfile</a></td>
+
+                  <td><a href="/static/all_submissions/{{inputfile}}" download>inputfile</a></td>
+
+                  <td><a href = "/static/all_submissions/{{outputfile}}" download>outputfile</td>
+                  <!--<td><a href="/compilerApiApp/static/dummy.txt" download>outputfile</a></td>-->
                   <td>{{runtime}}</td>
                   <td>{{memoryused}}</td>
                   <td>{{errortype}}</td>
-                  <td><a href="{{errorfile}}" download>errorfile</a></td>
+                  <td><a href="/static/all_submissions/{{errorfile}}" download>detailfile</a></td>
                   <td>{{score}}</td>
+
               </tr>
           {% endfor %}
       </tbody>

@@ -38,7 +38,9 @@ def auth_view(request):
         if user is not None:
             auth.login(request, user)
             if user.is_superuser:
-                return render(request,'usermodule/index.html')
+                return HttpResponseRedirect('/subject/')
+            usertype = request.user.groups.all()[0].name
+            request.session['usertype'] = usertype
             return HttpResponseRedirect('/subject/')
         else:
             messages.add_message(request, messages.WARNING, 'Incorect Username or Password')

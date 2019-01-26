@@ -1,0 +1,4 @@
+/media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/usermodule/static/all_submissions/214/codefile_7.cpp: In function ‘int main()’:
+/media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/usermodule/static/all_submissions/214/codefile_7.cpp:72:20: error: no match for ‘operator<<=’ (operand types are ‘std::basic_ostream<char>::__ostream_type’ {aka ‘std::basic_ostream<char>’} and ‘<unresolved overloaded function type>’)
+   cout<<getmid(ans)<<=endl;
+   ~~~~~~~~~~~~~~~~~^~~~~~~

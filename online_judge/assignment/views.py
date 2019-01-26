@@ -82,7 +82,7 @@ def newassignment(request):
     assignment = Assignment.objects.get(pk=int(id))
 
     fs = FileSystemStorage()
-    dirname = BASE_DIR + "/assignment/all_files/all_assignment/assignment_"+str(id)
+    dirname = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(id)
 
     if os.path.exists(dirname):
         shutil.rmtree(dirname)
@@ -117,7 +117,7 @@ def uploadfiles(request):
         score = request.POST.get("score_"+str(i))
 
         fs = FileSystemStorage()
-        dirname = BASE_DIR + "/assignment/all_files/all_assignment/assignment_"+str(assignment.id)
+        dirname = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(assignment.id)
 
         inputfilename = dirname+"/inputfile_"+str(i)+".txt"
         outputfilename = dirname+"/outputfile_"+str(i)+".txt"
@@ -177,30 +177,23 @@ def submitcode(request):
     total_inputfiles = int(total_inputfiles)
 
     inputfiles = ["" for i in range(total_inputfiles)]
-    outputfiles = ["" for i in range(total_inputfiles)]
+    '''outputfiles = ["" for i in range(total_inputfiles)]
     errorfiles = ["" for i in range(total_inputfiles)]
     errortypes = ["" for i in range(total_inputfiles)]
     runtimes = ["" for i in range(total_inputfiles)]
     memoryused = ["" for i in range(total_inputfiles)]
     score = [0 for i in range(total_inputfiles)]
-    codefile = [""]
+    codefile = [""]'''
 
     for i in range(0,int(total_inputfiles)):
-        inputfiles[i] = 'assignment/all_files/all_assignment/assignment_'+str(assignment.id)+'/inputfile_'+str(i+1)+".txt"
+        inputfiles[i] = 'usermodule/static/all_assignment/assignment_'+str(assignment.id)+'/inputfile_'+str(i+1)+".txt"
 
-    username = request.user.username
-    language = 'python'
-
-    submission = Submission(user=request.user,assignment=assignment,datetime=datetime.now(),isrunning='YES')
-    output = submit_code(request,inputfiles,outputfiles,username,language,code,total_inputfiles,errorfiles,errortypes,runtimes,memoryused,codefile)
-
-    #print(errortypes)
-    #print(runtimes)
-    #print(memoryused)
+    #submission = submit_code(request,inputfiles,outputfiles,assignment,code,total_inputfiles,errorfiles,errortypes,runtimes,memoryused,codefile)
+    submission,outputfiles,errorfiles,errortypes,runtimes,memoryused,score= submit_code(request,assignment,subject,inputfiles,code)
     totalscore = 0
 
     for i in range(0,int(total_inputfiles)):
-        assignment_outputfilepath = BASE_DIR + "/assignment/all_files/all_assignment/assignment_"+str(assignment.id)+"/outputfile_"+str(i+1)+".txt"
+        assignment_outputfilepath = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(assignment.id)+"/outputfile_"+str(i+1)+".txt"
 
         fhandler = open(outputfiles[i],'r')
         data1 = fhandler.readlines()
@@ -224,29 +217,14 @@ def submitcode(request):
     submission.totalscore = totalscore
     submission.save()
 
-    submission_files = Submission_files(submission=submission,type='codefile',score=int(totalscore),filepath=codefile[0])
-    submission_files.save()
-
-    for i in range(0,int(total_inputfiles)):
-        submission_files = Submission_files(submission=submission,type='inputfile',score=int(score[i]),runtime=runtimes[i],errortype=errortypes[i],memoryused=memoryused[i],filepath=inputfiles[i])
-        submission_files.save()
-
-        submission_files = Submission_files(submission=submission,type='outputfile',score=int(score[i]),runtime=runtimes[i],errortype=errortypes[i],memoryused=memoryused[i],filepath=outputfiles[i])
-        submission_files.save()
-
     c['previous_code'] = code
     c['totalscore'] = totalscore
 
-    '''c['inputfiles'] = inputfiles
-    c['outputfiles'] = outputfiles
-    c['runtimes'] = runtimes
-    c['memoryused'] = memoryused
-    c['errortypes'] = errortypes
-    c['errorfiles'] = errorfiles
-    c['score'] = score'''
+    for i in range(0,int(total_inputfiles)):
+       inputfiles[i] = str(submission.id)+"/input_"+str(i+1)+".txt"
+       outputfiles[i] = str(submission.id) + "/output_"+str(i+1)+".txt"
+       errorfiles[i] = str(submission.id) + "/error_"+str(i+1)+".txt"
 
-    #for i in range(0,int(total_inputfiles)):
-    #    inputfil
     combinedlist = zip(inputfiles,outputfiles,runtimes,memoryused,errortypes,errorfiles,score)
 
     c['combinedlist'] = combinedlist
