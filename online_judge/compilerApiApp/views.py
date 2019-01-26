@@ -228,7 +228,7 @@ def submit_code(request,inputfiles,outputfiles,username,language,code,inputfilec
     submission = Submissions_all.objects.get(pk=int(id))
 
     fs = FileSystemStorage()
-    filename = BASE_DIR + "/compilerApiApp/static/all_submissions/"
+    filename = BASE_DIR + "/compilerApiApp/all_submissions/"
     dirname = filename + str(id)
 
     if os.path.exists(dirname):
@@ -270,4 +270,4 @@ def submit_code(request,inputfiles,outputfiles,username,language,code,inputfilec
 
     submission.isRunning = 'NO'
     submission.save()
-    return
+    return "sucess"

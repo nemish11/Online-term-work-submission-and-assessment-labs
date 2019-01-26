@@ -22,7 +22,6 @@ urlpatterns = [
     url(r'^subject/',include('subject.urls')),
     url(r'^usermodule/',include('usermodule.urls')),
     url(r'userprofile/',include('userprofile.urls')),
-    url(r'compilerApiApp/',include('compilerApiApp.urls')),
     url(r'assignment/',include('assignment.urls')),
     url(r'',include('usermodule.urls')),
 ]

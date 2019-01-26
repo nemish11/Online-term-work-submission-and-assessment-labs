@@ -34,9 +34,8 @@
       <tbody>
           {% for inputfile,outputfile,runtime,memoryused,errortype,errorfile,score in combinedlist %}
               <tr>
-                 {{inputfile}}<br/>{{outputfile}}<br/>
-                  <td><a href="compilerApiApp/static/all_submissions/158/input_1.txt" download>inputfile</a></td>
-                  <td><a href="http://127.0.0.1:8000/compilerApiApp/static/all_submissions/158/output_1.txt" download>outputfile</a></td>
+                  <td><a href="{{inputfile}}" download>inputfile</a></td>
+                  <td><a href="{{outputfile}}" download>outputfile</a></td>
                   <td>{{runtime}}</td>
                   <td>{{memoryused}}</td>
                   <td>{{errortype}}</td>

@@ -82,7 +82,7 @@ def newassignment(request):
     assignment = Assignment.objects.get(pk=int(id))
 
     fs = FileSystemStorage()
-    dirname = BASE_DIR + "/assignment/static/all_files/all_assignment/assignment_"+str(id)
+    dirname = BASE_DIR + "/assignment/all_files/all_assignment/assignment_"+str(id)
 
     if os.path.exists(dirname):
         shutil.rmtree(dirname)
@@ -117,7 +117,7 @@ def uploadfiles(request):
         score = request.POST.get("score_"+str(i))
 
         fs = FileSystemStorage()
-        dirname = BASE_DIR + "/assignment/static/all_files/all_assignment/assignment_"+str(assignment.id)
+        dirname = BASE_DIR + "/assignment/all_files/all_assignment/assignment_"+str(assignment.id)
 
         inputfilename = dirname+"/inputfile_"+str(i)+".txt"
         outputfilename = dirname+"/outputfile_"+str(i)+".txt"
@@ -186,7 +186,7 @@ def submitcode(request):
     codefile = [""]
 
     for i in range(0,int(total_inputfiles)):
-        inputfiles[i] = 'assignment/static/all_files/all_assignment/assignment_'+str(assignment.id)+'/inputfile_'+str(i+1)+".txt"
+        inputfiles[i] = 'assignment/all_files/all_assignment/assignment_'+str(assignment.id)+'/inputfile_'+str(i+1)+".txt"
 
     username = request.user.username
     language = 'python'
@@ -200,7 +200,7 @@ def submitcode(request):
     totalscore = 0
 
     for i in range(0,int(total_inputfiles)):
-        assignment_outputfilepath = BASE_DIR + "/assignment/static/all_files/all_assignment/assignment_"+str(assignment.id)+"/outputfile_"+str(i+1)+".txt"
+        assignment_outputfilepath = BASE_DIR + "/assignment/all_files/all_assignment/assignment_"+str(assignment.id)+"/outputfile_"+str(i+1)+".txt"
 
         fhandler = open(outputfiles[i],'r')
         data1 = fhandler.readlines()
@@ -213,7 +213,7 @@ def submitcode(request):
         #print(data1)
         #print(data2)
 
-        assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" + inputfiles[i])[0]
+        assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])[0]
         if data1 == data2:
             score[i] = int(assignment_file.score)
         else:
@@ -245,9 +245,8 @@ def submitcode(request):
     c['errorfiles'] = errorfiles
     c['score'] = score'''
 
-    for i in range(0,int(total_inputfiles)):
-        inputfiles[i] = BASE_DIR + "/" + inputfiles[i]
-
+    #for i in range(0,int(total_inputfiles)):
+    #    inputfil
     combinedlist = zip(inputfiles,outputfiles,runtimes,memoryused,errortypes,errorfiles,score)
 
     c['combinedlist'] = combinedlist
