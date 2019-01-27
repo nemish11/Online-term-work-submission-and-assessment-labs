@@ -184,7 +184,7 @@ def previous_submissions(request):
     c['assignment'] = assignment
     c['accepted'] = len(accepted_submissions)
     c['wrong'] = len(wrong_submissions)
-    c['partially_accepted'] = len(submissions) - len(accepted_submissions) - len(wrong_submissions)
+    c['partially_accepted'] = max(0,len(submissions) - len(accepted_submissions) - len(wrong_submissions))
     c['total_submissions'] = len(submissions)
     c['submissions'] = submissions
     return render(request,'assignment/previous_submissions.html',c)
@@ -280,7 +280,7 @@ def submitcode(request):
     c['previous_code'] = code
     c['totalscore'] = totalscore
     c['verdict'] = submission.verdict
-    
+
     for i in range(0,int(total_inputfiles)):
         inputfiles[i] = submission_files.filter(filepath__contains = "/input_"+str(i+1))[0]
         inputfiles[i].score = score[i]

@@ -2,11 +2,53 @@
 {% block body%}
 <style>
   textarea {
-      width:300px;
-      height: 200px;
-        }
+  min-height: 60px;
+  overflow-y: auto;
+  word-wrap:break-word
+  }
+  
+  #divLoading
+  {
+      display : none;
+  }
+  #divLoading.show
+  {
+      display : block;
+      position : fixed;
+      z-index: 100;
+      background-image : url('http://loadinggif.com/images/image-selection/3.gif');
+      background-color:#666;
+      opacity : 0.4;
+      background-repeat : no-repeat;
+      background-position : center;
+      left : 0;
+      bottom : 0;
+      right : 0;
+      top : 0;
+  }
+  #loadinggif.show
+  {
+      left : 50%;
+      top : 50%;
+      position : absolute;
+      z-index : 101;
+      width : 32px;
+      height : 32px;
+      margin-left : -16px;
+      margin-top : -16px;
+  }
+  div.content {
+     width : 1000px;
+     height : 1000px;
+  }
+
 </style>
 <script>
+  $(document).ready(function(){
+    $("button.content").click(function(){
+        $("div#divLoading").addClass('show');
+    });
+});
   $(document).ready(function(){
 	//code here...
   var lang = "{{assignment.subject.name}}"
@@ -39,6 +81,7 @@
      <input type = "hidden" name="assignmentid" value="{{assignment.id}}" />
      <button type="submit"> see previous submission</button>
   </form>
+
   Title :{{assignment.title}}<br/>
   question is : {{assignment.question}} </br> </br>
  <form action = "/assignment/submitcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
@@ -46,8 +89,14 @@
    Enter a Code : <br/><br/>
 
    <textarea class="codemirror-textarea" style="width:auto;height:10000px" name = "code" value="{{previous_code}}">{{previous_code}}</textarea><br/>
-   <button type="submit"> submit </button>
+
+   <button class="content" type="submit">Submit</button>
+
  </form>
+
+ <div id="divLoading">
+  </div>
+
   <h2>Results :</h2>
   total score is : {{totalscore}} <br/>
   verdict : {{verdict}}
