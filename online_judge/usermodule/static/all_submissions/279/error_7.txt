@@ -1,0 +1,4 @@
+/media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/usermodule/static/all_submissions/279/codefile_7.cpp: In function ‘int main()’:
+/media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/usermodule/static/all_submissions/279/codefile_7.cpp:71:20: error: ‘edl’ was not declared in this scope
+         cout<<ans<<edl;
+                    ^~~

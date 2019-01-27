@@ -9,7 +9,7 @@
   });
 </script>
 
- All week of C subject <br/>
+ All week of {{subject.name}} subject <br/>
  <ul class="collapsible">
    {% for week in all_week %}
     <li>
@@ -29,19 +29,40 @@
       {% ifequal usertype faculty %}
       <form action="/assignment/new_assignment" method="post">{% csrf_token %}
             <input type="hidden" name="weekid" value="{{week.id}}">
-            <button type="submit" name="button">add new</button>
+            <button type="submit" name="button">add new assignment</button>
+      </form>
+      {% endifequal %}
+      {% ifequal usertype "admin" %}
+      <form action="/assignment/new_assignment" method="post">{% csrf_token %}
+            <input type="hidden" name="weekid" value="{{week.id}}">
+            <button type="submit" name="button">add new assignment</button>
       </form>
       {% endifequal %}
       </div>
     </li>
     {% endfor %}
-
+   <li>
     {% ifequal usertype faculty %}
-    <li>
-      <div class="collapsible-header"><i class="material-icons">Addweek</i></div>
-      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-    </li>
+    <div class="collapsible-header">Add New Week </div>
+    <div class="collapsible-body">
+    <form action="/assignment/addweek" method="POST" > {% csrf_token %}
+      <input type="hidden" name="subjectid" value="{{subject.id}}" >
+      enter a name of week :<input type="text" name="weekname" id="weekname"/>
+      <button type="submit" name="button">add week</button>
+    </form>
+    </div>
     {% endifequal %}
+    {% ifequal usertype "admin" %}
+    <div class="collapsible-header">Add New Week </div>
+    <div class="collapsible-body">
+    <form action="/assignment/addweek" method="POST" > {% csrf_token %}
+      <input type="hidden" name="subjectid" value="{{subject.id}}" >
+      enter a name of week :<input type="text" name="weekname" id="weekname"/>
+      <button type="submit" name="button">add week</button>
+    </form>
+    </div>
+    {% endifequal %}
+  </li>
   </ul>
 
 {% endblock %}

@@ -9,6 +9,7 @@ from django.contrib.auth.models import User,Group
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
+from userprofile.models import Student,Faculty
 from userprofile.models import Faculty,Student
 import datetime
 
@@ -38,7 +39,9 @@ def auth_view(request):
         if user is not None:
             auth.login(request, user)
             if user.is_superuser:
-                return render(request,'usermodule/index.html')
+                return HttpResponseRedirect('/subject/')
+            usertype = request.user.groups.all()[0].name
+            request.session['usertype'] = usertype
             return HttpResponseRedirect('/subject/')
         else:
             messages.add_message(request, messages.WARNING, 'Incorect Username or Password')
@@ -54,13 +57,21 @@ def logout(request):
 	return HttpResponseRedirect('/usermodule/login/')
 
 def add_faculty(request):
-    return render(request,'usermodule/add_faculty.html')
+    c = {}
+    c['current_faculty'] = Faculty.objects.filter(is_active= True)
+    c['past_faculty'] = Faculty.objects.filter(is_active=False)
+    return render(request,'usermodule/add_faculty.html',c)
 
 def add_student(request):
-    return render(request,'usermodule/add_student.html')
+    c = {}
+    c['current_student'] = Student.objects.filter(is_active= True)
+    c['past_student'] = Student.objects.filter(is_active=False)
+    return render(request,'usermodule/add_student.html',c)
 
 def addfaculty(request):
     c = {}
+    c['current_faculty'] = Faculty.objects.filter(is_active= True)
+    c['past_faculty'] = Faculty.objects.filter(is_active=False)
     try:
         if not request.user.is_superuser:
             return HttpResponseRedirect('/admin/')
@@ -102,6 +113,8 @@ def addfaculty(request):
 
 def addstudent(request):
     c = {}
+    c['current_student'] = Student.objects.filter(is_active= True)
+    c['past_student'] = Student.objects.filter(is_active=False)
     if not request.user.is_superuser:
         return HttpResponseRedirect('/admin/')
     else:
@@ -139,3 +152,31 @@ def addstudent(request):
 
         c['message'] = "Exception Occured"
         return render(request, 'usermodule/add_student.html', c)
+
+def removefaculty(request):
+    facultyid = request.POST.get('facultyid')
+    faculty = Faculty.objects.get(pk=int(facultyid))
+    faculty.is_active = False
+    faculty.save()
+    return HttpResponseRedirect('/usermodule/add_faculty')
+
+def removestudent(request):
+    studentid = request.POST.get('studentid')
+    student = Student.objects.get(pk=int(studentid))
+    student.is_active = False
+    student.save()
+    return HttpResponseRedirect('/usermodule/add_student')
+
+def readdfaculty(request):
+    facultyid = request.POST.get('facultyid')
+    faculty = Faculty.objects.get(pk=int(facultyid))
+    faculty.is_active = True
+    faculty.save()
+    return HttpResponseRedirect('/usermodule/add_faculty')
+
+def readdstudent(request):
+    studentid = request.POST.get('studentid')
+    student = Student.objects.get(pk=int(studentid))
+    student.is_active = True
+    student.save()
+    return HttpResponseRedirect('/usermodule/add_student')

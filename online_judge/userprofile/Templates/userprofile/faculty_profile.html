@@ -1,13 +1,59 @@
 {% extends "userprofile/base.html" %}
 {% block body%}
-<body>
-  role : Faculty<br/>
-  <a href = "/userprofile/updateFaculty" >edit profile</a> <br/>
-  username : {{request.user.username}}<br/>
-  first_name : {{request.user.first_name}}<br/>
-  last_name : {{request.user.last_name}}<br/>
-  date of birth : {{request.user.student.dob}}<br/>
-  emailId : {{request.user.email}}<br/>
-  phone_no : {{request.user.student.phone_no}}<br/>
-</body>
+
+<table class="highlight centered responsive-table col s8 m8 l8" >
+    <thead>
+      <tr>
+          <th>Role</th>
+          <th>username</th>
+          <th>first name</th>
+          <th>last name</th>
+          <th>date of birth</th>
+          <th>emailId</th>
+          <th>phone no</th>
+          <th> - </th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+              <td> Faculty </td>
+              <td>{{request.user.username}}</td>
+              <td>{{request.user.first_name}}</td>
+              <td>{{request.user.last_name}}</td>
+              <td>{{request.user.student.dob}}</td>
+              <td>{{request.user.email}}</td>
+              <td>{{request.user.faculty.phone_no}}</td>
+              <td><a href = "/userprofile/updateFaculty" >edit profile</a></td>
+          </tr>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+
+    var data = google.visualization.arrayToDataTable([
+      ['Task', 'Accuracy'],
+      ['fully accepted',{{accepted}}],
+      ['wrong',{{wrong}}],
+      ['partially accepted',{{partially_accepted}}]
+    ]);
+
+    var options = {
+      title: 'your submissions details'
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    chart.draw(data, options);
+  }
+</script>
+<br/>
+<br/>
+Total submission made by you : {{total_submissions}} <br/>
+<a href = "/userprofile/allsubmissions"> see all submission in details </a>
+<div id="piechart" style="width: 600px; height: 500px;"></div>
+
+
 {% endblock %}

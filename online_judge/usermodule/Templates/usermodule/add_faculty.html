@@ -3,9 +3,73 @@
 
 <body>
   {{message}}
+  <br/>
+  Add Faculty : <br/>
+  Upload csv file in format (username,password) :
     <form action="/usermodule/addfaculty" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
       <input type="file" name="facultyfile" id="facultyfile"/>
       <button type="submit" value="upload">Upload</button>
     </form>
+    Active Faculty List :
+    <table class="highlight centered responsive-table col s8 m8 l8" >
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>username</th>
+            <th>full name</th>
+            <th>email id</th>
+            <th>phone_no</th>
+            <th>-</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for faculty in current_faculty %}
+                <tr>
+                  <td>{{faculty.id}}</td>
+                  <td>{{faculty.user.username}}</td>
+                  <td>{{faculty.user.first_name}} {{faculty.user.last_name}}</td>
+                  <td>{{faculty.user.email}}</td>
+                  <td>{{faculty.phone_no}}</td>
+                  <td>
+                    <form action="/usermodule/removefaculty" method="POST" > {% csrf_token %}
+                      <input type="hidden" name="facultyid" value="{{faculty.id}}" />
+                      <button type="submit">remove</button>
+                    </form>
+                  </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br/>
+    Past Faculty List :
+    <table class="highlight centered responsive-table col s8 m8 l8" >
+        <thead>
+          <tr>
+              <th>No.</th>
+              <th>username</th>
+              <th>full name</th>
+              <th>email id</th>
+              <th>phone_no</th>
+              <th>-</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for faculty in past_faculty %}
+                <tr>
+                    <td>{{faculty.id}}</td>
+                    <td>{{faculty.user.username}}</td>
+                    <td>{{faculty.user.first_name}} {{faculty.user.last_name}}</td>
+                    <td>{{faculty.user.email}}</td>
+                    <td>{{faculty.phone_no}}</td>
+                    <td>
+                      <form action="/usermodule/readdfaculty" method="POST" > {% csrf_token %}
+                        <input type="hidden" name="facultyid" value="{{faculty.id}}" />
+                        <button type="submit">readd</button>
+                      </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
   </body>
 {% endblock %}

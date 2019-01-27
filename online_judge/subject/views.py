@@ -9,8 +9,6 @@ from django.contrib import messages
 from .models import *
 from userprofile.models import Faculty, Student
 
-
-
 @login_required()
 def all_subject(request):
     if request.user.is_superuser:
@@ -82,7 +80,7 @@ def request_subject(request):
     if request.user.groups.all()[0].name == 'student':
         subjects=Subject.objects.filter(status=True)
         #print(subjects)
-        faculty=Faculty.objects.all()
+        faculty=Faculty.objects.filter(is_active=True)
         #print(faculty)
         student=Student.objects.get(user=request.user)
         try:
@@ -166,17 +164,3 @@ def approved_request(request):
     Request.objects.filter(id=stu).update(status=s)
     messages.add_message(request, messages.INFO, "Request is "+s)
     return HttpResponseRedirect('/subject/request_list')
-
-
-@login_required()
-def go_next(request):
-    if request.user.is_superuser:
-        messages.add_message(request, messages.WARNING, 'You are not authorized!!')
-        return HttpResponseRedirect('/subject/all_subject')
-
-    idd=request.GET.get('id')
-    s = Subject.objects.get(id = idd)
-    c = {}
-    c.update(csrf(request))
-    c['subject'] = s
-    return HttpResponseRedirect('/assignment')

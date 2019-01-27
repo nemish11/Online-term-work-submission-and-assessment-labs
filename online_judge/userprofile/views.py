@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
+from assignment.models import *
 from userprofile.models import Faculty,Student
 
 def updateFaculty(request):
@@ -29,11 +30,12 @@ def update_faculty(request):
     faculty.last_name = last_name
     faculty.faculty.phone_no = phone_no
     faculty.email = email
-    faculty.student.dob = dob
+    if dob:
+        faculty.faculty.dob = dob
     faculty.save()
     faculty.faculty.save()
-
-    return render(request,'userprofile/faculty_profile.html')
+    return HttpResponseRedirect('/userprofile/')
+    #return render(request,'userprofile/faculty_profile.html')
 
 def update_student(request):
     first_name = request.POST.get('first_name')
@@ -47,11 +49,12 @@ def update_student(request):
     student.last_name = last_name
     student.student.phone_no = phone_no
     student.email = email
-    student.student.dob = dob
+    if dob:
+        student.student.dob = dob
     student.save()
     student.student.save()
 
-    return render(request,'userprofile/student_profile.html')
+    return HttpResponseRedirect('/userprofile/')
 
 def updateAdmin(request):
     return render(request,'userprofile/update_admin.html')
@@ -60,16 +63,25 @@ def update_admin(request):
     first_name = request.POST.get('first_name')
     last_name =  request.POST.get('last_name')
     email = request.POST.get('email')
-    
+
     admin_user = User.objects.get(pk=int(request.user.id))
     admin_user.first_name = first_name
     admin_user.last_name = last_name
     admin_user.email = email
     admin_user.save()
-    return render(request,'userprofile/admin_profile.html')
+    return HttpResponseRedirect('/userprofile/')
 
 def profile(request):
     c = {}
+    accepted_submissions = Submission.objects.filter(user = request.user, verdict = "accepted")
+    wrong_submissions = Submission.objects.filter(user = request.user, verdict = "wrong")
+    partially_accepted_submissions = Submission.objects.filter(user = request.user, verdict = "partially accepted")
+
+    c['accepted'] = len(accepted_submissions)
+    c['wrong'] = len(wrong_submissions)
+    c['partially_accepted'] = len(partially_accepted_submissions)
+    c['total_submissions'] = len(accepted_submissions) + len(wrong_submissions) + len(partially_accepted_submissions)
+
     if request.user.is_superuser:
         return render(request,'userprofile/admin_profile.html',c)
     if request.user.groups.all()[0].name == 'student':
@@ -81,4 +93,6 @@ def profile(request):
 
 def allsubmissions(request):
     c = {}
+    submissions = Submission.objects.filter(user = request.user)
+    c['submissions'] = submissions
     return render(request,'userprofile/all_submissions.html',c)
