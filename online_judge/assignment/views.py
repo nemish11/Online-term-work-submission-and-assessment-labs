@@ -151,34 +151,67 @@ def showAssignment(request):
     assignment = Assignment.objects.get(pk = int(assignmentid))
     c['assignment'] = assignment
 
-    try:
-        submission = Submission.objects.filter(user = request.user,assignment = assignment).last()
-        submission_files = Submission_files.objects.filter(submission = submission,type = 'codefile')[0]
+    submission = Submission.objects.filter(user = request.user,assignment = assignment).last()
+    submission_files = Submission_files.objects.filter(submission = submission,type = 'codefile')
 
-        fhandler = open(submission_files.filepath,'r')
+    previous_code = ''
+    if submission_files:
+        submission_files = submission_files[0]
+        fhandler = open(BASE_DIR+"/usermodule"+submission_files.filepath,'r')
         previous_code = fhandler.read()
         fhandler.close()
 
-        c['previous_code'] = previous_code
-        return render(request,'assignment/showAssignment.html',c)
-    except:
-        return render(request,'assignment/showAssignment.html',c)
+    c['previous_code'] = previous_code
+    return render(request,'assignment/showAssignment.html',c)
+
+    #    return render(request,'assignment/showAssignment.html',c)
 
 def previous_submissions(request):
     assignmentid = request.POST.get('assignmentid')
     user = request.user
     assignment = Assignment.objects.get(pk = int(assignmentid))
     submissions = Submission.objects.filter(user=user,assignment=assignment)
+
+    accepted_submissions = submissions.filter(totalscore = assignment.totalscore)
+    wrong_submissions = submissions.filter(totalscore = 0)
+
     c = {}
     c['assignment'] = assignment
-
-    submission_files = []
-    for submission in submissions:
-        submission_files.append(Submission_files.objects.filter(submission=submission))
-
-    combinedlist = zip(submissions,submission_files)
-    c['combinedlist'] = combinedlist
+    c['accepted'] = len(accepted_submissions)
+    c['wrong'] = len(wrong_submissions)
+    c['partially_accepted'] = len(submissions) - len(accepted_submissions) - len(wrong_submissions)
+    c['total_submissions'] = len(submissions)
+    c['submissions'] = submissions
     return render(request,'assignment/previous_submissions.html',c)
+
+def submission_files(request):
+    submissionid = request.POST.get('submissionid')
+    submission = Submission.objects.get(pk=int(submissionid))
+    assignment = submission.assignment
+    total_inputfiles = assignment.total_inputfiles
+    submission_files = Submission_files.objects.filter(submission=submission)
+
+    c = {}
+    c['totalscore'] = submission.totalscore
+
+    inputfiles = ["" for i in range(total_inputfiles)]
+    outputfiles = ["" for i in range(total_inputfiles)]
+    errorfiles = ["" for i in range(total_inputfiles)]
+
+    codefile = submission_files.filter(filepath__contains = "/codefile")[0].filepath
+    codefile_handler = open(BASE_DIR+"/usermodule"+codefile,'r')
+    previous_code = codefile_handler.read()
+    codefile_handler.close()
+
+    for i in range(0,int(total_inputfiles)):
+        inputfiles[i] = submission_files.filter(filepath__contains = "/input_"+str(i+1))[0]
+        outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))[0]
+        errorfiles[i] = submission_files.filter(filepath__contains = "/error_"+str(i+1))[0]
+
+    c['combinedlist'] = zip(inputfiles,outputfiles,errorfiles)
+    c['previous_code'] = previous_code
+    c['assignment'] = assignment
+    return render(request,'assignment/submission_files.html',c)
 
 def submitcode(request):
     assignmentid = request.POST.get('assignmentid')
@@ -193,25 +226,25 @@ def submitcode(request):
     total_inputfiles = int(total_inputfiles)
 
     inputfiles = ["" for i in range(total_inputfiles)]
-    '''outputfiles = ["" for i in range(total_inputfiles)]
+    outputfiles = ["" for i in range(total_inputfiles)]
     errorfiles = ["" for i in range(total_inputfiles)]
-    errortypes = ["" for i in range(total_inputfiles)]
-    runtimes = ["" for i in range(total_inputfiles)]
-    memoryused = ["" for i in range(total_inputfiles)]
     score = [0 for i in range(total_inputfiles)]
-    codefile = [""]'''
 
     for i in range(0,int(total_inputfiles)):
         inputfiles[i] = 'usermodule/static/all_assignment/assignment_'+str(assignment.id)+'/inputfile_'+str(i+1)+".txt"
 
     #submission = submit_code(request,inputfiles,outputfiles,assignment,code,total_inputfiles,errorfiles,errortypes,runtimes,memoryused,codefile)
-    submission,outputfiles,errorfiles,errortypes,runtimes,memoryused,score= submit_code(request,assignment,subject,inputfiles,code)
+    submission = submit_code(request,assignment,subject,inputfiles,code)
     totalscore = 0
+
+    submission_files = Submission_files.objects.filter(submission=submission)
 
     for i in range(0,int(total_inputfiles)):
         assignment_outputfilepath = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(assignment.id)+"/outputfile_"+str(i+1)+".txt"
 
-        fhandler = open(outputfiles[i],'r')
+        outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))[0]
+        outputfilepath = BASE_DIR + "/usermodule" + outputfiles[i].filepath
+        fhandler = open(outputfilepath,'r')
         data1 = fhandler.readlines()
         fhandler.close()
 
@@ -237,23 +270,16 @@ def submitcode(request):
     c['totalscore'] = totalscore
 
     for i in range(0,int(total_inputfiles)):
-       inputfiles[i] = str(submission.id)+"/input_"+str(i+1)+".txt"
-       outputfiles[i] = str(submission.id) + "/output_"+str(i+1)+".txt"
-       errorfiles[i] = str(submission.id) + "/error_"+str(i+1)+".txt"
-
-    '''submission_files = Submission_files.objects.filter(submission=submission)
-
-    for i in range(0,int(total_inputfiles)):
         inputfiles[i] = submission_files.filter(filepath__contains = "/input_"+str(i+1))[0]
         inputfiles[i].score = score[i]
         inputfiles[i].save()
         outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))[0]
         outputfiles[i].score = score[i]
         outputfiles[i].save()
-        errorfiles[i] = submission_files.filter(filepath__contains = "/error_"+str(i+1))[0]'''
+        errorfiles[i] = submission_files.filter(filepath__contains = "/error_"+str(i+1))[0]
 
-    combinedlist = zip(inputfiles,outputfiles,runtimes,memoryused,errortypes,errorfiles,score)
+    #combinedlist = zip(inputfiles,outputfiles,runtimes,memoryused,errortypes,errorfiles,score)
     #c['submission_files'] = submission_files
-    c['combinedlist'] = combinedlist
-    #c['combi'] = zip(inputfiles,outputfiles,errorfiles)
+    #c['combinedlist'] = combinedlist
+    c['combinedlist'] = zip(inputfiles,outputfiles,errorfiles)
     return render(request,'assignment/showAssignment.html',c)

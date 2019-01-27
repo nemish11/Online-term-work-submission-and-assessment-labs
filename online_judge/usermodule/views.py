@@ -9,6 +9,7 @@ from django.contrib.auth.models import User,Group
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
+from userprofile.models import Student,Faculty
 from userprofile.models import Faculty,Student
 import datetime
 
@@ -56,13 +57,21 @@ def logout(request):
 	return HttpResponseRedirect('/usermodule/login/')
 
 def add_faculty(request):
-    return render(request,'usermodule/add_faculty.html')
+    c = {}
+    c['current_faculty'] = Faculty.objects.filter(is_active= True)
+    c['past_faculty'] = Faculty.objects.filter(is_active=False)
+    return render(request,'usermodule/add_faculty.html',c)
 
 def add_student(request):
-    return render(request,'usermodule/add_student.html')
+    c = {}
+    c['current_student'] = Student.objects.filter(is_active= True)
+    c['past_student'] = Student.objects.filter(is_active=False)
+    return render(request,'usermodule/add_student.html',c)
 
 def addfaculty(request):
     c = {}
+    c['current_faculty'] = Faculty.objects.filter(is_active= True)
+    c['past_faculty'] = Faculty.objects.filter(is_active=False)
     try:
         if not request.user.is_superuser:
             return HttpResponseRedirect('/admin/')
@@ -104,6 +113,8 @@ def addfaculty(request):
 
 def addstudent(request):
     c = {}
+    c['current_student'] = Student.objects.filter(is_active= True)
+    c['past_student'] = Student.objects.filter(is_active=False)
     if not request.user.is_superuser:
         return HttpResponseRedirect('/admin/')
     else:

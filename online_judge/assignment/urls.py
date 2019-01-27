@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'uploadfiles',uploadfiles),
     url(r'addweek',addweek),
     url(r'previous_submissions',previous_submissions),
+    url(r'submission_files',submission_files),
     url(r'showWeek',showWeek),
     url(r'',showWeek),
 ]

@@ -8,6 +8,7 @@ class Student(models.Model):
     roll_no = models.CharField(max_length = 30)
     phone_no = models.CharField(max_length = 15)
     dob = models.DateField(null=True,blank=True)
+    is_active = models.BooleanField(default = True)
 
 class Faculty(models.Model):
     user = models.OneToOneField(User,on_delete = models.CASCADE)

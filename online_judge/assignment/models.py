@@ -13,6 +13,7 @@ class Assignment(models.Model):
     week = models.ForeignKey(Week,on_delete = models.CASCADE,related_name = 'assignment_week')
     subject = models.ForeignKey(Subject,on_delete = models.CASCADE,related_name = 'assignment_subject',null=True,blank=True)
     title = models.CharField(max_length = 1000)
+    totalscore = models.IntegerField(default=0)
     isdeleted = models.BooleanField(default=True)
     question = models.CharField(max_length = 70000)
     total_inputfiles = models.IntegerField(null=True)

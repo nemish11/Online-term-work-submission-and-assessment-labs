@@ -16,7 +16,7 @@ from multiprocessing import Pool
 def program_file(request):
     return render(request,'compilerApiApp/index.html')
 
-def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,errorfiles,errortypes,runtimes,memoryused,language,code,filename):
+def run_input_files(request,counter,dirname,submission,inputfiles,language,code,filename):
 
     inputfile = inputfiles[counter-1]
     fhandler = open(inputfile,'r')
@@ -36,12 +36,6 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
     inputfilename = dirname+"/input_"+str(counter)+".txt"
     outputfilename = dirname+"/output_"+str(counter)+".txt"
     errorfilename = dirname+"/error_"+str(counter)+".txt"
-
-    outputfiles[counter-1] = outputfilename
-    errorfiles[counter-1] = errorfilename
-    errortypes[counter-1] = '-'
-    runtimes[counter-1] = '-'
-    memoryused[counter-1] = '-'
 
     codefile = ''
 
@@ -90,7 +84,7 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
             error_f = Submission_files(type='errorfile',submission=submission,filepath=errorfilepath,errortype='compile error',runtime='0.0',memoryused='-')
             error_f.save()
             fhandler = open(errorfilename,'r')
-            errortypes[counter-1] = "compile error"
+            #errortypes[counter-1] = "compile error"
             #c['message'] = "compiler error " + fhandler.read(400)
             fhandler.close()
 
@@ -111,7 +105,7 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
                 f.close()
 
                 if termination_code == "9":
-                    errortypes[counter-1] = 'Time OUT'
+                    #errortypes[counter-1] = 'Time OUT'
                     input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='Time OUT',runtime='2.0',memoryused='-')
                     input_f.save()
                     output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='Time OUT',runtime='2.0',memoryused='-')
@@ -120,7 +114,7 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
                     error_f.save()
                     #c['message'] ="Time OUT" + data[index:index+31]
                 else:
-                    errortypes[counter-1] = 'runtime error'
+                    #errortypes[counter-1] = 'runtime error'
                     input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='Runtime error',runtime='0.0',memoryused='-')
                     input_f.save()
                     output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='Runtime error',runtime='0.0',memoryused='-')
@@ -138,7 +132,7 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
 
                 time_taken = int(data.find("User time (seconds)"))
                 time_taken1 = data[time_taken+20:time_taken+25] + "sec"
-                runtimes[counter-1] = time_taken1
+                #runtimes[counter-1] = time_taken1
                 #c['time_taken'] =  time_taken1
 
                 memory_used = int(data.find("Maximum resident set size (kbytes)"))
@@ -150,7 +144,7 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
                     pointer = pointer + 1
 
                 memory_used1 = memory_used1 + "kb"
-                memoryused[counter-1] = memory_used1
+                #memoryused[counter-1] = memory_used1
                 #c['memory_used'] = memory_used1
 
                 input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
@@ -179,7 +173,7 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
             error_f = Submission_files(type='errorfile',submission=submission,filepath=errorfilepath,errortype='runtime error',runtime='0.0',memoryused='-')
             error_f.save()
             fhandler = open(errorfilename,'r')
-            errortypes[counter-1] = "runtime error"
+            #errortypes[counter-1] = "runtime error"
             index = int(data.find("Command"))
             errormessage = fhandler.read(index)
             #c['message'] = "runtime error " + errormessage
@@ -192,8 +186,8 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
             if (index != -1): #timeout or other error
                 termination_code = data[index+29:index+30]
                 if termination_code == "9":
-                    errortypes[counter-1] = 'Time OUT'
-                    runtimes[counter-1] = '2.01 sec'
+                    #errortypes[counter-1] = 'Time OUT'
+                    #runtimes[counter-1] = '2.01 sec'
                     input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='Time OUT',runtime='2.0',memoryused='-')
                     input_f.save()
                     output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='Time OUT',runtime='2.0',memoryused='-')
@@ -202,8 +196,8 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
                     error_f.save()
                 #    c['message'] ="Time OUT" + data[index:index+31]
                 else:
-                    errortypes[counter-1] = 'runtime error'
-                    runtime[counter-1] = '0.00 sec'
+                    #errortypes[counter-1] = 'runtime error'
+                    #runtime[counter-1] = '0.00 sec'
                     input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='Runtime error',runtime='0.0',memoryused='-')
                     input_f.save()
                     output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='Runtime error',runtime='0.0',memoryused='-')
@@ -216,7 +210,7 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
                 #c['message'] = "sucessfully run"
                 time_taken = int(data.find("User time (seconds)"))
                 time_taken1 = data[time_taken+20:time_taken+25] + "sec"
-                runtimes[counter-1] = time_taken1
+                #runtimes[counter-1] = time_taken1
                 #c['time_taken'] =  time_taken1
 
                 memory_used = int(data.find("Maximum resident set size (kbytes)"))
@@ -228,7 +222,7 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
                     pointer = pointer + 1
 
                 memory_used1 = memory_used1 + "kb"
-                memoryused[counter-1] = memory_used1
+                #memoryused[counter-1] = memory_used1
                 #c['memory_used'] = memory_used1
 
                 input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
@@ -287,16 +281,9 @@ def submit_code(request,assignment,subject,inputfiles,code):
 
     total_inputfiles = assignment.total_inputfiles
 
-    outputfiles = ["" for i in range(total_inputfiles)]
-    errorfiles = ["" for i in range(total_inputfiles)]
-    errortypes = ["" for i in range(total_inputfiles)]
-    runtimes = ["" for i in range(total_inputfiles)]
-    memoryused = ["" for i in range(total_inputfiles)]
-    score = [0 for i in range(total_inputfiles)]
-
     while counter <= total_inputfiles :
         thread_arr.append(str(counter))
-        thread_arr[counter-1] = threading.Thread(target=run_input_files,args=(request,counter,dirname,submission,inputfiles,outputfiles,errorfiles,errortypes,runtimes,memoryused,language,code,filename))
+        thread_arr[counter-1] = threading.Thread(target=run_input_files,args=(request,counter,dirname,submission,inputfiles,language,code,filename))
         thread_arr[counter-1].start()
         counter = counter + 1
 
@@ -307,4 +294,4 @@ def submit_code(request,assignment,subject,inputfiles,code):
 
     submission.isrunning = 'NO'
     submission.save()
-    return submission,outputfiles,errorfiles,errortypes,runtimes,memoryused,score
+    return submission

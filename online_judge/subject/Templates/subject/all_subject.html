@@ -35,6 +35,12 @@
                                   <td><button type="submit" class="btn" name="status" value="remove">Remove</button></td>
                                   <td><input type="hidden" value="{{ s.pk }}" name="id"></td>
                                 </form>
+                                <td>
+                                    <form action="/assignment/showWeek" method="POST" class="col s12"> {% csrf_token %}
+                                      <input type="hidden" name="subjectid" value="{{ s.id }}" />
+                                      <button type="submit" class="btn" name="send">Send</button>
+                                    </form>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
