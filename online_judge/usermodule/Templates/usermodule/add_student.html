@@ -18,17 +18,25 @@
             <th>full name</th>
             <th>email id</th>
             <th>phone_no</th>
-              <th> -</th>
+            <th>year</th>
+            <th>-</th>
           </tr>
         </thead>
         <tbody>
             {% for student in current_student %}
                 <tr>
-                  <td>{{facultly.id}}</td>
+                  <td>{{student.id}}</td>
                   <td>{{student.user.username}}</td>
-                  <td>{{student.user.firstname}} {{student.user.last_name}}</td>
+                  <td>{{student.user.first_name}} {{student.user.last_name}}</td>
                   <td>{{student.user.email}}</td>
-                  <td>--</td>
+                  <td>{{student.phone_no}}</td>
+                  <td>{{student.year}}</td>
+                  <td>
+                    <form action="/usermodule/removestudent" method="POST" > {% csrf_token %}
+                      <input type="hidden" name="studentid" value="{{student.id}}" />
+                      <button type="submit">remove</button>
+                    </form>
+                  </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -49,11 +57,18 @@
         <tbody>
             {% for student in past_student %}
                 <tr>
-                    <td>{{facultly.id}}</td>
+                    <td>{{student.id}}</td>
                     <td>{{student.user.username}}</td>
-                    <td>{{student.user.firstname}} {{student.user.last_name}}</td>
+                    <td>{{student.user.first_name}} {{student.user.last_name}}</td>
                     <td>{{student.user.email}}</td>
-                    <td>--</td>
+                    <td>{{student.phone_no}}</td>
+                    <td>{{student.year}}</td>
+                    <td>
+                      <form action="/usermodule/readdstudent" method="POST" > {% csrf_token %}
+                        <input type="hidden" name="studentid" value="{{student.id}}" />
+                        <button type="submit">readd</button>
+                      </form>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

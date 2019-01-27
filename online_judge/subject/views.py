@@ -9,8 +9,6 @@ from django.contrib import messages
 from .models import *
 from userprofile.models import Faculty, Student
 
-
-
 @login_required()
 def all_subject(request):
     if request.user.is_superuser:
@@ -82,7 +80,7 @@ def request_subject(request):
     if request.user.groups.all()[0].name == 'student':
         subjects=Subject.objects.filter(status=True)
         #print(subjects)
-        faculty=Faculty.objects.all()
+        faculty=Faculty.objects.filter(is_active=True)
         #print(faculty)
         student=Student.objects.get(user=request.user)
         try:

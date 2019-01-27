@@ -19,17 +19,23 @@
             <th>full name</th>
             <th>email id</th>
             <th>phone_no</th>
-            <th> -</th>
+            <th>-</th>
           </tr>
         </thead>
         <tbody>
             {% for faculty in current_faculty %}
                 <tr>
-                  <td>{{facultly.id}}</td>
+                  <td>{{faculty.id}}</td>
                   <td>{{faculty.user.username}}</td>
-                  <td>{{faculty.user.firstname}} {{faculty.user.last_name}}</td>
+                  <td>{{faculty.user.first_name}} {{faculty.user.last_name}}</td>
                   <td>{{faculty.user.email}}</td>
-                  <td>--</td>
+                  <td>{{faculty.phone_no}}</td>
+                  <td>
+                    <form action="/usermodule/removefaculty" method="POST" > {% csrf_token %}
+                      <input type="hidden" name="facultyid" value="{{faculty.id}}" />
+                      <button type="submit">remove</button>
+                    </form>
+                  </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -44,17 +50,23 @@
               <th>full name</th>
               <th>email id</th>
               <th>phone_no</th>
-              <th> -</th>
+              <th>-</th>
           </tr>
         </thead>
         <tbody>
             {% for faculty in past_faculty %}
                 <tr>
-                    <td>{{facultly.id}}</td>
+                    <td>{{faculty.id}}</td>
                     <td>{{faculty.user.username}}</td>
-                    <td>{{faculty.user.firstname}} {{faculty.user.last_name}}</td>
+                    <td>{{faculty.user.first_name}} {{faculty.user.last_name}}</td>
                     <td>{{faculty.user.email}}</td>
-                    <td>--</td>
+                    <td>{{faculty.phone_no}}</td>
+                    <td>
+                      <form action="/usermodule/readdfaculty" method="POST" > {% csrf_token %}
+                        <input type="hidden" name="facultyid" value="{{faculty.id}}" />
+                        <button type="submit">readd</button>
+                      </form>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

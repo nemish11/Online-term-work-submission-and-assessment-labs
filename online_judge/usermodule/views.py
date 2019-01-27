@@ -152,3 +152,31 @@ def addstudent(request):
 
         c['message'] = "Exception Occured"
         return render(request, 'usermodule/add_student.html', c)
+
+def removefaculty(request):
+    facultyid = request.POST.get('facultyid')
+    faculty = Faculty.objects.get(pk=int(facultyid))
+    faculty.is_active = False
+    faculty.save()
+    return HttpResponseRedirect('/usermodule/add_faculty')
+
+def removestudent(request):
+    studentid = request.POST.get('studentid')
+    student = Student.objects.get(pk=int(studentid))
+    student.is_active = False
+    student.save()
+    return HttpResponseRedirect('/usermodule/add_student')
+
+def readdfaculty(request):
+    facultyid = request.POST.get('facultyid')
+    faculty = Faculty.objects.get(pk=int(facultyid))
+    faculty.is_active = True
+    faculty.save()
+    return HttpResponseRedirect('/usermodule/add_faculty')
+
+def readdstudent(request):
+    studentid = request.POST.get('studentid')
+    student = Student.objects.get(pk=int(studentid))
+    student.is_active = True
+    student.save()
+    return HttpResponseRedirect('/usermodule/add_student')
