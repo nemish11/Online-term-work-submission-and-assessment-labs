@@ -1,0 +1,22 @@
+{% extends "assignment/base.html" %}
+{% block body%}
+  subject : {{assignment.subject.name}}<br/>
+  <br/>
+  {% for submission,submission_files in combinedlist %}
+    total score : {{submission.totalscore}} <br/>
+    datetime : {{submission.datetime}}<br/>
+    isrunning : {{submission.isrunning}}<br/>
+
+   {% for submission_file in submission_files %}
+      {{submission_file.id}}<br/>
+      {{submission_file.type}}<br/>
+      {{submission_file.score}}<br/>
+      {{submission_file.errortype}}<br/>
+      {{submission_file.runtime}}<br/>
+      {{submission_file.memoryused}}<br/>
+      {{submission_file.filepath}}<br/>
+      <br/>
+    {% endfor %}
+  {% endfor %}
+
+{% endblock %}

@@ -6,12 +6,14 @@ from subject.models import Subject
 class Week(models.Model):
     subject = models.ForeignKey(Subject,on_delete = models.CASCADE,related_name = 'week_subject')
     name = models.CharField(max_length = 50)
+    isdeleted = models.BooleanField(default=True)
     is_locked = models.BooleanField(default = False)
 
 class Assignment(models.Model):
     week = models.ForeignKey(Week,on_delete = models.CASCADE,related_name = 'assignment_week')
     subject = models.ForeignKey(Subject,on_delete = models.CASCADE,related_name = 'assignment_subject',null=True,blank=True)
     title = models.CharField(max_length = 1000)
+    isdeleted = models.BooleanField(default=True)
     question = models.CharField(max_length = 70000)
     total_inputfiles = models.IntegerField(null=True)
     deadline = models.DateField()

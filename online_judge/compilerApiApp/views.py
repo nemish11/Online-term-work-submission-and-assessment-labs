@@ -74,12 +74,21 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
     if os.path.exists(dirname+"/codefile_"+str(counter)+".out"):
         os.remove(dirname+"/codefile_"+str(counter)+".out")
 
+    inputfilepath = int(inputfilename.find('/static'))
+    inputfilepath = inputfilename[inputfilepath:]
+    outputfilepath = int(outputfilename.find('/static'))
+    outputfilepath = outputfilename[outputfilepath:]
+    errorfilepath = int(errorfilename.find('/static'))
+    errorfilepath = errorfilename[errorfilepath:]
+
     if (language == 'c' or language == 'C' or language == 'C++' or language == 'c++'):
         if os.stat(errorfilename).st_size != 0:
-            input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilename,errortype='compile error',runtime='0.0',memoryused='-')
+            input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='compile error',runtime='0.0',memoryused='-')
             input_f.save()
-            output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilename,errortype='compile error',runtime='0.0',memoryused='-')
+            output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='compile error',runtime='0.0',memoryused='-')
             output_f.save()
+            error_f = Submission_files(type='errorfile',submission=submission,filepath=errorfilepath,errortype='compile error',runtime='0.0',memoryused='-')
+            error_f.save()
             fhandler = open(errorfilename,'r')
             errortypes[counter-1] = "compile error"
             #c['message'] = "compiler error " + fhandler.read(400)
@@ -103,17 +112,21 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
 
                 if termination_code == "9":
                     errortypes[counter-1] = 'Time OUT'
-                    input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilename,errortype='Time OUT',runtime='2.0',memoryused='-')
+                    input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='Time OUT',runtime='2.0',memoryused='-')
                     input_f.save()
-                    output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilename,errortype='Time OUT',runtime='2.0',memoryused='-')
+                    output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='Time OUT',runtime='2.0',memoryused='-')
                     output_f.save()
+                    error_f = Submission_files(type='errorfile',submission=submission,filepath=errorfilepath,errortype='Time OUT',runtime='2.0',memoryused='-')
+                    error_f.save()
                     #c['message'] ="Time OUT" + data[index:index+31]
                 else:
                     errortypes[counter-1] = 'runtime error'
-                    input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilename,errortype='Runtime error',runtime='0.0',memoryused='-')
+                    input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='Runtime error',runtime='0.0',memoryused='-')
                     input_f.save()
-                    output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilename,errortype='Runtime error',runtime='0.0',memoryused='-')
+                    output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='Runtime error',runtime='0.0',memoryused='-')
                     output_f.save()
+                    error_f = Submission_files(type='errorfile',submission=submission,filepath=errorfilepath,errortype='Runtime error',runtime='0.0',memoryused='-')
+                    error_f.save()
                     #c['message'] ="runtime error" + data[index:index+31]
             else:
                 #c['message'] = "sucessfully run"
@@ -140,11 +153,14 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
                 memoryused[counter-1] = memory_used1
                 #c['memory_used'] = memory_used1
 
-                input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilename,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
+                input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
                 input_f.save()
 
-                output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilename,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
+                output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
                 output_f.save()
+
+                error_f = Submission_files(type='errorfile',submission=submission,filepath=errorfilepath,errortype='-r',runtime=str(time_taken1),memoryused=str(memory_used1))
+                error_f.save()
 
     elif language == 'python' or language == 'Python':
 
@@ -156,10 +172,12 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
         index1 = int(data.find("Command terminated by signal"))
 
         if index != 1 and index1==-1: #runtime error
-            input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilename,errortype='runtime error',runtime='0.0',memoryused='-')
+            input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='runtime error',runtime='0.0',memoryused='-')
             input_f.save()
-            output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilename,errortype='runtime error',runtime='0.0',memoryused='-')
+            output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='runtime error',runtime='0.0',memoryused='-')
             output_f.save()
+            error_f = Submission_files(type='errorfile',submission=submission,filepath=errorfilepath,errortype='runtime error',runtime='0.0',memoryused='-')
+            error_f.save()
             fhandler = open(errorfilename,'r')
             errortypes[counter-1] = "runtime error"
             index = int(data.find("Command"))
@@ -173,23 +191,25 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
 
             if (index != -1): #timeout or other error
                 termination_code = data[index+29:index+30]
-                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 if termination_code == "9":
-                    print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
                     errortypes[counter-1] = 'Time OUT'
                     runtimes[counter-1] = '2.01 sec'
-                    input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilename,errortype='Time OUT',runtime='2.0',memoryused='-')
+                    input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='Time OUT',runtime='2.0',memoryused='-')
                     input_f.save()
-                    output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilename,errortype='Time OUT',runtime='2.0',memoryused='-')
+                    output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='Time OUT',runtime='2.0',memoryused='-')
                     output_f.save()
+                    error_f = Submission_files(type='errorfile',submission=submission,filepath=errorfilepath,errortype='Time OUT',runtime='2.0',memoryused='-')
+                    error_f.save()
                 #    c['message'] ="Time OUT" + data[index:index+31]
                 else:
                     errortypes[counter-1] = 'runtime error'
                     runtime[counter-1] = '0.00 sec'
-                    input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilename,errortype='Runtime error',runtime='0.0',memoryused='-')
+                    input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='Runtime error',runtime='0.0',memoryused='-')
                     input_f.save()
-                    output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilename,errortype='Runtime error',runtime='0.0',memoryused='-')
+                    output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='Runtime error',runtime='0.0',memoryused='-')
                     output_f.save()
+                    error_f = Submission_files(type='errorfile',submission=submission,filepath=errorfilepath,errortype='Runtime error',runtime='0.0',memoryused='-')
+                    error_f.save()
                 #    c['message'] ="runtime error" + data[index:index+31]
 
             else: #successfully run
@@ -211,11 +231,14 @@ def run_input_files(request,counter,dirname,submission,inputfiles,outputfiles,er
                 memoryused[counter-1] = memory_used1
                 #c['memory_used'] = memory_used1
 
-                input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilename,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
+                input_f = Submission_files(type='inputfile',submission=submission,filepath=inputfilepath,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
                 input_f.save()
 
-                output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilename,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
+                output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
                 output_f.save()
+
+                error_f = Submission_files(type='errorfile',submission=submission,filepath=errorfilepath,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
+                error_f.save()
 
     else:
         return "NO langauage available"
@@ -250,12 +273,14 @@ def submit_code(request,assignment,subject,inputfiles,code):
     else:
         return "NO language supported"
 
-    #print(codefile[0])
     codefile_handler=open(codefile,'w')
     codefile_handler.write(code)
     codefile_handler.close()
 
-    code_file_object = Submission_files(type='codefile',submission=submission,filepath=codefile,errortype='-',runtime='-',memoryused='-')
+    codefilepath = int(codefile.find('/static'))
+    codefilepath = codefile[codefilepath:]
+
+    code_file_object = Submission_files(type='codefile',submission=submission,filepath=codefilepath,errortype='-',runtime='-',memoryused='-')
     code_file_object.save()
 
     thread_arr = []

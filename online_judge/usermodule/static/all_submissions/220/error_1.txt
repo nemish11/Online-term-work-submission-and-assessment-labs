@@ -1,18 +1,23 @@
-	Command being timed: "python3 /media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/compilerApiApp/all_submissions/220/codefile_1.py"
-	User time (seconds): 0.03
-	System time (seconds): 0.00
-	Percent of CPU this job got: 97%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.03
+  File "/media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/usermodule/static/all_submissions/220/codefile_1.py", line 1
+    a[22222222222222222222222] = ""
+    ^
+IndentationError: unexpected indent
+Command exited with non-zero status 1
+	Command being timed: "python3 /media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/usermodule/static/all_submissions/220/codefile_1.py"
+	User time (seconds): 0.15
+	System time (seconds): 0.02
+	Percent of CPU this job got: 96%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.19
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 9540
+	Maximum resident set size (kbytes): 23872
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 1117
-	Voluntary context switches: 108
-	Involuntary context switches: 3
+	Minor (reclaiming a frame) page faults: 3380
+	Voluntary context switches: 730
+	Involuntary context switches: 8
 	Swaps: 0
 	File system inputs: 0
 	File system outputs: 0
@@ -20,4 +25,4 @@
 	Socket messages received: 0
 	Signals delivered: 0
 	Page size (bytes): 4096
-	Exit status: 0
+	Exit status: 1

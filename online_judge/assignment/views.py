@@ -164,6 +164,22 @@ def showAssignment(request):
     except:
         return render(request,'assignment/showAssignment.html',c)
 
+def previous_submissions(request):
+    assignmentid = request.POST.get('assignmentid')
+    user = request.user
+    assignment = Assignment.objects.get(pk = int(assignmentid))
+    submissions = Submission.objects.filter(user=user,assignment=assignment)
+    c = {}
+    c['assignment'] = assignment
+
+    submission_files = []
+    for submission in submissions:
+        submission_files.append(Submission_files.objects.filter(submission=submission))
+
+    combinedlist = zip(submissions,submission_files)
+    c['combinedlist'] = combinedlist
+    return render(request,'assignment/previous_submissions.html',c)
+
 def submitcode(request):
     assignmentid = request.POST.get('assignmentid')
     code = request.POST.get('code')
@@ -225,7 +241,19 @@ def submitcode(request):
        outputfiles[i] = str(submission.id) + "/output_"+str(i+1)+".txt"
        errorfiles[i] = str(submission.id) + "/error_"+str(i+1)+".txt"
 
-    combinedlist = zip(inputfiles,outputfiles,runtimes,memoryused,errortypes,errorfiles,score)
+    '''submission_files = Submission_files.objects.filter(submission=submission)
 
+    for i in range(0,int(total_inputfiles)):
+        inputfiles[i] = submission_files.filter(filepath__contains = "/input_"+str(i+1))[0]
+        inputfiles[i].score = score[i]
+        inputfiles[i].save()
+        outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))[0]
+        outputfiles[i].score = score[i]
+        outputfiles[i].save()
+        errorfiles[i] = submission_files.filter(filepath__contains = "/error_"+str(i+1))[0]'''
+
+    combinedlist = zip(inputfiles,outputfiles,runtimes,memoryused,errortypes,errorfiles,score)
+    #c['submission_files'] = submission_files
     c['combinedlist'] = combinedlist
+    #c['combi'] = zip(inputfiles,outputfiles,errorfiles)
     return render(request,'assignment/showAssignment.html',c)
