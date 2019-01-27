@@ -239,7 +239,7 @@ def run_input_files(request,counter,dirname,submission,inputfiles,language,code,
 
 
 def submit_code(request,assignment,subject,inputfiles,code):
-    submission = Submission(user=request.user,assignment=assignment,datetime=datetime.now(),isrunning='YES')
+    submission = Submission(user=request.user,assignment=assignment,datetime=datetime.now(),verdict="running",isrunning='YES')
     submission.save()
     submission = Submission.objects.filter(user=request.user,isrunning='YES',assignment=assignment).last()
     id = submission.id

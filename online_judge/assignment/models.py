@@ -33,6 +33,7 @@ class Submission(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='submission_assignment')
     totalscore = models.IntegerField(default=0)
     datetime = models.DateTimeField(null=True,blank=True)
+    verdict = models.CharField(max_length = 50,null=True)
     isrunning = models.CharField(max_length = 20)
 
 class Submission_files(models.Model):

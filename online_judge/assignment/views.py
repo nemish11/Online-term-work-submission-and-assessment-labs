@@ -91,7 +91,7 @@ def newassignment(request):
     codefilename = dirname + "/codefile.txt"
     inp = fs.save(codefilename,codefile)
 
-    assignment_files = Assignment_files(assignment = assignment, type='codefile',filepath=codefilename)
+    assignment_files = Assignment_files(assignment = assignment, type='codefile',filepath=codefilename,totalscore = 0)
     assignment_files.save()
 
     c = {}
@@ -110,11 +110,13 @@ def uploadfiles(request):
     assignment = Assignment.objects.get(pk = int(assignmentid))
     subject = assignment.subject
     total_inputfiles = assignment.total_inputfiles
+    totalscore = 0
 
     for i in range(1,int(total_inputfiles)+1):
         inputfile = request.FILES["inputfile_"+str(i)]
         outputfile = request.FILES["outputfile_"+str(i)]
         score = request.POST.get("score_"+str(i))
+        totalscore = totalscore + int(score)
 
         fs = FileSystemStorage()
         dirname = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(assignment.id)
@@ -130,6 +132,9 @@ def uploadfiles(request):
 
         assignment_files = Assignment_files(assignment = assignment, type='outputfile', filepath=outputfilename, errortype='', runtime='',memoryused='')
         assignment_files.save()
+
+    assignment.totalscore = totalscore
+    assignment.save()
 
     c = {}
     all_week = Week.objects.filter(subject=subject)
@@ -264,11 +269,18 @@ def submitcode(request):
         totalscore = totalscore + int(score[i])
 
     submission.totalscore = totalscore
+    if totalscore == assignment.totalscore:
+        submission.verdict = "accepted"
+    elif totalscore == 0:
+        submission.verdict = "wrong"
+    else:
+        submission.verdict = "partially accepted"
     submission.save()
 
     c['previous_code'] = code
     c['totalscore'] = totalscore
-
+    c['verdict'] = submission.verdict
+    
     for i in range(0,int(total_inputfiles)):
         inputfiles[i] = submission_files.filter(filepath__contains = "/input_"+str(i+1))[0]
         inputfiles[i].score = score[i]
