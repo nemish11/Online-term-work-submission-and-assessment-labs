@@ -210,9 +210,11 @@ def previous_submissions(request):
         assignment = Assignment.objects.get(pk = int(assignmentid))
         submissions = Submission.objects.filter(user=user,assignment=assignment)
 
-        accepted_submissions = submissions.filter(totalscore = assignment.totalscore)
-        wrong_submissions = submissions.filter(totalscore = 0)
-
+        #accepted_submissions = submissions.filter(totalscore = assignment.totalscore)
+        #wrong_submissions = submissions.filter(totalscore = 0)
+        accepted_submissions = submissions.filter(verdict = 'accepted')
+        wrong_submissions = submissions.filter(verdict = 'wrong')
+        
         c = {}
         c['assignment'] = assignment
         c['accepted'] = len(accepted_submissions)

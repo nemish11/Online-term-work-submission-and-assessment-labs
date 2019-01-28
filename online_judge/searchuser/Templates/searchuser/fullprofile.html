@@ -1,0 +1,61 @@
+{% extends "userprofile/base.html" %}
+{% block body%}
+
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+
+    var data = google.visualization.arrayToDataTable([
+      ['Task', 'Accuracy'],
+      ['fully accepted',{{accepted}}],
+      ['wrong',{{wrong}}],
+      ['partially accepted',{{partially_accepted}}]
+    ]);
+
+    var options = {
+      title: 'your submissions details'
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    chart.draw(data, options);
+  }
+</script>
+
+{{message}}
+<table class="highlight centered responsive-table col s8 m8 l8" >
+    <thead>
+      <tr>
+          <th>Role</th>
+          <th>username</th>
+          <th>first name</th>
+          <th>last name</th>
+          <th>Roll No</th>
+          <th>date of birth</th>
+          <th>emailId</th>
+          <th>phone no</th>
+          <th>Year</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+              <td> Student </td>
+              <td>{{student.user.username}}</td>
+              <td>{{student.user.first_name}}</td>
+              <td>{{student.user.last_name}}</td>
+              <td>{{student.roll_no}}
+              <td>{{student.dob}}</td>
+              <td>{{student.user.email}}</td>
+              <td>{{student.phone_no}}</td>
+              <td>{{student.year}}</td>
+          </tr>
+    </tbody>
+</table>
+
+<br/>
+<br/>
+Total submission made by {{student.user.username}} : {{total_submissions}} <br/>
+<div id="piechart" style="width: 600px; height: 500px;"></div>
+
+{% endblock %}
