@@ -26,7 +26,7 @@
             {% endifequal %}
           {% endfor %}
 
-      {% ifequal usertype faculty %}
+      {% ifequal usertype "faculty" %}
       <form action="/assignment/new_assignment" method="post">{% csrf_token %}
             <input type="hidden" name="weekid" value="{{week.id}}">
             <button type="submit" name="button">add new assignment</button>

@@ -46,6 +46,7 @@
                     </tbody>
                 </table>
         {% else %}
+            {% if role == "student" %}
                 <table class="highlight centered responsive-table col s8 m8 l8" >
                     <thead>
                       <tr>
@@ -57,22 +58,12 @@
                     <tbody>
                         {% for s in subject_list %}
                             <tr>
-                                <td>{% if role == "student" %}
-                                        {{ s.subject.subject_code }}
-                                    {% else %}
-                                        {{ s.subject_code }}
-                                    {% endif %}
-                                </td>
-                                <td>{% if role == "student" %}
-                                        {{ s.subject.name }}
-                                    {% else %}
-                                        {{ s.name }}
-                                    {% endif %}
-                                </td>
+                                <td>{{ s.subject.subject_code }}</td>
+                                <td>{{ s.subject.name }}</td>
                                 <td>
                                     <form action="/assignment/showWeek" method="POST" class="col s12"> {% csrf_token %}
                                       <input type="hidden" name="subjectid" value="{{ s.id }}" />
-                                      <button type="submit" class="btn" name="send">Send</button>
+                                      <button type="submit" class="btn" name="send">Go</button>
                                     </form>
                                 </td>
 
@@ -80,8 +71,35 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            {% endif %}
+            {% if role == "faculty" %}
+                <table class="highlight centered responsive-table col s8 m8 l8" >
+                    <thead>
+                      <tr>
+                          <th>subject code</th>
+                          <th>subject name</th>
+                          <th>Go</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in subject_list %}
+                            <tr>
+                                <td>{{ s.subject_code }}</td>
+                                <td>{{ s.name }}</td>
+                                <td>
+                                    <form action="/assignment/showWeek" method="POST" class="col s12"> {% csrf_token %}
+                                      <input type="hidden" name="subjectid" value="{{ s.id }}" />
+                                      <button type="submit" class="btn" name="send">Go</button>
+                                    </form>
+                                </td>
 
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
         {% endif %}
+
     </div>
     <div class="divider col s8 m8 l8"></div>
     {% endif %}

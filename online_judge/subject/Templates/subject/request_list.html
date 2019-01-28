@@ -1,6 +1,6 @@
 {% extends "subject/base.html" %}
 {% block body %}
-<div >
+<div class="container">
     <div class="col s8 m8 l8 ">
         {% if messages %}
             {% for m in messages %}
@@ -23,6 +23,11 @@
                 </tr>
             </thead>
             <tbody>
+            {% if  not req_list|length%}
+                <tr>
+                No Request list..
+                </tr>
+            {% else%}
                 {% for r in req_list %}
                     <tr>
                         <td><input type="hidden" value={{ r.pk }} name="id"></td>
@@ -35,11 +40,56 @@
                         </td>
                     </tr>
                 {% endfor %}
+            {% endif %}
             </tbody>
             </table>
        </form>
     {% endif %}
 
-</div>
 
+ <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.collapsible');
+        var instances = M.Collapsible.init(elems, options);
+        });
+    </script>
+
+    {% for y in year %}
+        <ul class="collapsible">
+            <li>
+                <div class="collapsible-header">Year {{y}}</div>
+                <div class="collapsible-body">
+                    <table class="highlight centered responsive-table col s8 m8 l8" >
+
+                        <tbody>
+
+                            <thead>
+                                <tr>
+                                    <th>Roll no</th>
+                                    <th>Student name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            {% for s in s_list %}
+                                {% if s.student.year == y%}
+                                    <tr>
+                                        <td>{{ s.student.roll_no }}</td>
+                                        <td>{{ s.student.user.username }}</td>
+                                        <td>
+                                            <form action="/subject/remove_student" method="POST" class="col s12"> {% csrf_token %}
+                                            <td><button type="submit" class="btn" name="status" value="remove">Remove</button></td>
+                                            <td><input type="hidden" value="{{ s.pk }}" name="id"></td>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+        </ul>
+    {% endfor%}
 {% endblock %}
+    </div>

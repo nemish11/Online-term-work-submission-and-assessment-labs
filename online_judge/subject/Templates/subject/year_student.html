@@ -1,0 +1,46 @@
+{% extends "subject/base.html" %}
+{% block body %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.collapsible');
+        var instances = M.Collapsible.init(elems, options);
+        });
+    </script>
+
+    {% for y in [1,2,3,4] %}
+        <ul class="collapsible">
+            <li>
+                <div class="collapsible-header">Year {{y}}</div>
+                <div class="collapsible-body">
+                    <table class="highlight centered responsive-table col s8 m8 l8" >
+
+                        <tbody>
+
+                            <thead>
+                                <tr>
+                                    <th>Roll no</th>
+                                    <th>Student name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            {% for s in approved_list %}
+                                {% if s.student.year=y%}
+                                    <tr>
+                                        <td>{{ s.student.roll_no }}</td>
+                                        <td>{{ s.student.name }}</td>
+                                        <td>
+                                            <form action="/subject/remove_student" method="POST" class="col s12"> {% csrf_token %}
+                                            <td><button type="submit" class="btn" name="status" value="remove">Remove</button></td>
+                                            <td><input type="hidden" value="{{ s.pk }}" name="id"></td>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+        </ul>
+    {% endfor%}
+{% endblock %}
