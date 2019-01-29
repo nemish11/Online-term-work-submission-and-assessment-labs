@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e0e77c23-114d-482e-8a39-2f5a91c2e00a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/assignment/Templates/assignment/showWeek.html" beforeDir="false" afterPath="$PROJECT_DIR$/assignment/Templates/assignment/showWeek.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subject/Templates/subject/all_subject.html" beforeDir="false" afterPath="$PROJECT_DIR$/subject/Templates/subject/all_subject.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subject/Templates/subject/remove_subject.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/subject/Templates/subject/request_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/subject/Templates/subject/request_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subject/Templates/subject/request_subject.html" beforeDir="false" afterPath="$PROJECT_DIR$/subject/Templates/subject/request_subject.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subject/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/subject/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subject/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/subject/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="e0e77c23-114d-482e-8a39-2f5a91c2e00a" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +162,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="27" width="1299" height="741" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20187794" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
