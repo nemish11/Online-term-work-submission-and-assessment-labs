@@ -78,8 +78,8 @@
                                         <td>{{ s.student.user.username }}</td>
                                         <td>
                                             <form action="/subject/remove_student" method="POST" class="col s12"> {% csrf_token %}
-                                            <td><button type="submit" class="btn" name="status" value="remove">Remove</button></td>
-                                            <td><input type="hidden" value="{{ s.pk }}" name="id"></td>
+                                            <button type="submit" class="btn" name="status" value="remove">Remove</button>
+                                                <input type="hidden" value="{{ s.pk }}" name="id">
                                             </form>
                                         </td>
                                     </tr>
