@@ -1,3 +1,0 @@
-/media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/usermodule/static/all_submissions/245/codefile_6.cpp:1:1: error: ‘kk’ does not name a type
- kk
- ^~

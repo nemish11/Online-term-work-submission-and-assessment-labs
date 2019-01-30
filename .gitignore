@@ -1,5 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+/online_judge/usermodule/static/all_assignment/
+/online_judge/usermodule/static/all_submissions/
 *.py[cod]
 *$py.class
 
