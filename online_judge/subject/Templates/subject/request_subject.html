@@ -1,6 +1,12 @@
 {% extends "subject/base.html" %}
 {% block body %}
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
 
 <div class="row container">
     <div class="col s8 m8 l8 ">
@@ -12,73 +18,60 @@
             {% endfor %}
         {% endif%}
     </div>
-    {% if role == "student" %}
-        <form action="/subject/pending_request" method="POST" class="col s12"> {% csrf_token %}
-          <!--  <select class="dropdown" name="subject" id="subject">
-            {% for s in req_subject %}
-                <option value="{{ s.pk }}">{{ s.name }}</option>
-            {% endfor %}
-            </select>
-            <select name="faculty" id="faculty">
-            {% for f in faculty %}
-                <option value="{{ f.pk }}">{{ f.user.name }}</option>
-            {% endfor %}
-            </select>
-            <button type="submit" class="btn">Request</button>
-
-
-
-
-        <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>Subject</a>
-
-        <ul id='dropdown1' class='dropdown-content'>
-            {% for s in req_subject %}
-            <li><a href="#!">{{ s.name }}</a></li>
-            {% endfor %}
-        </ul>-->
-            <section>
-            <div class="row">
-
-            <div class="col s12 m6 l6 left">
-                <h5>Select Subject</h5>
-                {% for s in req_subject %}
-                <p>
-                    <label>
-                        <input class="with-gap" name="subject" type="radio"  value="{{ s.pk }}"/>
-                        <span>{{ s.name }}</span>
-                    </label>
-                </p>
-
-                {% endfor %}
-            </div>
-            <div class="col s12 m6 l6 right">
-                <h5>Select Subject</h5>
-                {% for f in faculty_list %}
-                <p>
-                    <label>
-                        <input class="with-gap" name="faculty" type="radio" value="{{ f.pk }}" />
-                        <span>{{ f.user }}</span>
-                    </label>
-                </p>
-                {% endfor %}
-            </div>
-            </div>
-            </section>
+    {% if  not req_list|length%}
+        <div class="col s8 m8 l8 ">
+            <h5>No subject for request.</h5>
+        </div>
+    {% else%}
+        {% if role == "student" %}
+            <form action="/subject/pending_request" method="POST" class="col s12"> {% csrf_token %}
 
                 <section>
-                    <div class="center">
-                        <button type="submit" class="btn ">Request</button>
-                    </div>
+                <div class="row">
+
+                <div class="col s12 m6 l6 left">
+                    <h5>Select Subject</h5>
+                    {% for s in req_subject %}
+                    <p>
+                        <label>
+                            <input class="with-gap" name="subject" type="radio"  value="{{ s.pk }}"/>
+                            <span>{{ s.name }}</span>
+                        </label>
+                    </p>
+
+                    {% endfor %}
+                </div>
+                <div class="col s12 m6 l6 right">
+                    <h5>Select Faculty</h5>
+                    {% for f in faculty_list %}
+                    <p>
+                        <label>
+                            <input class="with-gap" name="faculty" type="radio" value="{{ f.pk }}" />
+                            <span>{{ f.user }}</span>
+                        </label>
+                    </p>
+                    {% endfor %}
+                </div>
+                </div>
                 </section>
 
-        </form>
-    {% endif %}
+                    <section>
+                        <div class="center">
+                            <button type="submit" class="btn ">Request</button>
+                        </div>
+                    </section>
 
+            </form>
+        {% endif %}
+    {% endif %}
 </div>
-<div class="row">
-    <div class="col s8 m8 l8">
-    <h5>Pending Request</h5>
-    <table class="highlight centered responsive-table col s8 m8 l8" >
+
+
+  <ul class="collapsible ">
+    <li>
+      <div class="collapsible-header">Pending Request</div>
+      <div class="collapsible-body">
+          <table class="highlight centered responsive-table col s8 m8 l8" >
 
             <tbody>
             {% if not pending_list|length%}
@@ -89,9 +82,72 @@
                       <th>Subject name</th>
                       <th>Faculty name</th>
                       <th>Status</th>
+                      <th>Action</th>
                   </tr>
                 </thead>
                 {% for s in pending_list %}
+                    <tr>
+                        <td>{{ s.subject.name }}</td>
+                        <td>{{ s.faculty.user }}</td>
+                        <td>{{ s.status }}</td>
+                        <td>
+                            <form action="/subject/removerequest" method="POST" >{% csrf_token%}
+                                <button type="submit" name="remove_s">Remove Request</button>
+                                <input type="hidden" name="id" value="{{ s.pk }}">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Approved Request</div>
+      <div class="collapsible-body">
+          <table class="highlight centered responsive-table col s8 m8 l8" >
+
+            <tbody>
+                {% if not approved_list|length%}
+                <h5>No Request.</h5>
+                {% else %}
+                    <thead>
+                  <tr>
+                      <th>Subject name</th>
+                      <th>Faculty name</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+                {% for s in approved_list %}
+                        <tr>
+                            <td>{{ s.subject.name }}</td>
+                            <td>{{ s.faculty.user }}</td>
+                            <td>{{ s.status }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">Decline Request</div>
+      <div class="collapsible-body">
+          <table class="highlight centered responsive-table col s8 m8 l8" >
+
+            <tbody>
+                {% if not decline_list|length%}
+                <h5>No Request.</h5>
+            {% else %}
+                <thead>
+                  <tr>
+                      <th>Subject name</th>
+                      <th>Faculty name</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+                {% for s in decline_list %}
                     <tr>
                         <td>{{ s.subject.name }}</td>
                         <td>{{ s.faculty.user }}</td>
@@ -101,11 +157,76 @@
             {% endif %}
             </tbody>
         </table>
+      </div>
+    </li>
+      <li>
+      <div class="collapsible-header">Block Request</div>
+      <div class="collapsible-body">
+          <table class="highlight centered responsive-table col s8 m8 l8" >
+
+                {% if not block_list|length%}
+            <h5>No Request.</h5>
+            {% else %}
+                <thead>
+                  <tr>
+                      <th>Subject name</th>
+                      <th>Faculty name</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+            <tbody>
+                {% for s in block_list %}
+                    <tr>
+                        <td>{{ s.subject.name }}</td>
+                        <td>{{ s.faculty.user }}</td>
+                        <td>{{ s.status }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+      </div>
+    </li>
+  </ul>
+
+
+
+<!--<div class="row">
+    <div class="col s8 m8 l8">
+    <h5>Pending Request</h5>
+    <table class="highlight centered responsive-table col s8 m8 l8" >
+            <tbody>
+            {% if not pending_list|length%}
+            <h5>No Request.</h5>
+            {% else %}
+                <thead>
+                  <tr>
+                      <th>Subject name</th>
+                      <th>Faculty name</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                  </tr>
+                </thead>
+                {% for s in pending_list %}
+                    <tr>
+                        <td>{{ s.subject.name }}</td>
+                        <td>{{ s.faculty.user }}</td>
+                        <td>{{ s.status }}</td>
+                        <td>
+                            <form action="/subject/removerequest" method="POST" >{% csrf_token%}
+                                <button type="submit" name="remove_s">Remove Request</button>
+                                <input type="hidden" name="id" value="{{ s.pk }}">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
     </div>
     <div class="col s8 m8 l8">
     <h5>Approved Request</h5>
     <table class="highlight centered responsive-table col s8 m8 l8" >
-
             <tbody>
                 {% if not approved_list|length%}
                 <h5>No Request.</h5>
@@ -131,7 +252,6 @@
     <div class="col s8 m8 l8">
     <h5>Decline Request</h5>
     <table class="highlight centered responsive-table col s8 m8 l8" >
-
             <tbody>
                 {% if not decline_list|length%}
                 <h5>No Request.</h5>
@@ -157,7 +277,6 @@
     <div class="col s8 m8 l8">
     <h5>Block Request</h5>
     <table class="highlight centered responsive-table col s8 m8 l8" >
-
                 {% if not block_list|length%}
             <h5>No Request.</h5>
             {% else %}
@@ -182,3 +301,4 @@
     </div>
 </div>
 {% endblock %}
+-->
