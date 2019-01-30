@@ -7,7 +7,7 @@
 
 if gcc $1 -o $2 &> $6;
 then
-  ulimit -t 2
+  ulimit -t 4
   ulimit -m 30000
   /usr/bin/time -v $3 <$4 &> $5
   exit

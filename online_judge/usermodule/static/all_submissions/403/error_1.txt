@@ -1,0 +1,8 @@
+/media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/usermodule/static/all_submissions/403/codefile_1.cpp: In function ‘int main()’:
+/media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/usermodule/static/all_submissions/403/codefile_1.cpp:45:31: error: ‘getmidmid’ was not declared in this scope
+             long long int y = getmidmid);
+                               ^~~~~~~~~
+/media/nemish/College/GIT/Online-term-work-submission-and-assessment-labs/online_judge/usermodule/static/all_submissions/403/codefile_1.cpp:45:31: note: suggested alternative: ‘getmid’
+             long long int y = getmidmid);
+                               ^~~~~~~~~
+                               getmid

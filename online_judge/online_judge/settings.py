@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'usermodule.apps.UsermoduleConfig',
     'userprofile.apps.UserprofileConfig',
     'compilerApiApp.apps.CompilerapiappConfig',
+    'searchuser.apps.SearchuserConfig',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +63,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR,'usermodule/Templates'),os.path.join(BASE_DIR,'subject/Templates'),
                 os.path.join(BASE_DIR,'userprofile/Templates'), os.path.join(BASE_DIR,'assignment/Templates'),
-                os.path.join(BASE_DIR,'leaderboard/Templates'), os.path.join(BASE_DIR,'compilerApiApp/Templates') ],
+                os.path.join(BASE_DIR,'leaderboard/Templates'), os.path.join(BASE_DIR,'compilerApiApp/Templates'),
+                os.path.join(BASE_DIR,'searchuser/Templates') ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -25,7 +25,7 @@ def showWeek(request):
         c={}
         subjectid = request.POST.get('subjectid')
         subject = Subject.objects.get(pk=int(subjectid))
-        all_week = Week.objects.filter(subject=subject)
+        all_week = Week.objects.filter(subject=subject,isdeleted=False)
         c['subject'] = subject
         c['all_week'] = all_week
         all_assignment = Assignment.objects.filter(subject=subject)
@@ -49,7 +49,34 @@ def addweek(request):
         subject = Subject.objects.get(pk=int(subjectid))
         week = Week(name=weekname,subject=subject)
         week.save()
-        all_week = Week.objects.filter(subject=subject)
+        all_week = Week.objects.filter(subject=subject,isdeleted=False)
+        c['all_week'] = all_week
+        all_assignment = Assignment.objects.filter(subject=subject)
+        c['all_assignment'] = all_assignment
+        if request.user.is_superuser:
+            usertype = 'admin'
+        else:
+            usertype = request.user.groups.all()[0].name
+        c['usertype'] = usertype
+        c['faculty'] = 'faculty'
+        c['subject'] = subject
+        return render(request,'assignment/showWeek.html',c)
+    except:
+        c = {}
+        c['message'] = "Exception Occured..please try again and enter a correct details.."
+        return render(request,'assignment/showWeek.html',c)
+
+@login_required()
+def deleteweek(request):
+    try:
+        weekid = request.POST.get('weekid')
+        week = Week.objects.get(pk = int(weekid))
+        week.isdeleted = True
+        week.save()
+        c = {}
+        subject = week.subject
+        all_week = Week.objects.filter(subject=subject,isdeleted=False)
+        c['subject'] = subject
         c['all_week'] = all_week
         all_assignment = Assignment.objects.filter(subject=subject)
         c['all_assignment'] = all_assignment
@@ -61,15 +88,13 @@ def addweek(request):
         c['faculty'] = 'faculty'
         return render(request,'assignment/showWeek.html',c)
     except:
-        c = {}
-        c['message'] = "Exception Occured..please try again and enter a correct details.."
-        return render(request,'assignment/showWeek.html',c)
+        return HttpResponseRedirect('/subject/')
 
 @login_required()
 def new_assignment(request):
     try:
         weekid = request.POST.get('weekid')
-        week = Week.objects.filter(id = int(weekid))[0]
+        week = Week.objects.get(pk = int(weekid))
         subject  = week.subject
         c = {}
         c['week'] = week
@@ -109,7 +134,7 @@ def newassignment(request):
         codefilename = dirname + "/codefile.txt"
         inp = fs.save(codefilename,codefile)
 
-        assignment_files = Assignment_files(assignment = assignment, type='codefile',filepath=codefilename,totalscore = 0)
+        assignment_files = Assignment_files(assignment = assignment, type='codefile',filepath=codefilename,score = 0)
         assignment_files.save()
 
         c = {}
@@ -161,7 +186,7 @@ def uploadfiles(request):
         assignment.save()
 
         c = {}
-        all_week = Week.objects.filter(subject=subject)
+        all_week = Week.objects.filter(subject=subject,isdeleted=False)
         c['subject'] = subject
         c['all_week'] = all_week
         all_assignment = Assignment.objects.filter(subject=subject)
@@ -210,8 +235,10 @@ def previous_submissions(request):
         assignment = Assignment.objects.get(pk = int(assignmentid))
         submissions = Submission.objects.filter(user=user,assignment=assignment)
 
-        accepted_submissions = submissions.filter(totalscore = assignment.totalscore)
-        wrong_submissions = submissions.filter(totalscore = 0)
+        #accepted_submissions = submissions.filter(totalscore = assignment.totalscore)
+        #wrong_submissions = submissions.filter(totalscore = 0)
+        accepted_submissions = submissions.filter(verdict = 'accepted')
+        wrong_submissions = submissions.filter(verdict = 'wrong')
 
         c = {}
         c['assignment'] = assignment
@@ -240,18 +267,35 @@ def submission_files(request):
         outputfiles = ["" for i in range(total_inputfiles)]
         errorfiles = ["" for i in range(total_inputfiles)]
 
-        codefile = submission_files.filter(filepath__contains = "/codefile")[0].filepath
-        codefile_handler = open(BASE_DIR+"/usermodule"+codefile,'r')
-        previous_code = codefile_handler.read()
-        codefile_handler.close()
+        codefile = submission_files.filter(filepath__contains = "/codefile")
+        if codefile:
+            codefile = codefile[0].filepath
+            codefile_handler = open(BASE_DIR+"/usermodule"+codefile,'r')
+            previous_code = codefile_handler.read()
+            c['previous_code'] = previous_code
+            codefile_handler.close()
+        else:
+            c['message'] = 'file properly not uploaded..please contact to faculty.'
 
         for i in range(0,int(total_inputfiles)):
-            inputfiles[i] = submission_files.filter(filepath__contains = "/input_"+str(i+1))[0]
-            outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))[0]
-            errorfiles[i] = submission_files.filter(filepath__contains = "/error_"+str(i+1))[0]
+            inputfiles[i] = submission_files.filter(filepath__contains = "/input_"+str(i+1))
+            if inputfiles[i]:
+                inputfiles[i] = inputfiles[i][0]
+            else:
+                c['message'] = 'file properly not uploaded..please contact to faculty.'
+            outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))
+            if outputfiles[i]:
+                outputfiles[i] = outputfiles[i][0]
+            else:
+                c['message'] = 'file properly not uploaded..please contact to faculty.'
+            errorfiles[i] = submission_files.filter(filepath__contains = "/error_"+str(i+1))
+            if errorfiles[i]:
+                errorfiles[i] = errorfiles[i][0]
+            else:
+                c['message'] = 'file properly not uploaded..please contact to faculty.'
 
         c['combinedlist'] = zip(inputfiles,outputfiles,errorfiles)
-        c['previous_code'] = previous_code
+
         c['assignment'] = assignment
         return render(request,'assignment/submission_files.html',c)
     except:
@@ -288,22 +332,27 @@ def submitcode(request):
         for i in range(0,int(total_inputfiles)):
             assignment_outputfilepath = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(assignment.id)+"/outputfile_"+str(i+1)+".txt"
 
-            outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))[0]
-            outputfilepath = BASE_DIR + "/usermodule" + outputfiles[i].filepath
-            fhandler = open(outputfilepath,'r')
-            data1 = fhandler.readlines()
-            fhandler.close()
+            outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))
 
-            fhandler = open(assignment_outputfilepath)
-            data2 = fhandler.readlines()
-            fhandler.close()
+            if outputfiles[i]:
+                outputfiles[i] = outputfiles[i][0]
+                outputfilepath = BASE_DIR + "/usermodule" + outputfiles[i].filepath
+                fhandler = open(outputfilepath,'r')
+                data1 = fhandler.readlines()
+                fhandler.close()
 
-            #print(data1)
-            #print(data2)
+                fhandler = open(assignment_outputfilepath)
+                data2 = fhandler.readlines()
+                fhandler.close()
 
-            assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])[0]
-            if data1 == data2:
-                score[i] = int(assignment_file.score)
+                #print(data1)
+                #print(data2)
+
+                assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])[0]
+                if data1 == data2:
+                    score[i] = int(assignment_file.score)
+                else:
+                    score[i] = 0
             else:
                 score[i] = 0
 
@@ -323,13 +372,25 @@ def submitcode(request):
         c['verdict'] = submission.verdict
 
         for i in range(0,int(total_inputfiles)):
-            inputfiles[i] = submission_files.filter(filepath__contains = "/input_"+str(i+1))[0]
-            inputfiles[i].score = score[i]
-            inputfiles[i].save()
-            outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))[0]
-            outputfiles[i].score = score[i]
-            outputfiles[i].save()
-            errorfiles[i] = submission_files.filter(filepath__contains = "/error_"+str(i+1))[0]
+            inputfiles[i] = submission_files.filter(filepath__contains = "/input_"+str(i+1))
+            if inputfiles[i]:
+                inputfiles[i] = inputfiles[i][0]
+                inputfiles[i].score = score[i]
+                inputfiles[i].save()
+            else:
+                c['message'] = "file properly not uploaded..please contact to faculty"
+            outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))
+            if outputfiles[i]:
+                outputfiles[i] = outputfiles[i][0]
+                outputfiles[i].score = score[i]
+                outputfiles[i].save()
+            else:
+                c['message'] = "file properly not uploaded..please contact to faculty"
+            errorfiles[i] = submission_files.filter(filepath__contains = "/error_"+str(i+1))
+            if errorfiles[i]:
+                errorfiles[i] = errorfiles[i][0]
+            else:
+                c['message'] = "file properly not uploaded..please contact to faculty"
 
         #combinedlist = zip(inputfiles,outputfiles,runtimes,memoryused,errortypes,errorfiles,score)
         #c['submission_files'] = submission_files

@@ -31,6 +31,10 @@
             <input type="hidden" name="weekid" value="{{week.id}}">
             <button type="submit" name="button">add new assignment</button>
       </form>
+      <form action="/assignment/deleteweek" method="POST"> {% csrf_token %}
+        <input type="hidden" name="weekid" value="{{week.id}}">
+        <button type="submit" name="button">Delete week</button>
+      </form>
       {% endifequal %}
       {% ifequal usertype "admin" %}
       <form action="/assignment/new_assignment" method="post">{% csrf_token %}

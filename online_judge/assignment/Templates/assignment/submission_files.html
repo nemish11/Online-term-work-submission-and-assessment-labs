@@ -80,6 +80,7 @@
      <input type = "hidden" name="assignmentid" value="{{assignment.id}}" />
      <button type="submit"> back to previous submission</button>
   </form>
+  <p style='color:red;'>{{message}}</p><br/>
   Title :{{assignment.title}}<br/>
   question is : {{assignment.question}} </br> </br>
  <form action = "/assignment/submitcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
