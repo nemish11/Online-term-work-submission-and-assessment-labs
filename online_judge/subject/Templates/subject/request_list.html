@@ -23,15 +23,15 @@
                 </tr>
             </thead>
             <tbody>
-            {% if  not req_list|length%}
+            {% if not req_list|length%}
                 <tr>
                 No Request list..
                 </tr>
             {% else%}
                 {% for r in req_list %}
                     <tr>
-                        <td><input type="hidden" value={{ r.pk }} name="id"></td>
-                        <td>{{ r.student.user }}</td>
+                        <td><input type="hidden" value={{ r.pk }} name="id">
+                        {{ r.student.user.username }}</td>
                         <td>{{ r.subject.name }}</td>
                         <td>
                             <button type="submit" class="btn" name="status" value="approved">Approved</button>
@@ -47,49 +47,58 @@
     {% endif %}
 
 
- <script>
+<script>
         document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.collapsible');
         var instances = M.Collapsible.init(elems, options);
         });
-    </script>
+</script>
 
-    {% for y in year %}
+    {% for sub in subject %}
         <ul class="collapsible">
             <li>
-                <div class="collapsible-header">Year {{y}}</div>
+                <div class="collapsible-header">{{ sub.name }}</div>
                 <div class="collapsible-body">
-                    <table class="highlight centered responsive-table col s8 m8 l8" >
+                    {% for y in year %}
+                        <ul class="collapsible">
+                            <li>
+                                <div class="collapsible-header">Year {{y}}</div>
+                                <div class="collapsible-body">
+                                    <table class="highlight centered responsive-table col s8 m8 l8" >
 
-                        <tbody>
+                                        <tbody>
 
-                            <thead>
-                                <tr>
-                                    <th>Roll no</th>
-                                    <th>Student name</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
+                                            <thead>
+                                                <tr>
+                                                    <th>Roll no</th>
+                                                    <th>Student name</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
 
-                            {% for s in s_list %}
-                                {% if s.student.year == y%}
-                                    <tr>
-                                        <td>{{ s.student.roll_no }}</td>
-                                        <td>{{ s.student.user.username }}</td>
-                                        <td>
-                                            <form action="/subject/remove_student" method="POST" class="col s12"> {% csrf_token %}
-                                            <button type="submit" class="btn" name="status" value="remove">Remove</button>
-                                                <input type="hidden" value="{{ s.pk }}" name="id">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                                            {% for s in s_list %}
+                                                {% if s.student.year == y and s.subject == sub %}
+                                                    <tr>
+                                                        <td>{{ s.student.roll_no }}</td>
+                                                        <td>{{ s.student.user.username }}</td>
+                                                        <td>
+                                                            <form action="/subject/remove_student" method="POST" class="col s12"> {% csrf_token %}
+                                                            <button type="submit" class="btn" name="status" value="remove">Remove</button>
+                                                                <input type="hidden" value="{{ s.pk }}" name="id">
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                    {% endfor %}
                 </div>
             </li>
         </ul>
-    {% endfor%}
+    {% endfor %}
 {% endblock %}
     </div>

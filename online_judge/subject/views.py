@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import *
 from userprofile.models import Faculty, Student
+from django.db.models import Max,Min
 
 @login_required()
 def all_subject(request):
@@ -118,13 +119,10 @@ def request_subject(request):
             if dic[key]==1:
                 slist.append(dic2[key])
         sub_list = []
-        print("length ",len(slist))
-        '''if r_subject is None:
-            sub_list=subjects
-        else:
-            for s in subjects:
-                if s not in approved_list:sub_list.append(s)'''
-        #print(len(sub_list))
+
+        c = {}
+        #c['req_subject'] = slist
+
         return render(request,'subject/request_subject.html',{'req_subject': slist,'faculty_list':faculty,'role':"student",'pending_list':pending_list,'approved_list':approved_list,'decline_list':decline_list,'block_list':block_list})
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
@@ -177,23 +175,32 @@ def request_list(request):
         return HttpResponseRedirect('/subject/all_subject')
 
     if request.user.groups.all()[0].name == 'faculty':
-        faculty=Faculty.objects.get(user=request.user)
+        faculty = Faculty.objects.get(user=request.user)
         try:
-            req_list=Request.objects.filter(faculty=faculty,status="pending")
+            req_list = Request.objects.filter(faculty=faculty,status="pending")
         except:
-            req_list=None
-
+            req_list = None
 
         try:
             subject = Subject.objects.filter(status=True)
         except:
-            subject =None
+            subject = None
 
         student = Request.objects.filter(faculty=faculty, status="approved")
-        #print(student[0].student.name)
-        #return render(request, 'subject/year_student.html', {'s_list': student})
-        y=[2016,2017,2018,2019]
-        return render(request,'subject/request_list.html',{'req_list':req_list,'role':"faculty",'s_list': student,'year':y})
+        subject = Subject.objects.filter(status=True)
+        y1 = Student.objects.all().aggregate(Max('year'))['year__max']
+        y2 = Student.objects.all().aggregate(Min('year'))['year__min']
+
+        y = []
+        for i in range(y1, y2-1, -1):
+            y.append(i)
+        c = {}
+        c['req_list'] = req_list
+        c['role'] = "faculty"
+        c['s_list'] = student
+        c['year'] = y
+        c['subject'] = subject
+        return render(request,'subject/request_list.html', c)
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/all_subject')
