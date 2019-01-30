@@ -6,7 +6,7 @@
   overflow-y: auto;
   word-wrap:break-word
   }
-  
+
   #divLoading
   {
       display : none;
@@ -81,7 +81,7 @@
      <input type = "hidden" name="assignmentid" value="{{assignment.id}}" />
      <button type="submit"> see previous submission</button>
   </form>
-
+    <p style='color:red;'>{{message}}</p><br/>
   Title :{{assignment.title}}<br/>
   question is : {{assignment.question}} </br> </br>
  <form action = "/assignment/submitcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
@@ -96,41 +96,42 @@
 
  <div id="divLoading">
   </div>
+  {% if combinedlist %}
+    <h2>Results :</h2>
+    total score is : {{totalscore}} <br/>
+    verdict : {{verdict}}
+    <br/>
+    <br/>
+    <table class="highlight centered responsive-table col s8 m8 l8" >
+        <thead>
+          <tr>
+              <th>inputfiles</th>
+              <th>outputfiles</th>
+              <th>runtimes</th>
+              <th>memoryused</th>
+              <th>errortypes</th>
+              <th>detailfiles</th>
+              <th>score</th>
+          </tr>
+        </thead>
+        <tbody>
 
-  <h2>Results :</h2>
-  total score is : {{totalscore}} <br/>
-  verdict : {{verdict}}
-  <br/>
-  <br/>
-  <table class="highlight centered responsive-table col s8 m8 l8" >
-      <thead>
-        <tr>
-            <th>inputfiles</th>
-            <th>outputfiles</th>
-            <th>runtimes</th>
-            <th>memoryused</th>
-            <th>errortypes</th>
-            <th>detailfiles</th>
-            <th>score</th>
-        </tr>
-      </thead>
-      <tbody>
+            {% for inputfile,outputfile,errorfile in combinedlist %}
 
-          {% for inputfile,outputfile,errorfile in combinedlist %}
+                <tr>
 
-              <tr>
+                    <td><a href="{{inputfile.filepath}}" download>inputfile</a></td>
 
-                  <td><a href="{{inputfile.filepath}}" download>inputfile</a></td>
+                    <td><a href = "{{outputfile.filepath}}" download>outputfile</td>
+                    <td>{{inputfile.runtime}}</td>
+                    <td>{{inputfile.memoryused}}</td>
+                    <td>{{inputfile.errortype}}</td>
+                    <td><a href="{{errorfile.filepath}}" download>detailfile</a></td>
+                    <td>{{inputfile.score}}</td>
 
-                  <td><a href = "{{outputfile.filepath}}" download>outputfile</td>
-                  <td>{{inputfile.runtime}}</td>
-                  <td>{{inputfile.memoryused}}</td>
-                  <td>{{inputfile.errortype}}</td>
-                  <td><a href="{{errorfile.filepath}}" download>detailfile</a></td>
-                  <td>{{inputfile.score}}</td>
-
-              </tr>
-          {% endfor %}
-      </tbody>
-  </table>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+   {% endif %}
  {% endblock %}

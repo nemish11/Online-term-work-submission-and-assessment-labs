@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'previous_submissions',previous_submissions),
     url(r'submission_files',submission_files),
     url(r'showWeek',showWeek),
+    url(r'deleteweek',deleteweek),
     url(r'',showWeek),
 ]
