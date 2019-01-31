@@ -1,1 +1,16 @@
-"Rutvik","thisispassword",1,2016
+#include<stdio.h>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<string.h>
+using namespace std;
+
+int main(){
+	int n;
+	cin>>n;
+	for(int i=0;i<5;i++){
+	cout<<n<<endl;	
+	}
+	return 0;
+}
