@@ -1,28 +1,30 @@
 {% extends "subject/base.html" %}
 {% block body %}
+{% set counter = 1 %}
     <div ><header>{{ subject.name }}</header></div>
     <div class="row container">
         <table class="highlight centered responsive-table col s8 m8 l8" >
-                    <thead>
-                      <tr>
-                          <th>Rank</th>
-                          <th>Student Name</th>
-                          {% for w in weeks %}
-                            <th>{{ w.name }}</th>
-                          {% endfor %}
-                      </tr>
-                    </thead>
-                    <tbody>
-                        {% for d in data %}
-                            <tr>
-                                <td>1</td>
-                                <td>{{ d.user }}</td>
-                                {% for week in d %}
-                                    <td>{{ d.week }}</td>
-                                {% endfor %}
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Student Name</th>
+                    <th>Total score</th>
+                    {% for w in weeks %}
+                        <th>{{ w }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+                <tbody>
+                    {% for key,value in data.items %}
+                        <tr>
+                            <td>{{ counter++ }}</td>
+					        {% for k,v in value.items %}
+                                <td>{{ v }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
     </div>
+
 {% endblock %}

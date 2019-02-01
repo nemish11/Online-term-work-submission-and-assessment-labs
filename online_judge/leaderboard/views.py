@@ -5,8 +5,8 @@ from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from assignment.models import Week,Assignment,Submission
-from subject.models import Subject,Request
+from assignment.models import Week, Assignment, Submission
+from subject.models import Subject, Request
 #from .models import *
 from userprofile.models import Faculty, Student
 
@@ -24,14 +24,14 @@ def show_leaderboard(request):
         for w in weeks:
             t[w.name] = 0
         dic[s.student.user] = t
-    '''for key in dic:
+    for key in dic:
         d = dic[key]
         for w in weeks:
 
             assign = Assignment.objects.filter(week=w, subject=subject,Submission__user=request.user).sum('totalscore')
 
             d[w.name] = assign
-            print(key.user.username, w.name, assign)'''
+            print(key.user.username, w.name, assign)
     for s in submision_list:
         assign = s.assignment
         w = assign.week.name
@@ -40,8 +40,10 @@ def show_leaderboard(request):
             dic[s.user][w] = s.totalscore
 
     c = {}
+    
     c['data'] = dic
-    c['weeks'] = weeks
+    c['weeks'] = [week.name for week in weeks]
+
     c['subject'] = subject
     return render(request, 'leaderboard/show_leaderboard.html', c)
 
