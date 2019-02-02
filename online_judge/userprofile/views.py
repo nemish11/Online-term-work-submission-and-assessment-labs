@@ -95,14 +95,14 @@ def update_admin(request):
 def profile(request):
     try:
         c = {}
-        accepted_submissions = Submission.objects.filter(user = request.user, verdict = "accepted")
-        wrong_submissions = Submission.objects.filter(user = request.user, verdict = "wrong")
-        partially_accepted_submissions = Submission.objects.filter(user = request.user, verdict = "partially accepted")
+        all_submissions = Submission.objects.filter(user = request.user)
+        accepted_submissions = all_submissions.filter(verdict = "accepted")
+        wrong_submissions = all_submissions.filter(verdict = "wrong")
 
         c['accepted'] = len(accepted_submissions)
         c['wrong'] = len(wrong_submissions)
-        c['partially_accepted'] = len(partially_accepted_submissions)
-        c['total_submissions'] = len(accepted_submissions) + len(wrong_submissions) + len(partially_accepted_submissions)
+        c['partially_accepted'] = len(all_submissions) - len(accepted_submissions) - len(wrong_submissions)
+        c['total_submissions'] = len(all_submissions)
 
         if request.user.is_superuser:
             return render(request,'userprofile/admin_profile.html',c)

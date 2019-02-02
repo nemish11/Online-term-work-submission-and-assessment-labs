@@ -23,6 +23,22 @@
                 <button type="submit" name="button">{{assignment.title}}</button>
               </div>
               </form>
+              {% ifequal usertype faculty %}
+              <form action = "/assignment/deleteAssignment" method="POST" > {% csrf_token %}
+               <div class = "row" >
+                 <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
+                 <button type="submit" name="button">Delete {{assignment.title}}</button>
+               </div>
+               </form>
+              {% endifequal %}
+              {% ifequal usertype "admin" %}
+                <form action = "/assignment/deleteAssignment" method="POST" > {% csrf_token %}
+                 <div class = "row" >
+                   <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
+                   <button type="submit" name="button">Delete {{assignment.title}}</button>
+                 </div>
+                 </form>
+              {% endifequal %}
             {% endifequal %}
           {% endfor %}
 

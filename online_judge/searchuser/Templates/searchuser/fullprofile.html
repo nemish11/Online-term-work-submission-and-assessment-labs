@@ -23,7 +23,16 @@
   }
 </script>
 
-{{message}}
+<div>
+  <div class="col s8 m8 l8 ">
+      {% if messages %}
+          {% for m in messages %}
+                  <script>
+          Materialize.toast('{{ m }}', 3000);
+        </script>
+          {% endfor %}
+      {% endif%}
+  </div>
 <table class="highlight centered responsive-table col s8 m8 l8" >
     <thead>
       <tr>
@@ -56,6 +65,9 @@
 <br/>
 <br/>
 Total submission made by {{student.user.username}} : {{total_submissions}} <br/>
+{% ifequal request.session.usertype "faculty" %}
+    <a href = "/searchuser/allsubmissions" > see all submissions </a>
+{% endifequal %}
 <div id="piechart" style="width: 600px; height: 500px;"></div>
-
+</div>
 {% endblock %}

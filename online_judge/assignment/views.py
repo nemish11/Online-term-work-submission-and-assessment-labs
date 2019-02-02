@@ -18,6 +18,7 @@ from multiprocessing import Pool
 from online_judge.settings import *
 from compilerApiApp.views import submit_code
 import filecmp
+from leaderboard.models import Leaderboard
 
 @login_required()
 def showWeek(request):
@@ -65,6 +66,17 @@ def deleteweek(request):
         return HttpResponseRedirect('/subject/')
 
 @login_required()
+def deleteAssignment(request):
+    try:
+        assignmentid = request.POST.get('assignmentid')
+        assignment = Assignment.objects.get(pk = int(assignmentid))
+        assignment.delete()
+        return HttpResponseRedirect('/assignment/showWeek')
+    except:
+        messages.add_message(request, messages.WARNING, 'Some error occured..try again...!!')
+        return HttpResponseRedirect('/assignment/showWeek')
+
+@login_required()
 def new_assignment(request):
     try:
         weekid = request.POST.get('weekid')
@@ -83,13 +95,20 @@ def newassignment(request):
         weekid = request.POST.get('weekid')
         title = request.POST.get('title')
         question = request.POST.get('question')
+        constraint = request.POST.get('constraint')
+        inputformat = request.POST.get('inputformat')
+        outputformat = request.POST.get('outputformat')
+        sampleinput = request.POST.get('sampleinput')
+        sampleoutput = request.POST.get('outputformat')
+        explanation = request.POST.get('explanation')
+        
         codefile = request.FILES['codefile']
         total_inputfiles = request.POST.get('total_inputfiles')
 
         week = Week.objects.get(pk = int(weekid))
         subject = week.subject
 
-        assignment = Assignment(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question,deadline=datetime.now())
+        assignment = Assignment(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question,inputformat = "input",deadline=datetime.now())
         assignment.save()
 
         fs = FileSystemStorage()
@@ -105,34 +124,6 @@ def newassignment(request):
         assignment_files = Assignment_files(assignment = assignment, type='codefile',filepath=codefilename,score = 0)
         assignment_files.save()
 
-        request.session['addassignmentid'] = assignment.id
-        return HttpResponseRedirect('/assignment/addinputfiles')
-    except:
-        return HttpResponseRedirect('/subject/')
-
-@login_required()
-def addinputfiles(request):
-    c = {}
-    assignmentid = request.session.get('addassignmentid')
-    subjectid = request.session.get('subjectid')
-    assignment = Assignment.objects.get(pk = int(assignmentid))
-    subject = Subject.objects.get(pk = int(subjectid))
-    c['assignment'] = assignment
-    c['subject'] = subject
-    total_inputfiles = assignment.total_inputfiles
-    total_inputfile = []
-
-    for i in range(1,int(total_inputfiles)+1):
-        total_inputfile.append(str(i))
-
-    c['total_inputfiles'] = total_inputfile
-    return render(request,'assignment/add_inputfiles.html',c)
-
-@login_required()
-def uploadfiles(request):
-    try:
-        assignmentid = request.POST.get('assignmentid')
-        assignment = Assignment.objects.get(pk = int(assignmentid))
         subject = assignment.subject
         total_inputfiles = assignment.total_inputfiles
         totalscore = 0
@@ -164,6 +155,60 @@ def uploadfiles(request):
         return HttpResponseRedirect('/assignment/showWeek')
     except:
         return HttpResponseRedirect('/subject/')
+
+'''
+@login_required()
+def addinputfiles(request):
+    c = {}
+    assignmentid = request.session.get('addassignmentid')
+    subjectid = request.session.get('subjectid')
+    assignment = Assignment.objects.get(pk = int(assignmentid))
+    subject = Subject.objects.get(pk = int(subjectid))
+    c['assignment'] = assignment
+    c['subject'] = subject
+    total_inputfiles = assignment.total_inputfiles
+    total_inputfile = []
+
+    for i in range(1,int(total_inputfiles)+1):
+        total_inputfile.append(str(i))
+
+    c['total_inputfiles'] = total_inputfile
+    return render(request,'assignment/add_inputfiles.html',c)
+
+@login_required()
+def uploadfiles(request):
+        assignmentid = request.session.get('addassignmentid')
+        assignment = Assignment.objects.get(pk = int(assignmentid))
+        subject = assignment.subject
+        total_inputfiles = assignment.total_inputfiles
+        totalscore = 0
+
+        for i in range(1,int(total_inputfiles)+1):
+            inputfile = request.FILES["inputfile_"+str(i)]
+            outputfile = request.FILES["outputfile_"+str(i)]
+            score = request.POST.get("score_"+str(i))
+            totalscore = totalscore + int(score)
+
+            fs = FileSystemStorage()
+            dirname = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(assignment.id)
+
+            inputfilename = dirname+"/inputfile_"+str(i)+".txt"
+            outputfilename = dirname+"/outputfile_"+str(i)+".txt"
+
+            inp = fs.save(inputfilename,inputfile)
+            inp = fs.save(outputfilename,outputfile)
+
+            assignment_files = Assignment_files(assignment = assignment, type='inputfile',filepath=inputfilename,score=int(score))
+            assignment_files.save()
+
+            assignment_files = Assignment_files(assignment = assignment, type='outputfile', filepath=outputfilename, errortype='', runtime='',memoryused='')
+            assignment_files.save()
+
+        assignment.totalscore = totalscore
+        assignment.save()
+
+        return HttpResponseRedirect('/assignment/showWeek')
+        return HttpResponseRedirect('/subject/')'''
 
 @login_required()
 def selectedAssignment(request):
@@ -337,11 +382,11 @@ def submitcode(request):
                 #print(data1)
                 #print(data2)
 
-                assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])
-                if assignment_file:
+                assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])[0]
+                '''if assignment_file:
                     assignment_file = assignment_file[i][0]
                 else:
-                    score[i] = 0
+                    score[i] = 0'''
 
                 if assignment_file and data1 == data2:
                     score[i] = int(assignment_file.score)
@@ -389,6 +434,18 @@ def submitcode(request):
         #combinedlist = zip(inputfiles,outputfiles,runtimes,memoryused,errortypes,errorfiles,score)
         #c['submission_files'] = submission_files
         #c['combinedlist'] = combinedlist
+        if request.user.groups.all()[0].name == 'student':
+            scoreA = sum(score)
+            studentA = Student.objects.filter(user = request.user)[0]
+            leaderboard = Leaderboard.objects.filter(student  = studentA, year = studentA.year, subject = assignment.subject, assignment = assignment, week = assignment.week)
+            if leaderboard:
+                leaderboard = leaderboard[0]
+                leaderboard.maxscore = max(leaderboard.maxscore,scoreA)
+                leaderboard.save()
+            else:
+                leaderboard = Leaderboard(subject = assignment.subject, year = studentA.year, assignment=assignment, student = studentA, week = assignment.week, maxscore = scoreA)
+                leaderboard.save()
+
         c['combinedlist'] = zip(inputfiles,outputfiles,errorfiles)
         return render(request,'assignment/showAssignment.html',c)
 

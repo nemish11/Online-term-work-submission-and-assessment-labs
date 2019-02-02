@@ -1,9 +1,18 @@
 {% extends "userprofile/base.html" %}
 {% block body%}
-{{message}}
+<div>
+  <div class="col s8 m8 l8 ">
+      {% if messages %}
+          {% for m in messages %}
+                  <script>
+          Materialize.toast('{{ m }}', 3000);
+        </script>
+          {% endfor %}
+      {% endif%}
+  </div>
 please fill details for sort the students..<br/>
   <form action = "/searchuser/sortby" method="POST" > {% csrf_token %}
-    year : <input type = "number" name="selectedyear" min="2015" max="2050" />
+    year : <input type = "number" name="selectedyear" min="2015" max="2099" />
            <button type="submit" value="submit">search</button>
   </form>
 all students : <br/>
@@ -29,7 +38,7 @@ all students : <br/>
               <td>{{student.phone_no}}</td>
               <td>{{student.year}}</td>
               <td>
-                <form action="/searchuser/fullprofile" method="POST" > {% csrf_token %}
+                <form action="/searchuser/selectedstudent" method="POST" > {% csrf_token %}
                   <input type="hidden" name="studentid" value="{{student.id}}" />
                   <button type="submit">see profile</button>
                 </form>
@@ -38,4 +47,5 @@ all students : <br/>
         {% endfor %}
     </tbody>
 </table>
+</div>
 {% endblock %}

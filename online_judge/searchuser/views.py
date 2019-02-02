@@ -23,34 +23,66 @@ def allstudents(request):
         return HttpResponseRedirect('/subject/')
 
 @login_required()
-def fullprofile(request):
+def selectedstudent(request):
     try:
         studentid = request.POST.get('studentid')
+        request.session['selectedstudentfp'] = studentid
+        return HttpResponseRedirect('/searchuser/fullprofile')
+    except:
+        messages.add_message(request, messages.WARNING, 'some error occured..please try again..!!')
+        return HttpResponseRedirect('/searchuser/')
+
+@login_required()
+def fullprofile(request):
+    try:
+        studentid = request.session.get('selectedstudentfp')
         student = Student.objects.get(pk = int(studentid))
         c = {}
-        accepted_submissions = Submission.objects.filter(user = student.user, verdict = "accepted")
-        wrong_submissions = Submission.objects.filter(user = student.user, verdict = "wrong")
-        partially_accepted_submissions = Submission.objects.filter(user = student.user, verdict = "partially accepted")
+        all_submissions = Submission.objects.filter(user = student.user)
+        accepted_submissions = all_submissions.filter(verdict = "accepted")
+        wrong_submissions = all_submissions.filter(verdict = "wrong")
+        partially_accepted_submissions = all_submissions.filter(verdict = "partially accepted")
         c['student'] = student
         c['accepted'] = len(accepted_submissions)
         c['wrong'] = len(wrong_submissions)
         c['partially_accepted'] = len(partially_accepted_submissions)
-        c['total_submissions'] = len(accepted_submissions) + len(wrong_submissions) + len(partially_accepted_submissions)
+        c['total_submissions'] = len(all_submissions)
         return render(request,'searchuser/fullprofile.html',c)
     except:
+        messages.add_message(request, messages.WARNING, 'some error occured..please try again..!!')
+        return HttpResponseRedirect('/searchuser/')
+
+@login_required()
+def allsubmissions(request):
+    try:
+        studentid = request.session.get('selectedstudentfp')
+        student = Student.objects.get(pk = int(studentid))
+        c = {}
+        all_submissions = Submission.objects.filter(user = student.user)
+        c['submissions'] = all_submissions
+        return render(request,'searchuser/all_submissions.html',c)
+    except:
+        return HttpResponseRedirect('/searchuser/')
+
+@login_required()
+def sortedstudent(request):
+    try:
+        year = request.session.get('sortbyyear')
+        students = Student.objects.filter(year = int(year))
+        c = {}
+        c['students'] = students
+        messages.add_message(request, messages.INFO, 'below listed sorted student!!!')
+        return render(request,'searchuser/sortby.html',c)
+    except:
+        messages.add_message(request, messages.WARNING, 'Some Error occured..please try again..!!')
         return HttpResponseRedirect('/searchuser/')
 
 @login_required()
 def sortby(request):
     try:
         year = request.POST.get('selectedyear')
-        students = Student.objects.filter(year = int(year))
-        c = {}
-        c['students'] = students
-        return render(request,'searchuser/sortby.html',c)
+        request.session['sortbyyear'] = year
+        return HttpResponseRedirect('/searchuser/sortedstudent')
     except:
-        c = {}
-        c['message'] = "Exception Occured..please enter a correct details.."
-        allstudents = Student.objects.all()
-        c['allstudents'] = allstudents
-        return render(request,'searchuser/allstudents.html',c)
+        messages.add_message(request, messages.WARNING, 'please enter a correct details..!!')
+        return HttpResponseRedirect('/searchuser/')

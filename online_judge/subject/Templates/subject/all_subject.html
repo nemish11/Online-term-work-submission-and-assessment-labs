@@ -52,7 +52,7 @@
                       <tr>
                           <th>subject code</th>
                           <th>subject name</th>
-                          <th>Go</th>
+                          <th>--</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -62,8 +62,8 @@
                                 <td>{{ s.subject.name }}</td>
                                 <td>
                                     <form action="/subject/selectedsubject" method="POST" class="col s12"> {% csrf_token %}
-                                      <input type="hidden" name="subjectid" value="{{ s.id }}" />
-                                      <button type="submit" class="btn" name="send">Go</button>
+                                      <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
+                                      <button type="submit" class="btn" name="send">Show week</button>
                                     </form>
                                 </td>
 
@@ -78,7 +78,7 @@
                       <tr>
                           <th>subject code</th>
                           <th>subject name</th>
-                          <th>Go</th>
+                          <th>--</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -89,7 +89,7 @@
                                 <td>
                                     <form action="/subject/selectedsubject" method="POST" class="col s12"> {% csrf_token %}
                                       <input type="hidden" name="subjectid" value="{{ s.id }}" />
-                                      <button type="submit" class="btn" name="send">Go</button>
+                                      <button type="submit" class="btn" name="send">Show week</button>
                                     </form>
                                 </td>
 

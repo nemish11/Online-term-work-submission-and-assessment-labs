@@ -25,5 +25,6 @@ urlpatterns = [
     url(r'compilerApiApp/',include('compilerApiApp.urls')),
     url(r'assignment/',include('assignment.urls')),
     url(r'searchuser/',include('searchuser.urls')),
+    url(r'leaderboard/',include('leaderboard.urls')),
     url(r'',include('usermodule.urls')),
 ]

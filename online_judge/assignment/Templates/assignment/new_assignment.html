@@ -1,16 +1,54 @@
 {% extends "assignment/base.html" %}
 {% block body%}
-  {{message}}<br/>
-  {{week.name}}<br/>
-  <br/>
-  <body>
-      <form action="/assignment/newassignment" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
-        <input type="hidden" name="weekid" value="{{week.id}}" />
+   <style>
+     textarea {
+     min-height: 60px;
+     overflow-y: auto;
+     word-wrap:break-word
+     }
+   </style>
+  week name is : {{week.name}}<br/><br/>
+
+    <form action="/assignment/newassignment" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
+      <input type="hidden" name="weekid" value="{{week.id}}" />
       enter a title :  <input type="text" name="title" id="title"/>
-      enter a question :  <input type="text" name="question" id="question" />
-      upload code file :  <input type="file" name="codefile" id="codefile" /><br/>
-      enter a nunmer of testfiles :<input type="number" name="total_inputfiles" id="total_inputfiles" />
-        <button type="submit">submit</button>
-      </form>
-   </body>
+      enter a question in html form :  <textarea class="codemirror-textarea" style="width:auto;height:10000px" name="question" id="question"></textarea><br/>
+      upload code file :  <input type="file" name="codefile" id="codefile" /><br/><br/>
+      enter a number of testfiles(should be greater than 0) then click on upload before submit: <input type="number" name="total_inputfiles" id="total_inputfiles" min="1" max="20"/>
+      <div id="inputfiles"></div>
+      <button type="submit" id="sub_btn" disabled>submit</button>
+    </form>
+    <button class="btn" id="file_btn">Upload</button>
+
+   <script>
+     $('#file_btn').click(function(){
+       var st = "";
+       for(var i=1 ; i<=$("#total_inputfiles").val() ; i++){
+           st+='upload input file : '+i+'  <input type="file" name="inputfile_'+i+'" id="inputfile_'+i+'" /><br/>'+
+           'upload output file : '+i+'  <input type="file" name="outputfile_'+i+'" id="outputfile_'+i+'" /><br/>'+
+           'enter a score of this file : <input type="number" name="score_'+i+'" id="score_'+i+'" /><br/><br/>';
+        }
+        $("#inputfiles").html("Upload Testcases<br/><br/>"+st);
+        if($("#total_inputfiles").val() > 0){
+          $('#sub_btn').prop('disabled', false);
+        }
+      });
+
+        $(document).ready(function(){
+      	//code here...
+      	var code = $(".codemirror-textarea")[0];
+      	var editor = CodeMirror.fromTextArea(code, {
+          mode:"application/xml",
+          htmlMode: true,
+          matchClosing:true,
+      		lineNumbers : true,
+          spellcheck : true,
+          autocorrect : true,
+
+          matchBrackets : true,
+          lineWrapping: true,
+      	});
+      });
+
+    </script>
 {% endblock %}

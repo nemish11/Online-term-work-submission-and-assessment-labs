@@ -245,11 +245,9 @@ def run_input_files(request,counter,dirname,submission,inputfiles,language,code,
 @login_required()
 def submit_code(request,assignment,subject,inputfiles,code):
     try:
-        submission = Submission(user=request.user,assignment=assignment,datetime=datetime.now(),verdict="running",isrunning='YES')
+        submission = Submission(user=request.user,assignment=assignment,datetime=datetime.now(),verdict="wrong",isrunning='YES')
         submission.save()
-        submission = Submission.objects.filter(user=request.user,isrunning='YES',assignment=assignment).last()
         id = submission.id
-        submission = Submission.objects.get(pk=int(id))
 
         fs = FileSystemStorage()
         filename = BASE_DIR + "/usermodule/static/all_submissions/"

@@ -1,5 +1,15 @@
 {% extends "usermodule/base.html" %}
 {% block body%}
+<div>
+  <div class="col s8 m8 l8 ">
+      {% if messages %}
+          {% for m in messages %}
+                  <script>
+          Materialize.toast('{{ m }}', 3000);
+        </script>
+          {% endfor %}
+      {% endif%}
+  </div>
 sorted students : <br/>
 <table class="highlight centered responsive-table col s8 m8 l8" >
     <thead>
@@ -32,4 +42,5 @@ sorted students : <br/>
         {% endfor %}
     </tbody>
 </table>
+</div>
 {% endblock %}

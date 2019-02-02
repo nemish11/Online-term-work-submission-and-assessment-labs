@@ -12,10 +12,16 @@ class Week(models.Model):
 class Assignment(models.Model):
     week = models.ForeignKey(Week,on_delete = models.CASCADE,related_name = 'assignment_week')
     subject = models.ForeignKey(Subject,on_delete = models.CASCADE,related_name = 'assignment_subject',null=True,blank=True)
-    title = models.CharField(max_length = 1000)
+    title = models.TextField()
     totalscore = models.IntegerField(default=0)
     isdeleted = models.BooleanField(default=False)
-    question = models.CharField(max_length = 70000)
+    question = models.TextField(blank=True,null=True)
+    constraint = models.TextField(null=True,blank=True)
+    inputformat = models.TextField(null=True,blank=True)
+    outputformat = models.TextField(null=True,blank=True)
+    sampleinput = models.TextField(null=True,blank=True)
+    sampleoutput = models.TextField(null=True,blank=True)
+    explanation = models.TextField(null=True,blank=True)
     total_inputfiles = models.IntegerField(null=True)
     deadline = models.DateField()
 
@@ -26,7 +32,7 @@ class Assignment_files(models.Model):
     errortype = models.CharField(max_length=1000,null=True)
     runtime = models.CharField(max_length=20,null=True)
     memoryused = models.CharField(max_length=50,null=True)
-    filepath = models.CharField(max_length = 1000)
+    filepath = models.TextField()
 
 class Submission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='submission_user')
@@ -35,7 +41,7 @@ class Submission(models.Model):
     datetime = models.DateTimeField(null=True,blank=True)
     verdict = models.CharField(max_length = 50,null=True)
     isrunning = models.CharField(max_length = 20)
-    comment = models.CharField(max_length = 10000,null=True,blank=True)
+    comment = models.TextField(null=True,blank=True)
     commentunread = models.BooleanField(default = True,null=True,blank=True)
 
 class Submission_files(models.Model):
@@ -45,4 +51,4 @@ class Submission_files(models.Model):
     errortype = models.CharField(max_length=1000,null=True)
     runtime = models.CharField(max_length=20,null=True)
     memoryused = models.CharField(max_length=50,null=True)
-    filepath = models.CharField(max_length = 1000)
+    filepath = models.TextField()
