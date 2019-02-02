@@ -36,9 +36,9 @@
                                   <td><input type="hidden" value="{{ s.pk }}" name="id"></td>
                                 </form>
                                 <td>
-                                    <form action="/assignment/showWeek" method="POST" class="col s12"> {% csrf_token %}
+                                    <form action="/subject/selectedsubject" method="POST" class="col s12"> {% csrf_token %}
                                       <input type="hidden" name="subjectid" value="{{ s.id }}" />
-                                      <button type="submit" class="btn" name="send">Send</button>
+                                      <button type="submit" class="btn" name="send">Show week</button>
                                     </form>
                                 </td>
                             </tr>
@@ -61,7 +61,7 @@
                                 <td>{{ s.subject.subject_code }}</td>
                                 <td>{{ s.subject.name }}</td>
                                 <td>
-                                    <form action="/assignment/showWeek" method="POST" class="col s12"> {% csrf_token %}
+                                    <form action="/subject/selectedsubject" method="POST" class="col s12"> {% csrf_token %}
                                       <input type="hidden" name="subjectid" value="{{ s.id }}" />
                                       <button type="submit" class="btn" name="send">Go</button>
                                     </form>
@@ -87,7 +87,7 @@
                                 <td>{{ s.subject_code }}</td>
                                 <td>{{ s.name }}</td>
                                 <td>
-                                    <form action="/assignment/showWeek" method="POST" class="col s12"> {% csrf_token %}
+                                    <form action="/subject/selectedsubject" method="POST" class="col s12"> {% csrf_token %}
                                       <input type="hidden" name="subjectid" value="{{ s.id }}" />
                                       <button type="submit" class="btn" name="send">Go</button>
                                     </form>

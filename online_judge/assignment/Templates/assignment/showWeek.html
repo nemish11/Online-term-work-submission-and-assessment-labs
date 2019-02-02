@@ -8,7 +8,7 @@
     });
   });
 </script>
-
+{{message}}
  All week of {{subject.name}} subject <br/>
  <ul class="collapsible">
    {% for week in all_week %}
@@ -17,7 +17,7 @@
       <div class="collapsible-body">
           {% for assignment in all_assignment %}
             {% ifequal assignment.week.id week.id %}
-             <form action = "/assignment/showAssignment" method="POST" > {% csrf_token %}
+             <form action = "/assignment/selectedAssignment" method="POST" > {% csrf_token %}
               <div class = "row" >
                 <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
                 <button type="submit" name="button">{{assignment.title}}</button>
@@ -41,6 +41,10 @@
             <input type="hidden" name="weekid" value="{{week.id}}">
             <button type="submit" name="button">add new assignment</button>
       </form>
+      <form action="/assignment/deleteweek" method="POST"> {% csrf_token %}
+        <input type="hidden" name="weekid" value="{{week.id}}">
+        <button type="submit" name="button">Delete week</button>
+      </form>
       {% endifequal %}
       </div>
     </li>
@@ -50,7 +54,6 @@
     <div class="collapsible-header">Add New Week </div>
     <div class="collapsible-body">
     <form action="/assignment/addweek" method="POST" > {% csrf_token %}
-      <input type="hidden" name="subjectid" value="{{subject.id}}" >
       enter a name of week :<input type="text" name="weekname" id="weekname"/>
       <button type="submit" name="button">add week</button>
     </form>
@@ -60,7 +63,6 @@
     <div class="collapsible-header">Add New Week </div>
     <div class="collapsible-body">
     <form action="/assignment/addweek" method="POST" > {% csrf_token %}
-      <input type="hidden" name="subjectid" value="{{subject.id}}" >
       enter a name of week :<input type="text" name="weekname" id="weekname"/>
       <button type="submit" name="button">add week</button>
     </form>

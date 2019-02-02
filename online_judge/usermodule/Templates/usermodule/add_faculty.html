@@ -1,10 +1,15 @@
 {% extends "usermodule/base.html" %}
 {% block body%}
-
-<body>
-  {{message}}
-  <br/>
-  Add Faculty : <br/>
+<div>
+    <div class="col s8 m8 l8 ">
+        {% if messages %}
+            {% for m in messages %}
+                    <script>
+						Materialize.toast('{{ m }}', 3000);
+					</script>
+            {% endfor %}
+        {% endif%}
+    </div>
   Upload csv file in format (username,password) :
     <form action="/usermodule/addfaculty" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
       <input type="file" name="facultyfile" id="facultyfile"/>
@@ -19,7 +24,8 @@
             <th>full name</th>
             <th>email id</th>
             <th>phone_no</th>
-            <th>-</th>
+            <th>--</th>
+            <th>--</th>
           </tr>
         </thead>
         <tbody>
@@ -30,6 +36,12 @@
                   <td>{{faculty.user.first_name}} {{faculty.user.last_name}}</td>
                   <td>{{faculty.user.email}}</td>
                   <td>{{faculty.phone_no}}</td>
+                  <td>
+                    <form action="/usermodule/addtopastfaculty" method="POST" > {% csrf_token %}
+                      <input type="hidden" name="facultyid" value="{{faculty.id}}" />
+                      <button type="submit">add to past faculty</button>
+                    </form>
+                  </td>
                   <td>
                     <form action="/usermodule/removefaculty" method="POST" > {% csrf_token %}
                       <input type="hidden" name="facultyid" value="{{faculty.id}}" />
@@ -50,7 +62,8 @@
               <th>full name</th>
               <th>email id</th>
               <th>phone_no</th>
-              <th>-</th>
+              <th>--</th>
+              <th>--</th>
           </tr>
         </thead>
         <tbody>
@@ -62,14 +75,20 @@
                     <td>{{faculty.user.email}}</td>
                     <td>{{faculty.phone_no}}</td>
                     <td>
-                      <form action="/usermodule/readdfaculty" method="POST" > {% csrf_token %}
+                      <form action="/usermodule/addtoactivefaculty" method="POST" > {% csrf_token %}
                         <input type="hidden" name="facultyid" value="{{faculty.id}}" />
-                        <button type="submit">readd</button>
+                        <button type="submit">add to active faculty</button>
+                      </form>
+                    </td>
+                    <td>
+                      <form action="/usermodule/removefaculty" method="POST" > {% csrf_token %}
+                        <input type="hidden" name="facultyid" value="{{faculty.id}}" />
+                        <button type="submit">remove</button>
                       </form>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-  </body>
+</div>
 {% endblock %}

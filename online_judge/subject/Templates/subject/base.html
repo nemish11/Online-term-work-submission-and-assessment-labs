@@ -23,6 +23,7 @@
 								{% endif %}
 										{% ifequal request.session.usertype "faculty" %}
 												<li><a href="/subject/request_list" class="waves-effect waves-light ">Request List</a></li>
+												<li><a href="/searchuser/" class="waves-effect waves-light">search user</a></li>
 										{% endifequal %}
 										{% ifequal request.session.usertype "student" %}
 												<li><a href="/subject/request_subject" class="waves-effect waves-light ">Request Subject</a></li>

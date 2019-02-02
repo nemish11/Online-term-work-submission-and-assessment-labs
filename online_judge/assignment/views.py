@@ -23,7 +23,7 @@ import filecmp
 def showWeek(request):
     try:
         c={}
-        subjectid = request.POST.get('subjectid')
+        subjectid = request.session.get('subjectid')
         subject = Subject.objects.get(pk=int(subjectid))
         all_week = Week.objects.filter(subject=subject,isdeleted=False)
         c['subject'] = subject
@@ -44,27 +44,14 @@ def showWeek(request):
 def addweek(request):
     try:
         c = {}
-        subjectid = request.POST.get('subjectid')
+        subjectid = request.session.get('subjectid')
         weekname = request.POST.get('weekname')
         subject = Subject.objects.get(pk=int(subjectid))
         week = Week(name=weekname,subject=subject)
         week.save()
-        all_week = Week.objects.filter(subject=subject,isdeleted=False)
-        c['all_week'] = all_week
-        all_assignment = Assignment.objects.filter(subject=subject)
-        c['all_assignment'] = all_assignment
-        if request.user.is_superuser:
-            usertype = 'admin'
-        else:
-            usertype = request.user.groups.all()[0].name
-        c['usertype'] = usertype
-        c['faculty'] = 'faculty'
-        c['subject'] = subject
-        return render(request,'assignment/showWeek.html',c)
+        return HttpResponseRedirect('/assignment/showWeek')
     except:
-        c = {}
-        c['message'] = "Exception Occured..please try again and enter a correct details.."
-        return render(request,'assignment/showWeek.html',c)
+        return HttpResponseRedirect('/subject/')
 
 @login_required()
 def deleteweek(request):
@@ -73,20 +60,7 @@ def deleteweek(request):
         week = Week.objects.get(pk = int(weekid))
         week.isdeleted = True
         week.save()
-        c = {}
-        subject = week.subject
-        all_week = Week.objects.filter(subject=subject,isdeleted=False)
-        c['subject'] = subject
-        c['all_week'] = all_week
-        all_assignment = Assignment.objects.filter(subject=subject)
-        c['all_assignment'] = all_assignment
-        if request.user.is_superuser:
-            usertype = 'admin'
-        else:
-            usertype = request.user.groups.all()[0].name
-        c['usertype'] = usertype
-        c['faculty'] = 'faculty'
-        return render(request,'assignment/showWeek.html',c)
+        return HttpResponseRedirect('/assignment/showWeek')
     except:
         return HttpResponseRedirect('/subject/')
 
@@ -101,9 +75,7 @@ def new_assignment(request):
         c['subject'] = subject
         return render(request,'assignment/new_assignment.html',c)
     except:
-        c = {}
-        c['message'] = "Exception Occured..please try again and enter a correct details.."
-        return render(request,'assignment/showWeek.html',c)
+        return HttpResponseRedirect('/assignment/showWeek')
 
 @login_required()
 def newassignment(request):
@@ -120,10 +92,6 @@ def newassignment(request):
         assignment = Assignment(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question,deadline=datetime.now())
         assignment.save()
 
-        assignment = Assignment.objects.filter(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question).last()
-        id = assignment.id
-        assignment = Assignment.objects.get(pk=int(id))
-
         fs = FileSystemStorage()
         dirname = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(id)
 
@@ -137,20 +105,28 @@ def newassignment(request):
         assignment_files = Assignment_files(assignment = assignment, type='codefile',filepath=codefilename,score = 0)
         assignment_files.save()
 
-        c = {}
-        c['assignment'] = assignment
-        c['subject'] = subject
-        total_inputfile = []
-
-        for i in range(1,int(total_inputfiles)+1):
-            total_inputfile.append(str(i))
-
-        c['total_inputfiles'] = total_inputfile
-        return render(request,'assignment/add_inputfiles.html',c)
+        request.session['addassignmentid'] = assignment.id
+        return HttpResponseRedirect('/assignment/addinputfiles')
     except:
-        c = {}
-        c['message'] = "Exception Occured..please try again and enter a correct details.."
-        return render(request,'assignment/new_assignment.html',c)
+        return HttpResponseRedirect('/subject/')
+
+@login_required()
+def addinputfiles(request):
+    c = {}
+    assignmentid = request.session.get('addassignmentid')
+    subjectid = request.session.get('subjectid')
+    assignment = Assignment.objects.get(pk = int(assignmentid))
+    subject = Subject.objects.get(pk = int(subjectid))
+    c['assignment'] = assignment
+    c['subject'] = subject
+    total_inputfiles = assignment.total_inputfiles
+    total_inputfile = []
+
+    for i in range(1,int(total_inputfiles)+1):
+        total_inputfile.append(str(i))
+
+    c['total_inputfiles'] = total_inputfile
+    return render(request,'assignment/add_inputfiles.html',c)
 
 @login_required()
 def uploadfiles(request):
@@ -185,29 +161,24 @@ def uploadfiles(request):
         assignment.totalscore = totalscore
         assignment.save()
 
-        c = {}
-        all_week = Week.objects.filter(subject=subject,isdeleted=False)
-        c['subject'] = subject
-        c['all_week'] = all_week
-        all_assignment = Assignment.objects.filter(subject=subject)
-        c['all_assignment'] = all_assignment
-        if request.user.is_superuser:
-            usertype = 'admin'
-        else:
-            usertype = request.user.groups.all()[0].name
-        c['usertype'] = usertype
-        c['faculty'] = 'faculty'
-        return render(request,'assignment/showWeek.html',c)
+        return HttpResponseRedirect('/assignment/showWeek')
     except:
-        c = {}
-        c['message'] = "Exception Occured..please try again and enter a correct details.."
-        return render(request,'assignment/add_inputfiles.html',c)
+        return HttpResponseRedirect('/subject/')
+
+@login_required()
+def selectedAssignment(request):
+    try:
+        assignmentid = request.POST.get('assignmentid')
+        request.session['assignmentid'] = assignmentid
+        return HttpResponseRedirect('/assignment/showAssignment')
+    except:
+        return HttpResponseRedirect('/subject/')
 
 @login_required()
 def showAssignment(request):
     try:
         c = {}
-        assignmentid = request.POST.get('assignmentid')
+        assignmentid = request.session.get('assignmentid')
         assignment = Assignment.objects.get(pk = int(assignmentid))
         c['assignment'] = assignment
 
@@ -230,7 +201,7 @@ def showAssignment(request):
 @login_required()
 def previous_submissions(request):
     try:
-        assignmentid = request.POST.get('assignmentid')
+        assignmentid = request.session.get('assignmentid')
         user = request.user
         assignment = Assignment.objects.get(pk = int(assignmentid))
         submissions = Submission.objects.filter(user=user,assignment=assignment)
@@ -252,9 +223,18 @@ def previous_submissions(request):
         return HttpResponseRedirect('/subject/')
 
 @login_required()
-def submission_files(request):
+def selectedsubmission(request):
     try:
         submissionid = request.POST.get('submissionid')
+        request.session['submissionid'] = submissionid
+        return HttpResponseRedirect('/assignment/submission_files')
+    except:
+        return HttpResponseRedirect('/subject/')
+
+@login_required()
+def submission_files(request):
+    try:
+        submissionid = request.session.get('submissionid')
         submission = Submission.objects.get(pk=int(submissionid))
         assignment = submission.assignment
         total_inputfiles = assignment.total_inputfiles
@@ -302,10 +282,19 @@ def submission_files(request):
         return HttpResponseRedirect('/subject/')
 
 @login_required()
-def submitcode(request):
+def runcode(request):
     try:
-        assignmentid = request.POST.get('assignmentid')
         code = request.POST.get('code')
+        request.session['assignmentcode'] = code
+        return HttpResponseRedirect('/assignment/submitcode')
+    except:
+        return HttpResponseRedirect('/subject/')
+
+@login_required()
+def submitcode(request):
+
+        assignmentid = request.session.get('assignmentid')
+        code = request.session.get('assignmentcode')
         assignment = Assignment.objects.get(pk = int(assignmentid))
         subject = assignment.subject
         c = {}
@@ -348,8 +337,13 @@ def submitcode(request):
                 #print(data1)
                 #print(data2)
 
-                assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])[0]
-                if data1 == data2:
+                assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])
+                if assignment_file:
+                    assignment_file = assignment_file[i][0]
+                else:
+                    score[i] = 0
+
+                if assignment_file and data1 == data2:
                     score[i] = int(assignment_file.score)
                 else:
                     score[i] = 0
@@ -397,5 +391,5 @@ def submitcode(request):
         #c['combinedlist'] = combinedlist
         c['combinedlist'] = zip(inputfiles,outputfiles,errorfiles)
         return render(request,'assignment/showAssignment.html',c)
-    except:
+
         return HttpResponseRedirect('/subject/')

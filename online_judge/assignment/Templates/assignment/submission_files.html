@@ -76,16 +76,14 @@
 	});
 });
 </script>
-  <form action="/assignment/previous_submissions" method='POST' > {% csrf_token %}
-     <input type = "hidden" name="assignmentid" value="{{assignment.id}}" />
-     <button type="submit"> back to previous submission</button>
-  </form>
+  <a href="/assignment/previous_submissions" >back to previous submission</a>
+
   <p style='color:red;'>{{message}}</p><br/>
   Title :{{assignment.title}}<br/>
   question is : {{assignment.question}} </br> </br>
- <form action = "/assignment/submitcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
-   <input type = "hidden" name="assignmentid" value="{{assignment.id}}" />
-   Enter a Code : <br/><br/>
+ <form action = "/assignment/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
+
+   Your Code : <br/><br/>
 
    <textarea class="codemirror-textarea" name = "code" value="{{previous_code}}" onload="adjustHeight(this)">{{previous_code}}</textarea><br/>
    <button class="content" type="submit">Submit</button>

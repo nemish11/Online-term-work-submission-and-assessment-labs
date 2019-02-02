@@ -84,27 +84,24 @@ def add_student(request):
 @login_required()
 def addfaculty(request):
     try:
-        c = {}
-        c['current_faculty'] = Faculty.objects.filter(is_active= True)
-        c['past_faculty'] = Faculty.objects.filter(is_active=False)
         if not request.user.is_superuser:
             return HttpResponseRedirect('/admin/')
         else:
             csv_file = request.FILES["facultyfile"]
             if not csv_file.name.endswith('.csv'):
-                c['message'] = "please upload .csv file"
-                return render(request, 'usermodule/add_faculty.html', c)
+                messages.add_message(request, messages.WARNING, 'please upload .csv file!!!')
+                return HttpResponseRedirect('/usermodule/add_faculty')
 
             if csv_file.multiple_chunks():
-                c['message'] = "File is Too large!"
-                return render(request, 'usermodule/add_faculty.html', c)
+                messages.add_message(request, messages.WARNING, 'file is too large!!!')
+                return HttpResponseRedirect('/usermodule/add_faculty')
 
             data = pd.read_csv(csv_file, names=['username', 'password'])
             x, y = data.shape
 
             if y != int(2):
-                c['message'] = "File Format is not correct"
-                return render(request, 'usermodule/add_faculty.html', c)
+                messages.add_message(request, messages.WARNING, 'File Format is not correct!!!')
+                return HttpResponseRedirect('/usermodule/add_faculty')
 
             for i in range(x):
                 username = data['username'][i]
@@ -118,39 +115,33 @@ def addfaculty(request):
                 group.user_set.add(faculty)
                 group.save()
 
-            c['message'] = "User Added Successfully"
-            return render(request, 'usermodule/add_faculty.html', c)
+            messages.add_message(request, messages.INFO, 'User Added sucessfully')
+            return HttpResponseRedirect('/usermodule/add_faculty')
     except:
-        c = {}
-        c['message'] = "Exception Occured"
-        c['current_faculty'] = Faculty.objects.filter(is_active= True)
-        c['past_faculty'] = Faculty.objects.filter(is_active=False)
-        return render(request, 'usermodule/add_faculty.html', c)
+        messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
+        return HttpResponseRedirect('/usermodule/add_faculty')
 
 @login_required()
 def addstudent(request):
     try:
-        c = {}
-        c['current_student'] = Student.objects.filter(is_active= True)
-        c['past_student'] = Student.objects.filter(is_active=False)
         if not request.user.is_superuser:
             return HttpResponseRedirect('/admin/')
         else:
             csv_file = request.FILES["studentfile"]
             if not csv_file.name.endswith('.csv'):
-                c['message'] = "please upload .csv file"
-                return render(request, 'usermodule/add_student.html', c)
+                messages.add_message(request, messages.WARNING, 'please upload .csv file!!!')
+                return HttpResponseRedirect('/usermodule/add_student')
 
             if csv_file.multiple_chunks():
-                c['message'] = "File is Too large!"
-                return render(request, 'usermodule/add_student.html', c)
+                messages.add_message(request, messages.WARNING, 'file is too large!!!')
+                return HttpResponseRedirect('/usermodule/add_student')
 
             data = pd.read_csv(csv_file, names=['username', 'password','roll_no','year'])
             x, y = data.shape
 
             if y != int(4):
-                c['message'] = "File Format is not Correct"
-                return render(request, 'usermodule/add_student.html', c)
+                messages.add_message(request, messages.WARNING, 'File Format is not correct!!!')
+                return HttpResponseRedirect('/usermodule/add_student')
 
             for i in range(x):
                 username = data['username'][i]
@@ -165,27 +156,48 @@ def addstudent(request):
                 group.user_set.add(student)
                 group.save()
 
-            c['message'] = "User Added Successfully"
-            return render(request, 'usermodule/add_student.html', c)
-
-            c['message'] = "Exception Occured"
-            return render(request, 'usermodule/add_student.html', c)
+            messages.add_message(request, messages.INFO, 'User Added sucessfully')
+            return HttpResponseRedirect('/usermodule/add_student')
     except:
-        c = {}
-        c['message'] = "Exception Occured"
-        c['current_student'] = Student.objects.filter(is_active= True)
-        c['past_student'] = Student.objects.filter(is_active=False)
-        return render(request, 'usermodule/add_faculty.html', c)
+        messages.add_message(request, messages.WARNING, 'Something went wrong...please check file data and shape..try again!!!')
+        return HttpResponseRedirect('/usermodule/add_student')
 
 @login_required()
 def removefaculty(request):
     try:
         facultyid = request.POST.get('facultyid')
         faculty = Faculty.objects.get(pk=int(facultyid))
-        faculty.is_active = False
-        faculty.save()
+        faculty.delete()
+        messages.add_message(request, messages.INFO, 'Faculty Removed sucessfully')
         return HttpResponseRedirect('/usermodule/add_faculty')
     except:
+        messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
+        return HttpResponseRedirect('/usermodule/add_faculty')
+
+@login_required()
+def addtopastfaculty(request):
+    try:
+        facultyid = request.POST.get('facultyid')
+        faculty = Faculty.objects.get(pk=int(facultyid))
+        faculty.is_active = False
+        faculty.save()
+        messages.add_message(request, messages.INFO, 'Faculty Added to past Faculty sucessfully')
+        return HttpResponseRedirect('/usermodule/add_faculty')
+    except:
+        messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
+        return HttpResponseRedirect('/usermodule/add_faculty')
+
+@login_required()
+def addtoactivefaculty(request):
+    try:
+        facultyid = request.POST.get('facultyid')
+        faculty = Faculty.objects.get(pk=int(facultyid))
+        faculty.is_active = True
+        faculty.save()
+        messages.add_message(request, messages.INFO, 'Faculty Added to Active Faculty sucessfully')
+        return HttpResponseRedirect('/usermodule/add_faculty')
+    except:
+        messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
         return HttpResponseRedirect('/usermodule/add_faculty')
 
 @login_required()
@@ -193,30 +205,35 @@ def removestudent(request):
     try:
         studentid = request.POST.get('studentid')
         student = Student.objects.get(pk=int(studentid))
+        student.delete()
+        messages.add_message(request, messages.INFO, 'student removed sucessfully')
+        return HttpResponseRedirect('/usermodule/add_student')
+    except:
+        messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
+        return HttpResponseRedirect('/usermodule/add_student')
+
+@login_required()
+def addtopaststudent(request):
+    try:
+        studentid = request.POST.get('studentid')
+        student = Student.objects.get(pk=int(studentid))
         student.is_active = False
         student.save()
+        messages.add_message(request, messages.WARNING, 'student added to past student sucessfully')
         return HttpResponseRedirect('/usermodule/add_student')
     except:
+        messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
         return HttpResponseRedirect('/usermodule/add_student')
 
 @login_required()
-def readdfaculty(request):
-    try:
-        facultyid = request.POST.get('facultyid')
-        faculty = Faculty.objects.get(pk=int(facultyid))
-        faculty.is_active = True
-        faculty.save()
-        return HttpResponseRedirect('/usermodule/add_faculty')
-    except:
-        return HttpResponseRedirect('/usermodule/add_faculty')
-
-@login_required()
-def readdstudent(request):
+def addtoactivestudent(request):
     try:
         studentid = request.POST.get('studentid')
         student = Student.objects.get(pk=int(studentid))
         student.is_active = True
         student.save()
+        messages.add_message(request, messages.WARNING, 'student added to active student sucessfully')
         return HttpResponseRedirect('/usermodule/add_student')
     except:
+        messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
         return HttpResponseRedirect('/usermodule/add_student')
