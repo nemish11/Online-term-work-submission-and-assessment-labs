@@ -101,14 +101,14 @@ def newassignment(request):
         sampleinput = request.POST.get('sampleinput')
         sampleoutput = request.POST.get('outputformat')
         explanation = request.POST.get('explanation')
-        
+
         codefile = request.FILES['codefile']
         total_inputfiles = request.POST.get('total_inputfiles')
 
         week = Week.objects.get(pk = int(weekid))
         subject = week.subject
 
-        assignment = Assignment(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question,inputformat = "input",deadline=datetime.now())
+        assignment = Assignment(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question,constraint = constraint,inputformat=inputformat,outputformat=outputformat,sampleinput=sampleinput,sampleoutput=sampleoutput,explanation=explanation,deadline=datetime.now())
         assignment.save()
 
         fs = FileSystemStorage()

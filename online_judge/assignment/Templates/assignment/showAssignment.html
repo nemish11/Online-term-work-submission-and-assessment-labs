@@ -84,7 +84,13 @@
   <a href="/assignment/previous_submissions" >see previous submissions</a>
     <p style='color:red;'>{{message}}</p><br/>
   Title :{{assignment.title}}<br/><br/>
-  question is : <p id="questiontext" ></p> </br> </br>
+  question is : {{assignment.question}} <br/><br/>
+  constraint : {{assignment.constraint}}<br/><br/>
+  input format : {{assignment.inputformat}}<br/><br/>
+  output format : {{assignment.outputformat}}<br/><br/>
+  sample input: {{assignment.sampleinput}}<br/><br/>
+  sample output : {{assignment.sampleoutput}}<br/><br/>
+  explanation : {{assignment.explanation}}<br/><br/>
  <form action = "/assignment/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
    Enter a Code : <br/><br/>
 
@@ -134,12 +140,4 @@
         </tbody>
     </table>
    {% endif %}
-   <script>
-        console.log('heeyeyyey')
-       $(document).ready(function(){
-         var text = "{{assignment.question}}"
-
-         $("#questiontext").innerHTML(text);
-       });
-   </script>
  {% endblock %}

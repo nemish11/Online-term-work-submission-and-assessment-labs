@@ -11,10 +11,17 @@
 
     <form action="/assignment/newassignment" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
       <input type="hidden" name="weekid" value="{{week.id}}" />
-      enter a title :  <input type="text" name="title" id="title"/>
-      enter a question in html form :  <textarea class="codemirror-textarea" style="width:auto;height:10000px" name="question" id="question"></textarea><br/>
-      upload code file :  <input type="file" name="codefile" id="codefile" /><br/><br/>
-      enter a number of testfiles(should be greater than 0) then click on upload before submit: <input type="number" name="total_inputfiles" id="total_inputfiles" min="1" max="20"/>
+      Enter a title :  <input type="text" name="title" id="title"/>
+      Enter a question :  <textarea class="codemirror-textarea" name="question" id="question"></textarea><br/><br/>
+      Enter a constraint :  <textarea class="codemirror-textarea" name="constraint" id="constraint"></textarea><br/><br/>
+      Enter a input format :  <textarea class="codemirror-textarea" name="inputformat" id="inputformat"></textarea><br/><br/>
+      Enter a output format :  <textarea class="codemirror-textarea" name="outputformat" id="outputformat"></textarea><br/><br/>
+      Enter a sample input :  <textarea class="codemirror-textarea" name="sampleinput" id="sampleinput"></textarea><br/><br/>
+      Enter a sample output :  <textarea class="codemirror-textarea" name="sampleoutput" id="sampleoutput"></textarea><br/><br/>
+      Enter a explanation sample input :  <textarea class="codemirror-textarea" name="explanation" id="explanation"></textarea><br/><br/>
+
+      Upload code file :  <input type="file" name="codefile" id="codefile" /><br/><br/>
+      Enter a number of testfiles(should be greater than 0) then click on upload before submit: <input type="number" name="total_inputfiles" id="total_inputfiles" min="1" max="20"/>
       <div id="inputfiles"></div>
       <button type="submit" id="sub_btn" disabled>submit</button>
     </form>
