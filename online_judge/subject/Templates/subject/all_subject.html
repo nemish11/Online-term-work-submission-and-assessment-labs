@@ -24,6 +24,7 @@
                           <th>subject code</th>
                           <th>subject name</th>
                           <th>Action</th>
+                          <th>Leaderboard</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -41,6 +42,12 @@
                                       <button type="submit" class="btn" name="send">Show week</button>
                                     </form>
                                 </td>
+                                <td>
+                                    <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
+                                      <input type="hidden" name="subjectid" value="{{ s.id }}" />
+                                      <button type="submit" class="btn" name="send">Show Leaderboard</button>
+                                    </form>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -53,6 +60,7 @@
                           <th>subject code</th>
                           <th>subject name</th>
                           <th>--</th>
+                          <th>Leaderboard</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -64,6 +72,12 @@
                                     <form action="/subject/selectedsubject" method="POST" class="col s12"> {% csrf_token %}
                                       <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
                                       <button type="submit" class="btn" name="send">Show week</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
+                                      <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
+                                      <button type="submit" class="btn" name="send">Show Leaderboard</button>
                                     </form>
                                 </td>
 
@@ -90,6 +104,12 @@
                                     <form action="/subject/selectedsubject" method="POST" class="col s12"> {% csrf_token %}
                                       <input type="hidden" name="subjectid" value="{{ s.id }}" />
                                       <button type="submit" class="btn" name="send">Show week</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
+                                      <input type="hidden" name="subjectid" value="{{ s.id }}" />
+                                      <button type="submit" class="btn" name="send">Show leaderboard</button>
                                     </form>
                                 </td>
 

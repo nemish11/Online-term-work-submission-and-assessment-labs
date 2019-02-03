@@ -22,7 +22,6 @@ from leaderboard.models import Leaderboard
 
 @login_required()
 def showWeek(request):
-    try:
         c={}
         subjectid = request.session.get('subjectid')
         subject = Subject.objects.get(pk=int(subjectid))
@@ -38,8 +37,7 @@ def showWeek(request):
         c['usertype'] = usertype
         c['faculty'] = 'faculty'
         return render(request,'assignment/showWeek.html',c)
-    except:
-        return HttpResponseRedirect('/subject/')
+        #return HttpResponseRedirect('/subject/')
 
 @login_required()
 def addweek(request):
@@ -112,7 +110,7 @@ def newassignment(request):
         assignment.save()
 
         fs = FileSystemStorage()
-        dirname = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(id)
+        dirname = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(assignment.id)
 
         if os.path.exists(dirname):
             shutil.rmtree(dirname)
@@ -379,8 +377,10 @@ def submitcode(request):
                 data2 = fhandler.readlines()
                 fhandler.close()
 
-                #print(data1)
-                #print(data2)
+                ldata1 = data1[-1]
+                data1 = data1[:len(data1)-1]
+                ldata2 = data2[-1]
+                data2 = data2[:len(data2)-1]
 
                 assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])[0]
                 '''if assignment_file:
@@ -388,7 +388,7 @@ def submitcode(request):
                 else:
                     score[i] = 0'''
 
-                if assignment_file and data1 == data2:
+                if assignment_file and data1 == data2 and ldata1.strip() == ldata2.strip():
                     score[i] = int(assignment_file.score)
                 else:
                     score[i] = 0

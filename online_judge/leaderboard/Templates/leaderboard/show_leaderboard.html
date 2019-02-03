@@ -1,0 +1,34 @@
+{% extends "leaderboard/base.html" %}
+{% block body %}
+{% with i=1 %}
+{% endwith %}
+    <div class=" container">
+        <div >
+              Leaderboard - {{ subject.name }}
+        </div>
+        <div>
+            <table class="highlight centered responsive-table col s8 m8 l8" >
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Student Name</th>
+                            <th>Total Score</th>
+                            {% for week,val in weeks.items %}
+                                <th>{{ val }}</th>
+                            {% endfor%}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for l,value in leaderboard_data.items %}
+                            <tr>
+                               <td>{{ forloop.counter }}</td>
+                                {% for k,v in value.items %}
+                                    <td>{{ v }}</td>
+                                {% endfor%}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+    </div>
+{% endblock %}

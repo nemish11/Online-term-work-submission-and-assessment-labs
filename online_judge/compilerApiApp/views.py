@@ -19,7 +19,6 @@ def program_file(request):
 
 @login_required()
 def run_input_files(request,counter,dirname,submission,inputfiles,language,code,filename):
-    try:
         inputfile = inputfiles[counter-1]
         fhandler = open(inputfile,'r')
         inputfiledata = fhandler.read()
@@ -238,7 +237,6 @@ def run_input_files(request,counter,dirname,submission,inputfiles,language,code,
 
         else:
             return "NO langauage available"
-    except:
         return "some error"
 
 
