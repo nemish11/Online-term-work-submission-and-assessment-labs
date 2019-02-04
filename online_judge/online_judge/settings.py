@@ -77,6 +77,7 @@ TEMPLATES = [
     },
 ]
 
+CACHE_TTL = 60 * 15
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",

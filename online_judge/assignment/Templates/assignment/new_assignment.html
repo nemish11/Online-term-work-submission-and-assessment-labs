@@ -2,16 +2,17 @@
 {% block body%}
    <style>
      textarea {
-     min-height: 60px;
+     min-height: 100px;
      overflow-y: auto;
      word-wrap:break-word
      }
    </style>
-  week name is : {{week.name}}<br/><br/>
+<div class="container">
+  <div>week name is : {{week.name}}</div>
 
     <form action="/assignment/newassignment" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
       <input type="hidden" name="weekid" value="{{week.id}}" />
-      Enter a title :  <input type="text" name="title" id="title"/>
+     <div> Enter a title :  <input type="text" name="title" id="title"/></div>
       Enter a question :  <textarea class="codemirror-textarea" name="question" id="question"></textarea><br/><br/>
       Enter a constraint :  <textarea class="codemirror-textarea" name="constraint" id="constraint"></textarea><br/><br/>
       Enter a input format :  <textarea class="codemirror-textarea" name="inputformat" id="inputformat"></textarea><br/><br/>
@@ -26,7 +27,7 @@
       <button type="submit" id="sub_btn" disabled>submit</button>
     </form>
     <button class="btn" id="file_btn">Upload</button>
-
+</div>
    <script>
      $('#file_btn').click(function(){
        var st = "";
