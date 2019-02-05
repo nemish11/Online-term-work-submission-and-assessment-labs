@@ -9,6 +9,7 @@ from .models import *
 from userprofile.models import Faculty, Student
 from django.db.models import Max,Min
 
+
 @login_required()
 def all_subject(request):
         if request.user.is_superuser:
@@ -38,10 +39,11 @@ def all_subject(request):
 @login_required()
 def add_subject(request):
     if request.user.is_superuser:
-        return render(request, 'subject/add_subject.html')
+        return render(request, 'subject/all_subject.html')
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/all_subject')
+
 
 @login_required()
 def addsubject(request):
@@ -50,6 +52,17 @@ def addsubject(request):
         subject_code = request.POST.get("subject_code")
         s = Subject(name=name, subject_code=subject_code,status=True)
         s.save()
+        return HttpResponseRedirect('/subject/all_subject')
+    else:
+        messages.add_message(request, messages.WARNING, 'You are not authorized!!')
+        return HttpResponseRedirect('/subject/all_subject')
+
+
+@login_required()
+def readd_subject(request):
+    if request.user.is_superuser:
+        id = request.POST.get('id')
+        Subject.objects.filter(id=id).update(status=True)
         return HttpResponseRedirect('/subject/all_subject')
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
@@ -136,6 +149,7 @@ def selectedsubject(request):
     except:
         return HttpResponseRedirect('/subject/')
 
+
 @login_required()
 def pending_request(request):
     f = request.POST.get('faculty')
@@ -166,6 +180,7 @@ def pending_request(request):
     messages.add_message(request, messages.INFO, "Subject is requested to faculty "+str(fobj.user))
     return HttpResponseRedirect('/subject/request_subject')
 
+
 @login_required()
 def removerequest(request):
     if request.user.groups.all()[0].name == 'student':
@@ -175,6 +190,7 @@ def removerequest(request):
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/request_subject')
+
 
 @login_required()
 def request_list(request):
@@ -212,6 +228,7 @@ def request_list(request):
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/all_subject')
+
 
 @login_required()
 def approved_request(request):

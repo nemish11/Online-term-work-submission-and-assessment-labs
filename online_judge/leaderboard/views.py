@@ -21,15 +21,14 @@ from datetime import  datetime
 
 class Connection:
     def __init__(self):
-        r = Redis.StrictRedis('default')
+        r = Redis.StrictRedis(host='localhost', port=6379, db=0)
 
     def get_connection(self):
         return self.r
 
 def initialize_leaderboard_cache(request):
-    #c = Connection
     #r = Redis.Redis('default')
-    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    r=redis.StrictRedis(host='localhost', port=6379, db=0)
     subjectid = request.session.get('leaderboard_subjectid')
     subject = Subject.objects.get(id=subjectid)
     year = 2016
@@ -46,34 +45,90 @@ def initialize_leaderboard_cache(request):
         for l in leaderboard:
             if l['subject'] == sub.id:
                 student_list.add(l['student'])
-        sname = "rank_"+str(sub.id)
+        sname = "rank:"+str(sub.id)
 
         for s in student_list:
-            hasname = str(sub.id)+'_'+str(s)
+            hasname = str(sub.id)+':'+str(s)
             for w in week_list:
-                wname = str(sub.id)+'_'+str(s)+'_'+str(w.id)
-                r.hset(hasname, wname,0)
-            print(hasname, "   ==  ", r.hgetall(hasname))
-            r.hset(sub.id, hasname,hasname)
+                wname = str(sub.id)+':'+str(s)+':'+str(w.id)
+                r.hset(hasname, wname, 0)
+            r.hset(sub.id, hasname, hasname)
 
-            name = "rank_"+str(sub.id)+'_'+str(s)
-            r.zadd(sname,"name", 0)
-        r.hset("leaderrboard", sub.id, sub.id)
-        r.hset("ranklist",sname, sname)
+            name = "rank:"+str(sub.id)+':'+str(s)
 
-    print(r.hgetall("leaderboard"))
-    for l1 in r.hgetall("leaderboard"):
-        #for l2 in r.hgetall(l1):
-        print(r.hgetall(l1))
-    #for l1 in r.hgetall("ranklist"):
-        #print(r.hgetall(l1))
+            r.zadd(sname,{name: 0})
+        r.hset("ranklist", sname, sname)
+        r.hset("leaderboard", sub.id , sub.id)
 
-    weeks = Week.objects.filter(subject=subject)
-    week_dic = {}
-    for week in weeks:
-        week_dic[week.id] = week.name
-    c = {}
+    for l in leaderboard:
+        name = str(l['subject'])+':'+str(l['student'])
+        key = str(l['subject'])+':'+str(l['student'])+':'+str(l['week'])
+        oldval = int(r.hget(name,key))
+        incre_val = l['maxscore__sum'] - oldval
+
+        r.hincrby(name, key, incre_val)
+
+        name_for_z = "rank:"+str(l['subject'])
+        key_for_z = "rank:"+str(l['subject'])+":"+str(l['student'])
+        r.zincrby(name_for_z, incre_val, key_for_z)
+
     return
+
+
+@login_required()
+def get_leaderboard(request):
+    subjectid = request.session.get('leaderboard_subjectid')
+    subject = Subject.objects.get(id=subjectid)
+    year = 2016
+    weeks = Week.objects.filter(subject=subject)
+    week = {}
+    for w in weeks:
+        week[w.id] = w.name
+
+    students =Student.objects.filter(year=year)
+    student = {}
+    for s in students:
+        student[s.id] = s.user
+
+
+
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    data = {}
+    ranklist_data = {}
+
+    ranklist = r.zrange("rank:"+str(subjectid),0,-1,withscores=True)
+    for r in ranklist:
+        r = list(r)
+        key = str(r[0])
+        value = r[1]
+        key = list(key.split(':'))[-1]
+        ranklist_data[key] = int(value)
+    #print(ranklist_data)
+
+    for r_student in r.hgetall(str(subjectid)):
+        print(r_student)
+
+        temp = r.hgetall(r_student)
+        t = {}
+        outer_key = list(r_student.split(':'))[-1]
+        for key in temp:
+            key = str(key)
+            key = list(key.split(':'))[-1]
+            value = int(value)
+            t[key] = value
+        data[outer_key] = t
+    for d in data:
+        print(d)
+    return
+
+
+
+
+
+
+
+
+
 
 @login_required()
 def show_leaderboard(request):
@@ -123,7 +178,8 @@ def show_leaderboard(request):
     c['leaderboard_data'] = data
     c['subject'] = subject
     c['weeks'] = week_dic
-    initialize_leaderboard_cache(request)
+    #initialize_leaderboard_cache(request)
+    get_leaderboard(request)
     return render(request,'leaderboard/show_leaderboard.html', c)
 
 
