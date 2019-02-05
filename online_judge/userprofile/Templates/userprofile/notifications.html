@@ -1,0 +1,36 @@
+{% extends "userprofile/base.html" %}
+{% block body%}
+{{message}}
+your all Notifications : <br/>
+    <table class="highlight centered responsive-table col s8 m8 l8" >
+        <thead>
+          <tr>
+              <th>submissionID</th>
+              <th>subject</th>
+              <th>totalscore</th>
+              <th>yourscore</th>
+              <th>date and time</th>
+              <th>verdict</th>
+              <th>isrunning</th>
+              <th>In details</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for submission in submissions %}
+            <tr>
+              <form action="/assignment/selectedsubmission" method="POST" > {% csrf_token %}
+                  <input type="hidden" name="submissionid" value="{{submission.id}}" />
+                  <td>{{submission.id}}</td>
+                  <td>{{submission.assignment.subject.name}}</td>
+                  <td>{{submission.assignment.totalscore}}</td>
+                  <td>{{submission.totalscore}}</td>
+                  <td>{{submission.datetime}}</td>
+                  <td>{{submission.verdict}}</td>
+                  <td>{{submission.isrunning}}</td>
+                  <td><button type="submit">see details about submission</button></td>
+              </form>
+              </tr>
+         {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

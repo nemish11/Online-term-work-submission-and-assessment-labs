@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.urls import path
-from .views import updateStudent,updateFaculty,update_student,update_faculty,profile,update_admin,updateAdmin,allsubmissions
+from .views import *
 
 urlpatterns = [
     url(r'updateStudent',updateStudent),
@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'update_student',update_student),
     url(r'update_faculty',update_faculty),
     url(r'update_admin',update_admin),
+    url(r'shownotifications',shownotifications),
     url(r'profile',profile),
     url(r'',profile)
 ]

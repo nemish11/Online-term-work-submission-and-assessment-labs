@@ -18,5 +18,7 @@ urlpatterns = [
     url(r'selectedAssignment',selectedAssignment),
     url(r'showWeek',showWeek),
     url(r'deleteweek',deleteweek),
+    url(r'savecomment',savecomment),
+    url(r'markcomment',markcomment),
     url(r'',showWeek),
 ]

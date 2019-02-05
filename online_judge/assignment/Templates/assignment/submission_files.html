@@ -1,11 +1,6 @@
 {% extends "assignment/base.html" %}
 {% block body%}
 <style>
-  textarea {
-  min-height: 60px;
-  overflow-y: auto;
-  word-wrap:break-word
-  }
 
     #divLoading
     {
@@ -76,11 +71,21 @@
 	});
 });
 </script>
+<div>
+  <div class="col s8 m8 l8 ">
+      {% if messages %}
+          {% for m in messages %}
+                  <script>
+          Materialize.toast('{{ m }}', 3000);
+        </script>
+          {% endfor %}
+      {% endif%}
+  </div>
   <a href="/assignment/previous_submissions" >back to previous submission</a>
 
   <p style='color:red;'>{{message}}</p><br/>
   Title :{{assignment.title}}<br/>
-  question is : {{assignment.question}} </br> </br>
+  question is : {{assignment.question}} <br/> <br/>
  <form action = "/assignment/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
 
    Your Code : <br/><br/>
@@ -94,7 +99,7 @@
   </div>
 
   <h2>Results :</h2>
-  total score is : {{totalscore}}
+  total score is : {{totalscore}} out of {{assignment.totalscore}}
 
   <br/>
   <br/>
@@ -129,4 +134,19 @@
           {% endfor %}
       </tbody>
   </table>
+  <br/>
+  {% ifequal request.session.usertype "faculty" %}
+    <form action="/assignment/savecomment" method="POST" > {% csrf_token %}
+      Enter a comments :<br/>
+     <input type="textarea" style = "width:500px;height:100px;" placeholder="Enter a comments..." name="commenttext" /><br/>
+     <button type="submit">submit</button>
+    </form>
+  {% endifequal %}
+  {% ifequal request.session.usertype "student" %}
+     Comment added by faculty :<br/><div> {{submission.comment}}</div>
+     {% ifequal submission.commentunread true %}
+        <a href="/assignment/markcomment" > mark as read </a>
+     {% endifequal %}
+  {% endifequal %}
+</div>
  {% endblock %}

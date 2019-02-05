@@ -128,3 +128,11 @@ def allsubmissions(request):
         c = {}
         c['message'] = "exception Occured!! please try again..."
         return render(request,'userprofile/all_submissions.html',c)
+
+@login_required()
+def shownotifications(request):
+    user = request.user
+    submissions = Submission.objects.filter(user = user, commentunread = True)
+    c = {}
+    c['submissions'] = submissions
+    return render(request,'userprofile/notifications.html',c)

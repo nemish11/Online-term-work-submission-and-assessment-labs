@@ -112,7 +112,7 @@ def newassignment(request):
         assignment.save()
 
         fs = FileSystemStorage()
-        dirname = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(id)
+        dirname = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(assignment.id)
 
         if os.path.exists(dirname):
             shutil.rmtree(dirname)
@@ -287,6 +287,8 @@ def submission_files(request):
 
         c = {}
         c['totalscore'] = submission.totalscore
+        c['submission'] = submission
+        c['true'] = True
 
         inputfiles = ["" for i in range(total_inputfiles)]
         outputfiles = ["" for i in range(total_inputfiles)]
@@ -327,6 +329,30 @@ def submission_files(request):
         return HttpResponseRedirect('/subject/')
 
 @login_required()
+def savecomment(request):
+    try:
+        commenttext = request.POST.get('commenttext')
+        submissionid = request.session.get('submissionid')
+        submission = Submission.objects.get(pk=int(submissionid))
+        submission.comment = commenttext
+        submission.commentunread = True
+        submission.save()
+        messages.add_message(request, messages.INFO, 'Comment posted sucessfully...')
+        return HttpResponseRedirect('/assignment/submission_files')
+    except:
+        messages.add_message(request, messages.WARNING, 'SOme error occured..please try again..')
+        return HttpResponseRedirect('/subject/')
+
+@login_required()
+def markcomment(request):
+    submissionid = request.session.get('submissionid')
+    submission = Submission.objects.get(pk=int(submissionid))
+    submission.commentunread = False
+    submission.save()
+    messages.add_message(request, messages.INFO, 'Comment mark as read sucessfully...')
+    return HttpResponseRedirect('/assignment/submission_files')
+
+@login_required()
 def runcode(request):
     try:
         code = request.POST.get('code')
@@ -337,7 +363,7 @@ def runcode(request):
 
 @login_required()
 def submitcode(request):
-
+    try:
         assignmentid = request.session.get('assignmentid')
         code = request.session.get('assignmentcode')
         assignment = Assignment.objects.get(pk = int(assignmentid))
@@ -381,14 +407,22 @@ def submitcode(request):
 
                 #print(data1)
                 #print(data2)
+                ldata1 = ''
+                ldata2 = ''
+                if data1:
+                    ldata1 = data1[-1]
+                    data1 = data1[:len(data1)-1]
+                if data2:
+                    ldata2 = data2[-1]
+                    data2 = data2[:len(data2)-1]
 
-                assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])[0]
-                '''if assignment_file:
-                    assignment_file = assignment_file[i][0]
+                assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])
+                if assignment_file:
+                    assignment_file = assignment_file[0]
                 else:
-                    score[i] = 0'''
+                    score[i] = 0
 
-                if assignment_file and data1 == data2:
+                if assignment_file and data1 == data2 and ldata1.strip() == ldata2.strip():
                     score[i] = int(assignment_file.score)
                 else:
                     score[i] = 0
@@ -448,5 +482,5 @@ def submitcode(request):
 
         c['combinedlist'] = zip(inputfiles,outputfiles,errorfiles)
         return render(request,'assignment/showAssignment.html',c)
-
+    except:
         return HttpResponseRedirect('/subject/')
