@@ -88,7 +88,7 @@ def get_leaderboard(request):
     students =Student.objects.filter(year=year)
     student = {}
     for s in students:
-        student[s.id] = s.user
+        student[str(s.id)] = s.user.username
 
 
 
@@ -97,29 +97,49 @@ def get_leaderboard(request):
     ranklist_data = {}
 
     ranklist = r.zrange("rank:"+str(subjectid),0,-1,withscores=True)
-    for r in ranklist:
-        r = list(r)
-        key = str(r[0])
-        value = r[1]
+    for ra in ranklist:
+        ra = list(ra)
+        key = str(ra[0])
+        value = ra[1]
         key = list(key.split(':'))[-1]
+        key = str(key)
+        key = key[:len(key)-1]
         ranklist_data[key] = int(value)
     #print(ranklist_data)
 
-    for r_student in r.hgetall(str(subjectid)):
-        print(r_student)
+    for r_student in r.hgetall(1):
+        #print(r_student)
 
         temp = r.hgetall(r_student)
         t = {}
-        outer_key = list(r_student.split(':'))[-1]
+        outer_key = list(str(r_student).split(':'))[-1]
+        outer_key = outer_key[:len(outer_key)-1]
         for key in temp:
             key = str(key)
             key = list(key.split(':'))[-1]
+            key = key[:len(key)-1]
             value = int(value)
             t[key] = value
         data[outer_key] = t
+
     for d in data:
-        print(d)
-    return
+        print(data[d])
+
+    c = {}
+    c['subject'] = subject
+    c['data'] = data
+    c['weeks'] = week
+    c['students'] = student
+    c['ranklist'] = ranklist_data
+
+    for k in c['students']:
+        print(type(k))
+    for k in c['ranklist']:
+        print(type(k))
+    print(c['students'])
+    print(c['ranklist'])
+
+    return render(request,'leaderboard/leaderboard.html', c)
 
 
 
@@ -188,7 +208,7 @@ def set_leaderboard_subject(request):
     try:
         subjectid = request.POST.get('subjectid')
         request.session['leaderboard_subjectid'] = subjectid
-        return HttpResponseRedirect('/leaderboard/show_leaderboard')
+        return HttpResponseRedirect('/leaderboard/get_leaderboard')
     except:
         return HttpResponseRedirect('/subject/')
 
