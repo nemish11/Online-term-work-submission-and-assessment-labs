@@ -19,14 +19,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for key,value in ranklist.items %}
+                        {% for key,value in data.items %}
 
                             <tr>
-                               <td>{{ forloop.counter }}</td>
-                                <td>{{ students.kk }}</td>
-                                <td>{{ value }}</td>
-                                {% for k in data.key.items %}
-                                    <td>{{ k }}</td>
+                               <td>{{ key }}</td>
+
+                                {% for k,v in value.items %}
+                                    <td>{{ v }}</td>
                                 {% endfor%}
                             </tr>
                         {% endfor %}

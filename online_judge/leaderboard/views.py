@@ -19,12 +19,10 @@ import redis
 import time
 from datetime import  datetime
 
-class Connection:
-    def __init__(self):
-        r = Redis.StrictRedis(host='localhost', port=6379, db=0)
+def connection():
 
-    def get_connection(self):
-        return self.r
+    return  redis.StrictRedis(host='localhost', port=6379, db=0)
+
 
 def initialize_leaderboard_cache(request):
     #r = Redis.Redis('default')
@@ -35,7 +33,6 @@ def initialize_leaderboard_cache(request):
     subjects = Subject.objects.filter(status=True)
 
     leaderboard = Leaderboard.objects.filter(year=year).values('subject', 'week', 'student').annotate(Sum('maxscore'))
-    r.flushall()
 
 
 
@@ -96,7 +93,7 @@ def get_leaderboard(request):
     data = {}
     ranklist_data = {}
 
-    ranklist = r.zrange("rank:"+str(subjectid),0,-1,withscores=True)
+    ranklist = r.zrevrange("rank:"+str(subjectid),0,-1,withscores=True)
     for ra in ranklist:
         ra = list(ra)
         key = str(ra[0])
@@ -111,33 +108,44 @@ def get_leaderboard(request):
         #print(r_student)
 
         temp = r.hgetall(r_student)
+        #print(temp)
         t = {}
         outer_key = list(str(r_student).split(':'))[-1]
         outer_key = outer_key[:len(outer_key)-1]
         for key in temp:
+            value = temp[key]
             key = str(key)
             key = list(key.split(':'))[-1]
             key = key[:len(key)-1]
+
             value = int(value)
             t[key] = value
+            #print(value)
         data[outer_key] = t
 
-    for d in data:
-        print(data[d])
+    data_leaderboard = {}
+    count =1
+    for key in ranklist_data:
+        temp_dic={}
+        temp_dic['student_name'] = student[key]
+        temp_dic['totalscore'] = ranklist_data[key]
+
+
+        student_dic = data[key]
+        for student_d in student_dic:
+            temp_dic[student_d] = student_dic[student_d]
+        data_leaderboard[count] = temp_dic
+        count+=1
+        #print(temp_dic)
 
     c = {}
     c['subject'] = subject
-    c['data'] = data
+    c['data'] = data_leaderboard
     c['weeks'] = week
     c['students'] = student
     c['ranklist'] = ranklist_data
 
-    for k in c['students']:
-        print(type(k))
-    for k in c['ranklist']:
-        print(type(k))
-    print(c['students'])
-    print(c['ranklist'])
+    #print(data)
 
     return render(request,'leaderboard/leaderboard.html', c)
 
@@ -199,7 +207,7 @@ def show_leaderboard(request):
     c['subject'] = subject
     c['weeks'] = week_dic
     #initialize_leaderboard_cache(request)
-    get_leaderboard(request)
+    #get_leaderboard(request)
     return render(request,'leaderboard/show_leaderboard.html', c)
 
 
@@ -212,3 +220,28 @@ def set_leaderboard_subject(request):
     except:
         return HttpResponseRedirect('/subject/')
 
+
+def update_cache(leaderboard):
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    student_id = leaderboard.student.id
+    subject_id = leaderboard.subject.id
+    week_id = leaderboard.week.id
+    key = str(subject_id)+":"+str(student_id)+":"+str(week_id)
+
+    name = str(subject_id)+":"+str(student_id)
+    oldval = int(r.hget(name, key))
+    incre_val = leaderboard.maxscore - oldval
+    r.hincrby(name, key, incre_val)
+
+    name_for_z = "rank:" + str(subject_id)
+    key_for_z = "rank:" + str(subject_id) + ":" + str(student_id)
+
+    r.zincrby(name_for_z, incre_val, key_for_z)
+
+    return
+
+
+def add_record_to_cache(leaderboard):
+
+    
+    return

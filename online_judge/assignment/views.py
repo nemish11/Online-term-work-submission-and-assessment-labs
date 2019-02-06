@@ -19,7 +19,7 @@ from online_judge.settings import *
 from compilerApiApp.views import submit_code
 import filecmp
 from leaderboard.models import Leaderboard
-
+from leaderboard.views import  *
 @login_required()
 def showWeek(request):
         c={}
@@ -442,9 +442,11 @@ def submitcode(request):
                 leaderboard = leaderboard[0]
                 leaderboard.maxscore = max(leaderboard.maxscore,scoreA)
                 leaderboard.save()
+                update_cache(leaderboard)
             else:
                 leaderboard = Leaderboard(subject = assignment.subject, year = studentA.year, assignment=assignment, student = studentA, week = assignment.week, maxscore = scoreA)
                 leaderboard.save()
+                add_record_to_cache(leaderboard)
 
         c['combinedlist'] = zip(inputfiles,outputfiles,errorfiles)
         return render(request,'assignment/showAssignment.html',c)

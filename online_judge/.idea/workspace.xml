@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="b6adbe6d-bba8-495c-ac54-496799fca237" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignment/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/assignment/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/leaderboard/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/online_judge/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/online_judge/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,8 +19,20 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/leaderboard/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="477">
-              <caret line="137" column="20" selection-start-line="137" selection-start-column="20" selection-end-line="137" selection-end-column="20" />
+            <state relative-caret-position="1902">
+              <caret line="245" column="4" selection-start-line="245" selection-start-column="4" selection-end-line="245" selection-end-column="4" />
+              <folding>
+                <element signature="e#0#35#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assignment/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="401">
+              <caret line="448" column="47" selection-start-line="448" selection-start-column="47" selection-end-line="448" selection-end-column="47" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -28,8 +43,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="27" column="58" selection-start-line="27" selection-start-column="58" selection-end-line="27" selection-end-column="58" />
+            <state relative-caret-position="315">
+              <caret line="21" column="48" selection-start-line="21" selection-start-column="48" selection-end-line="21" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -50,7 +65,7 @@
         <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/show_leaderboard.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="405">
-              <caret line="27" column="33" lean-forward="true" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+              <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -84,10 +99,8 @@
         <option value="$PROJECT_DIR$/assignment/urls.py" />
         <option value="$PROJECT_DIR$/usermodule/Templates/usermodule/login.html" />
         <option value="$PROJECT_DIR$/compilerApiApp/views.py" />
-        <option value="$PROJECT_DIR$/assignment/views.py" />
         <option value="$PROJECT_DIR$/leaderboard/Templates/leaderboard/base.html" />
         <option value="$PROJECT_DIR$/leaderboard/models.py" />
-        <option value="$PROJECT_DIR$/online_judge/settings.py" />
         <option value="$PROJECT_DIR$/assignment/Templates/assignment/new_assignment.html" />
         <option value="$PROJECT_DIR$/subject/Templates/subject/request_subject.html" />
         <option value="$PROJECT_DIR$/subject/urls.py" />
@@ -99,6 +112,8 @@
         <option value="$PROJECT_DIR$/leaderboard/urls.py" />
         <option value="$PROJECT_DIR$/subject/Templates/subject/all_subject.html" />
         <option value="$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html" />
+        <option value="$PROJECT_DIR$/assignment/views.py" />
+        <option value="$PROJECT_DIR$/online_judge/settings.py" />
         <option value="$PROJECT_DIR$/leaderboard/views.py" />
       </list>
     </option>
@@ -126,20 +141,12 @@
             <path>
               <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_judge" type="462c0819:PsiDirectoryNode" />
-              <item name="subject" type="462c0819:PsiDirectoryNode" />
+              <item name="leaderboard" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_judge" type="462c0819:PsiDirectoryNode" />
-              <item name="subject" type="462c0819:PsiDirectoryNode" />
-              <item name="Templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_judge" type="462c0819:PsiDirectoryNode" />
-              <item name="subject" type="462c0819:PsiDirectoryNode" />
-              <item name="Templates" type="462c0819:PsiDirectoryNode" />
-              <item name="subject" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -315,13 +322,6 @@
     <entry file="file://$PROJECT_DIR$/usermodule/static/all_submissions/16/input_1.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/assignment/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="25" column="52" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/leaderboard/Templates/base.html" />
     <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/base.html">
       <provider selected="true" editor-type-id="text-editor">
@@ -344,23 +344,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/leaderboard/migrations/0001_initial.py">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/online_judge/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="536">
-          <caret line="67" column="25" selection-start-line="67" selection-start-column="25" selection-end-line="67" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/leaderboard/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/assignment/models.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -430,10 +413,34 @@
         <state relative-caret-position="-1053" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/show_leaderboard.html">
+    <entry file="file://$PROJECT_DIR$/subject/Templates/subject/all_subject.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="33" lean-forward="true" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+        <state relative-caret-position="-102">
+          <caret line="68" column="36" lean-forward="true" selection-start-line="68" selection-start-column="36" selection-end-line="68" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leaderboard/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/online_judge/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="251">
+          <caret line="141" column="26" selection-start-line="141" selection-start-column="26" selection-end-line="141" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="48" selection-start-line="21" selection-start-column="48" selection-end-line="21" selection-end-column="48" />
         </state>
       </provider>
     </entry>
@@ -447,24 +454,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/subject/Templates/subject/all_subject.html">
+    <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/show_leaderboard.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
-          <caret line="68" column="36" lean-forward="true" selection-start-line="68" selection-start-column="36" selection-end-line="68" selection-end-column="36" />
+        <state relative-caret-position="405">
+          <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html">
+    <entry file="file://$PROJECT_DIR$/assignment/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="27" column="58" selection-start-line="27" selection-start-column="58" selection-end-line="27" selection-end-column="58" />
+        <state relative-caret-position="401">
+          <caret line="448" column="47" selection-start-line="448" selection-start-column="47" selection-end-line="448" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/leaderboard/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="477">
-          <caret line="137" column="20" selection-start-line="137" selection-start-column="20" selection-end-line="137" selection-end-column="20" />
+        <state relative-caret-position="1902">
+          <caret line="245" column="4" selection-start-line="245" selection-start-column="4" selection-end-line="245" selection-end-column="4" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>
