@@ -20,53 +20,76 @@ import time
 from datetime import  datetime
 
 def connection():
+    return redis.StrictRedis(host='localhost', port=6379, db=0)
 
-    return  redis.StrictRedis(host='localhost', port=6379, db=0)
+
+@login_required()
+def set_leaderboard_subject(request):
+        r = redis.StrictRedis(host='localhost', port=6379, db=0)
+        subjectid = request.POST.get('subjectid')
+        #year = request.POST.get('year')
+        year = 2016
+        request.session['leaderboard_subjectid'] = subjectid
+        request.session['leaderboard_year'] = year
+
+        hash_key = str(year)+':'+str(subjectid)
+        if r.exists(hash_key):
+            return HttpResponseRedirect('/leaderboard/get_leaderboard')
+        else:
+            initialize_leaderboard_cache(request)
+            return HttpResponseRedirect('/leaderboard/get_leaderboard')
+
+        return HttpResponseRedirect('/subject/')
+
+
+def flush_DB():
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    return
+
 
 
 def initialize_leaderboard_cache(request):
     #r = Redis.Redis('default')
-    r=redis.StrictRedis(host='localhost', port=6379, db=0)
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)
     subjectid = request.session.get('leaderboard_subjectid')
     subject = Subject.objects.get(id=subjectid)
-    year = 2016
-    subjects = Subject.objects.filter(status=True)
+    year = request.session.get('leaderboard_year')
+    #subjects = Subject.objects.filter(status=True)
+    leaderboard = Leaderboard.objects.filter(subject=subject, year=year).values('subject', 'week', 'student').annotate(Sum('maxscore'))
 
-    leaderboard = Leaderboard.objects.filter(year=year).values('subject', 'week', 'student').annotate(Sum('maxscore'))
+    student_list = set()
+    week_list = Week.objects.filter(subject=subject)
+    for l in leaderboard:
+        student_list.add(l['student'])
+    subject_rank_name = "rank:"+str(year)+':'+str(subjectid)
+    for s in student_list:
+        subject_hash_key = str(year)+':'+str(subjectid)+':'+str(s)
+        for w in week_list:
+            student_hash_key = str(year)+':'+str(subjectid)+':'+str(s)+':'+str(w.id)
+            r.hset(subject_hash_key, student_hash_key, 0)
+        r.hset(str(year)+':'+str(subjectid), subject_hash_key, subject_hash_key)
 
+        name = "rank:"+str(year)+':'+str(subjectid)+':'+str(s)
 
+        r.zadd(subject_rank_name,{name: 0})
+    r.hset("ranklist", subject_rank_name, subject_rank_name)
+    r.hset("leaderboard", str(year)+':'+str(subjectid), str(year)+':'+str(subjectid))
 
-    for sub in subjects:
-        student_list = set()
-        week_list = Week.objects.filter(subject=sub)
-        for l in leaderboard:
-            if l['subject'] == sub.id:
-                student_list.add(l['student'])
-        sname = "rank:"+str(sub.id)
-
-        for s in student_list:
-            hasname = str(sub.id)+':'+str(s)
-            for w in week_list:
-                wname = str(sub.id)+':'+str(s)+':'+str(w.id)
-                r.hset(hasname, wname, 0)
-            r.hset(sub.id, hasname, hasname)
-
-            name = "rank:"+str(sub.id)+':'+str(s)
-
-            r.zadd(sname,{name: 0})
-        r.hset("ranklist", sname, sname)
-        r.hset("leaderboard", sub.id , sub.id)
+    r.expire(subject_rank_name, 400000)
+    r.expire(str(year)+':'+str(subjectid), 400000)
 
     for l in leaderboard:
-        name = str(l['subject'])+':'+str(l['student'])
-        key = str(l['subject'])+':'+str(l['student'])+':'+str(l['week'])
-        oldval = int(r.hget(name,key))
+        name = str(year)+':'+str(l['subject'])+':'+str(l['student'])
+        key = str(year)+':'+str(l['subject'])+':'+str(l['student'])+':'+str(l['week'])
+        name = str(name)
+        key = str(key)
+        oldval = int(r.hget(name, key))
         incre_val = l['maxscore__sum'] - oldval
 
         r.hincrby(name, key, incre_val)
 
-        name_for_z = "rank:"+str(l['subject'])
-        key_for_z = "rank:"+str(l['subject'])+":"+str(l['student'])
+        name_for_z = "rank:"+str(year)+':'+str(l['subject'])
+        key_for_z = "rank:"+str(year)+':'+str(l['subject'])+":"+str(l['student'])
         r.zincrby(name_for_z, incre_val, key_for_z)
 
     return
@@ -76,7 +99,7 @@ def initialize_leaderboard_cache(request):
 def get_leaderboard(request):
     subjectid = request.session.get('leaderboard_subjectid')
     subject = Subject.objects.get(id=subjectid)
-    year = 2016
+    year = request.session.get('leaderboard_year')
     weeks = Week.objects.filter(subject=subject)
     week = {}
     for w in weeks:
@@ -87,13 +110,14 @@ def get_leaderboard(request):
     for s in students:
         student[str(s.id)] = s.user.username
 
-
-
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
     data = {}
     ranklist_data = {}
 
-    ranklist = r.zrevrange("rank:"+str(subjectid),0,-1,withscores=True)
+    #d = datetime.now()
+    #print(d.microsecond)
+
+    ranklist = r.zrevrange("rank:"+str(year)+':'+str(subjectid), 0, -1, withscores=True)
     for ra in ranklist:
         ra = list(ra)
         key = str(ra[0])
@@ -102,13 +126,11 @@ def get_leaderboard(request):
         key = str(key)
         key = key[:len(key)-1]
         ranklist_data[key] = int(value)
-    #print(ranklist_data)
 
-    for r_student in r.hgetall(1):
-        #print(r_student)
+    subject_key = str(year)+':'+str(subjectid)
+    for r_student in r.hgetall(subject_key):
 
         temp = r.hgetall(r_student)
-        #print(temp)
         t = {}
         outer_key = list(str(r_student).split(':'))[-1]
         outer_key = outer_key[:len(outer_key)-1]
@@ -130,14 +152,15 @@ def get_leaderboard(request):
         temp_dic['student_name'] = student[key]
         temp_dic['totalscore'] = ranklist_data[key]
 
-
         student_dic = data[key]
         for student_d in student_dic:
             temp_dic[student_d] = student_dic[student_d]
         data_leaderboard[count] = temp_dic
-        count+=1
+        count += 1
         #print(temp_dic)
 
+    #d = datetime.now()
+    #print(d.microsecond)
     c = {}
     c['subject'] = subject
     c['data'] = data_leaderboard
@@ -145,17 +168,28 @@ def get_leaderboard(request):
     c['students'] = student
     c['ranklist'] = ranklist_data
 
-    #print(data)
-
     return render(request,'leaderboard/leaderboard.html', c)
 
 
+def update_cache(leaderboard):
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    student_id = leaderboard.student.id
+    subject_id = leaderboard.subject.id
+    week_id = leaderboard.week.id
+    year = leaderboard.year
+    key = str(year)+':'+str(subject_id)+":"+str(student_id)+":"+str(week_id)
 
+    name = str(year)+':'+str(subject_id)+":"+str(student_id)
+    oldval = int(r.hget(name, key))
+    incre_val = leaderboard.maxscore - oldval
+    r.hincrby(name, key, incre_val)
 
+    name_for_z = "rank:"+str(year)+':' + str(subject_id)
+    key_for_z = "rank:" + str(year)+':' + str(subject_id) + ":" + str(student_id)
 
+    r.zincrby(name_for_z, incre_val, key_for_z)
 
-
-
+    return
 
 
 @login_required()
@@ -169,20 +203,9 @@ def show_leaderboard(request):
         week_dic[week.id] = week.name
     c = {}
 
-    #leaderboard = Leaderboard.objects.values('subject', 'week', 'student').annotate(Sum('maxscore'))
-    #d=datetime.now()
-    #print(d.microsecond)
-
     leaderboard = Leaderboard.objects.filter(subject=subject,year=year).values('subject', 'student','week').annotate(Sum('maxscore'))
 
-    #print(str(leaderboard.query))
-    #leaderboard = Leaderboard.objects.values('year','subject', 'week', 'student').annotate(Sum('maxscore'))
-    #d = datetime.now()
-    #print(d.microsecond)
-
-    #for l in leaderboard:
-        #print(l)
-    students = Leaderboard.objects.filter(subject=subject,year=year)
+    students = Leaderboard.objects.filter(subject=subject, year=year)
     # print(leaderboard)
     leaderboard_data = {}
 
@@ -208,40 +231,11 @@ def show_leaderboard(request):
     c['weeks'] = week_dic
     #initialize_leaderboard_cache(request)
     #get_leaderboard(request)
-    return render(request,'leaderboard/show_leaderboard.html', c)
+    #d = datetime.now()
+    #print(d.microsecond)
+
+    return render(request, 'leaderboard/show_leaderboard.html', c)
 
 
-@login_required()
-def set_leaderboard_subject(request):
-    try:
-        subjectid = request.POST.get('subjectid')
-        request.session['leaderboard_subjectid'] = subjectid
-        return HttpResponseRedirect('/leaderboard/get_leaderboard')
-    except:
-        return HttpResponseRedirect('/subject/')
 
 
-def update_cache(leaderboard):
-    r = redis.StrictRedis(host='localhost', port=6379, db=0)
-    student_id = leaderboard.student.id
-    subject_id = leaderboard.subject.id
-    week_id = leaderboard.week.id
-    key = str(subject_id)+":"+str(student_id)+":"+str(week_id)
-
-    name = str(subject_id)+":"+str(student_id)
-    oldval = int(r.hget(name, key))
-    incre_val = leaderboard.maxscore - oldval
-    r.hincrby(name, key, incre_val)
-
-    name_for_z = "rank:" + str(subject_id)
-    key_for_z = "rank:" + str(subject_id) + ":" + str(student_id)
-
-    r.zincrby(name_for_z, incre_val, key_for_z)
-
-    return
-
-
-def add_record_to_cache(leaderboard):
-
-    
-    return

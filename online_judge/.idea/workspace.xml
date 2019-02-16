@@ -4,9 +4,7 @@
     <list default="true" id="b6adbe6d-bba8-495c-ac54-496799fca237" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assignment/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/assignment/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/leaderboard/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/online_judge/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/online_judge/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,8 +17,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/leaderboard/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1902">
-              <caret line="245" column="4" selection-start-line="245" selection-start-column="4" selection-end-line="245" selection-end-column="4" />
+            <state relative-caret-position="177">
+              <caret line="161" column="5" selection-start-line="161" selection-start-column="5" selection-end-line="161" selection-end-column="5" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -31,8 +29,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assignment/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="401">
-              <caret line="448" column="47" selection-start-line="448" selection-start-column="47" selection-end-line="448" selection-end-column="47" />
+            <state relative-caret-position="315">
+              <caret line="21" column="31" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="31" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -52,7 +50,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/leaderboard/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
+            <state relative-caret-position="60">
               <caret line="7" column="44" selection-start-line="7" selection-start-column="44" selection-end-line="7" selection-end-column="44" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
@@ -84,9 +82,14 @@
       <find>total_inputfiles</find>
       <find>print</find>
       <find>_</find>
+      <find>sname</find>
+      <find>wname</find>
     </findStrings>
     <replaceStrings>
       <replace>:</replace>
+      <replace>subject_rank_name</replace>
+      <replace>subject_hash_key</replace>
+      <replace>student_hash_key</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -112,8 +115,8 @@
         <option value="$PROJECT_DIR$/leaderboard/urls.py" />
         <option value="$PROJECT_DIR$/subject/Templates/subject/all_subject.html" />
         <option value="$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html" />
-        <option value="$PROJECT_DIR$/assignment/views.py" />
         <option value="$PROJECT_DIR$/online_judge/settings.py" />
+        <option value="$PROJECT_DIR$/assignment/views.py" />
         <option value="$PROJECT_DIR$/leaderboard/views.py" />
       </list>
     </option>
@@ -147,6 +150,11 @@
               <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_judge" type="462c0819:PsiDirectoryNode" />
               <item name="online_judge" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
+              <item name="online_judge" type="462c0819:PsiDirectoryNode" />
+              <item name="subject" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -190,7 +198,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="27" width="1299" height="741" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20266041" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -437,6 +444,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/leaderboard/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="161" column="5" selection-start-line="161" selection-start-column="5" selection-end-line="161" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assignment/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="31" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -446,7 +473,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/leaderboard/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
+        <state relative-caret-position="60">
           <caret line="7" column="44" selection-start-line="7" selection-start-column="44" selection-end-line="7" selection-end-column="44" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
@@ -458,26 +485,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
           <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assignment/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="448" column="47" selection-start-line="448" selection-start-column="47" selection-end-line="448" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/leaderboard/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1902">
-          <caret line="245" column="4" selection-start-line="245" selection-start-column="4" selection-end-line="245" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
