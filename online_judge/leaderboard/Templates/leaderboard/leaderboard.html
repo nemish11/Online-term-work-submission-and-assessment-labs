@@ -7,6 +7,9 @@
               Leaderboard - {{ subject.name }}
         </div>
         <div>
+            {% if not data|length %}
+                        <h5>Submission is not available.</h5>
+            {% else%}
             <table class="highlight centered responsive-table col s8 m8 l8" >
                     <thead>
                         <tr>
@@ -19,17 +22,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for key,value in data.items %}
 
-                            <tr>
-                               <td>{{ key }}</td>
+                            {% for key,value in data.items %}
 
-                                {% for k,v in value.items %}
-                                    <td>{{ v }}</td>
-                                {% endfor%}
-                            </tr>
-                        {% endfor %}
+                                <tr>
+                                   <td>{{ key }}</td>
+
+                                    {% for k,v in value.items %}
+                                        <td>{{ v }}</td>
+                                    {% endfor%}
+                                </tr>
+                            {% endfor %}
+
                     </tbody>
+                {% endif %}
                 </table>
         </div>
     </div>

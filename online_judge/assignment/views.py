@@ -46,8 +46,9 @@ def addweek(request):
         subjectid = request.session.get('subjectid')
         weekname = request.POST.get('weekname')
         subject = Subject.objects.get(pk=int(subjectid))
-        week = Week(name=weekname,subject=subject)
+        week = Week(name=weekname, subject=subject)
         week.save()
+        update_cache_week(subjectid)
         return HttpResponseRedirect('/assignment/showWeek')
     except:
         return HttpResponseRedirect('/subject/')

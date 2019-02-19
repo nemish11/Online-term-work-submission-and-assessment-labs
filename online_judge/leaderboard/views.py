@@ -19,6 +19,7 @@ import redis
 import time
 from datetime import  datetime
 
+
 def connection():
     return redis.StrictRedis(host='localhost', port=6379, db=0)
 
@@ -27,8 +28,8 @@ def connection():
 def set_leaderboard_subject(request):
         r = redis.StrictRedis(host='localhost', port=6379, db=0)
         subjectid = request.POST.get('subjectid')
-        #year = request.POST.get('year')
-        year = 2016
+        year = request.POST.get('year')
+        #year = 2016
         request.session['leaderboard_subjectid'] = subjectid
         request.session['leaderboard_year'] = year
 
@@ -44,17 +45,15 @@ def set_leaderboard_subject(request):
 
 def flush_DB():
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    r.flushall()
     return
 
 
-
 def initialize_leaderboard_cache(request):
-    #r = Redis.Redis('default')
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
     subjectid = request.session.get('leaderboard_subjectid')
     subject = Subject.objects.get(id=subjectid)
     year = request.session.get('leaderboard_year')
-    #subjects = Subject.objects.filter(status=True)
     leaderboard = Leaderboard.objects.filter(subject=subject, year=year).values('subject', 'week', 'student').annotate(Sum('maxscore'))
 
     student_list = set()
@@ -188,6 +187,23 @@ def update_cache(leaderboard):
     key_for_z = "rank:" + str(year)+':' + str(subject_id) + ":" + str(student_id)
 
     r.zincrby(name_for_z, incre_val, key_for_z)
+
+    return
+
+
+def update_cache_week(subjectid):
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    ymax = Student.objects.all().aggregate(Max('year'))['year__max']
+    ymin = Student.objects.all().aggregate(Min('year'))['year__min']
+
+    for year in range(ymin,ymax+1):
+        hash_key = str(year)+':'+str(subjectid)
+        set_key = "rank:"+str(year)+':'+str(subjectid)
+
+        if r.exists(hash_key):
+            r.expire(hash_key, 10)
+        if r.exists(set_key):
+            r.expire(set_key,10)
 
     return
 

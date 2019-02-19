@@ -39,7 +39,9 @@
                           <th>Subject Name</th>
                           <th>Action</th>
                           <th>Show Week</th>
+                          <th>Select Year</th>
                           <th>Leaderboard</th>
+
                       </tr>
                     </thead>
                     <tbody>
@@ -48,10 +50,10 @@
                                 <td>{{ s.subject_code }}</td>
                                 <td>{{ s.name }}</td>
                                 <td>
-                                <form action="/subject/removesubject" method="POST" class="col s12"> {% csrf_token %}
-                                  <button type="submit" class="btn" name="status" value="remove">Remove</button>
-                                  <input type="hidden" value="{{ s.pk }}" name="id">
-                                </form>
+                                    <form action="/subject/removesubject" method="POST" class="col s12"> {% csrf_token %}
+                                      <button type="submit" class="btn" name="status" value="remove">Remove</button>
+                                      <input type="hidden" value="{{ s.pk }}" name="id">
+                                    </form>
                                 </td>
                                 <td>
                                     <form action="/subject/selectedsubject" method="POST" class="col s12"> {% csrf_token %}
@@ -59,12 +61,14 @@
                                       <button type="submit" class="btn" name="send">Show week</button>
                                     </form>
                                 </td>
-                                <td>
+
                                     <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
-                                      <input type="hidden" name="subjectid" value="{{ s.id }}" />
-                                      <button type="submit" class="btn" name="send">Leaderboard</button>
+                                        <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
+                                            <input type="number" name="year" min="2016" max="2050" required/>
+                                        </td>
+                                        <td><button type="submit" class="btn" name="send">Leaderboard</button></td>
                                     </form>
-                                </td>
+
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -98,6 +102,7 @@
                           <th>Subject Code</th>
                           <th>Subject Name</th>
                           <th>Show Week</th>
+                          <th>Select Year</th>
                           <th>Leaderboard</th>
                       </tr>
                     </thead>
@@ -112,12 +117,14 @@
                                       <button type="submit" class="btn" name="send">Show week</button>
                                     </form>
                                 </td>
-                                <td>
+
                                     <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
-                                      <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
-                                      <button type="submit" class="btn" name="send">Show Leaderboard</button>
+                                     <td> <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
+                                        <input type="number" name="year" min="2016" max="2050" required/>
+                                    </td>
+                                        <td><button type="submit" class="btn" name="send">Show Leaderboard</button></td>
                                     </form>
-                                </td>
+
 
                             </tr>
                         {% endfor %}
@@ -131,6 +138,7 @@
                           <th>Subject Code</th>
                           <th>Subject Name</th>
                           <th>Show Week</th>
+                          <th>Select Year</th>
                           <th>Leaderboard</th>
                       </tr>
                     </thead>
@@ -145,12 +153,13 @@
                                       <button type="submit" class="btn" name="send">Show week</button>
                                     </form>
                                 </td>
-                                <td>
+
                                     <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
-                                      <input type="hidden" name="subjectid" value="{{ s.id }}" />
-                                      <button type="submit" class="btn" name="send">Show leaderboard</button>
+                                        <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
+                                        <input type="number" name="year" min="2016" max="2050" required/></td>
+                                        <td><button type="submit" class="btn" name="send">Show leaderboard</button></td>
                                     </form>
-                                </td>
+
 
                             </tr>
                         {% endfor %}

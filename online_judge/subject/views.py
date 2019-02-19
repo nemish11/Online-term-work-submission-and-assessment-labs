@@ -201,34 +201,47 @@ def request_list(request):
     if request.user.groups.all()[0].name == 'faculty':
         faculty = Faculty.objects.get(user=request.user)
         try:
-            req_list = Request.objects.filter(faculty=faculty,status="pending")
+            req_list = Request.objects.filter(faculty=faculty, status="pending")
         except:
             req_list = None
 
-        try:
-            subject = Subject.objects.filter(status=True)
-        except:
-            subject = None
-
-        student = Request.objects.filter(faculty=faculty, status="approved")
         subject = Subject.objects.filter(status=True)
-        y1 = Student.objects.all().aggregate(Max('year'))['year__max']
-        y2 = Student.objects.all().aggregate(Min('year'))['year__min']
 
-        y = []
-        for i in range(y1, y2-1, -1):
-            y.append(i)
+        ymax = Student.objects.all().aggregate(Max('year'))['year__max']
+        ymin = Student.objects.all().aggregate(Min('year'))['year__min']
+
         c = {}
         c['req_list'] = req_list
         c['role'] = "faculty"
-        c['s_list'] = student
-        c['year'] = y
-        c['subject'] = subject
-        return render(request,'subject/request_list.html', c)
+        c['min_year'] = ymin
+        c['max_year'] = ymax
+        c['subjects'] = subject
+        return render(request, 'subject/request_list.html', c)
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/all_subject')
 
+
+@login_required()
+def student_list(request):
+    if request.user.groups.all()[0].name == 'faculty':
+        faculty = Faculty.objects.get(user=request.user)
+        subjectid = request.POST.get('subjectid')
+        year1 = request.POST.get('year')
+        subject = Subject.objects.get(id=subjectid)
+        students = Request.objects.filter(faculty=faculty,  subject=subject, status="approved")
+        student = []
+        for s in students:
+            if int(s.student.year) == int(year1):
+                student.append(s)
+        c = {}
+        c['subject'] = subject
+        c['faculty'] = faculty
+        c['students'] = student
+        return render(request, 'subject/student_list.html', c)
+    else:
+        messages.add_message(request, messages.WARNING, 'You are not authorized!!')
+        return HttpResponseRedirect('/subject/request_list')
 
 @login_required()
 def approved_request(request):
@@ -242,6 +255,6 @@ def approved_request(request):
 
 @login_required()
 def remove_student(request):
-    id=request.POST.get('id')
+    id=int(request.POST.get('id'))
     Request.objects.filter(id=id).update(status="decline")
     return HttpResponseRedirect(request,'/subject/request_list')

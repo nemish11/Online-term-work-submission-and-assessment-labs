@@ -10,24 +10,26 @@
             {% endfor %}
         {% endif%}
     </div>
+    <div>
     {% if role == 'faculty'%}
-
+        {% if not req_list|length%}
+                <h5>
+                No Request list..
+                </h5>
+        {% else%}
         <form action="/subject/approved_request" method="POST" class="col s12"> {% csrf_token %}
-
-            <table id="myDataTable" class="table table-striped table-bordered">
+            <table id="myDataTable1" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>Student</th>
-                    <th>Subject</th>
+                    <th>Student Name</th>
+                    <th>Subject Name</th>
                     <th>Action</th>
                 </tr>
             </thead>
+
             <tbody>
-            {% if not req_list|length%}
-                <tr>
-                No Request list..
-                </tr>
-            {% else%}
+
+
                 {% for r in req_list %}
                     <tr>
                         <td><input type="hidden" value={{ r.pk }} name="id">
@@ -40,13 +42,52 @@
                         </td>
                     </tr>
                 {% endfor %}
-            {% endif %}
+
             </tbody>
             </table>
        </form>
+        {% endif %}
     {% endif %}
+    </div>
 
+    <div>
+        {% if not subjects|length %}
+        <h5>No Subjects.</h5>
+        {% else%}
+        <table id="myDataTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Subject Code</th>
+                    <th>Subject Name</th>
+                    <th>Select Year</th>
+                    <th>Show Student List</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject in subjects %}
+                    <tr>
+                        <td>{{subject.subject_code}}</td>
+                        <td>{{subject.name}}</td>
+                        <form action="/subject/student_list" method="POST" class="col s12"> {% csrf_token %}
+                            <td>
+                                <input type="number" name="year" min={{ min_year }} max={{ max_year }} required/>
+                            </td>
+                            <td>
+                                <input type="hidden" name="subjectid" value="{{ subject.id }}" />
+                                <input type="hidden" name="faculty" value="{{ request.user }}"/>
+                                <button type="submit" class="btn" name="send">student list</button></td>
+                        </form>
+                    </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+        {% endif%}
+    </div>
 
+</div>
+{% endblock %}
+
+<!--
 <script>
         document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.collapsible');
@@ -100,5 +141,5 @@
             </li>
         </ul>
     {% endfor %}
-{% endblock %}
     </div>
+-->
