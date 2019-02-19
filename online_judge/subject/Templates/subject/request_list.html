@@ -68,7 +68,7 @@
                     <tr>
                         <td>{{subject.subject_code}}</td>
                         <td>{{subject.name}}</td>
-                        <form action="/subject/student_list" method="POST" class="col s12"> {% csrf_token %}
+                        <form action="/subject/set_subject_for_studentlist" method="POST" class="col s12"> {% csrf_token %}
                             <td>
                                 <input type="number" name="year" min={{ min_year }} max={{ max_year }} required/>
                             </td>

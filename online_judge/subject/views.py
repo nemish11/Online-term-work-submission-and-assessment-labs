@@ -223,11 +223,20 @@ def request_list(request):
 
 
 @login_required()
+def set_subject_for_studentlist(request):
+    subjectid = request.POST.get('subjectid')
+    year = request.POST.get('year')
+    request.session['studentlist_subjectid'] = subjectid
+    request.session['studentlist_year'] = year
+    return HttpResponseRedirect('/subject/student_list')
+
+
+@login_required()
 def student_list(request):
     if request.user.groups.all()[0].name == 'faculty':
         faculty = Faculty.objects.get(user=request.user)
-        subjectid = request.POST.get('subjectid')
-        year1 = request.POST.get('year')
+        subjectid = request.session['studentlist_subjectid']
+        year1 = request.session['studentlist_year']
         subject = Subject.objects.get(id=subjectid)
         students = Request.objects.filter(faculty=faculty,  subject=subject, status="approved")
         student = []
@@ -245,16 +254,16 @@ def student_list(request):
 
 @login_required()
 def approved_request(request):
-    stu=request.POST.get('id')
-    s=request.POST['status']
+    id = request.POST.get('id')
+    s = request.POST['status']
     #print(s)
-    Request.objects.filter(id=stu).update(status=s)
+    Request.objects.filter(id=id).update(status=s)
     messages.add_message(request, messages.INFO, "Request is "+s)
     return HttpResponseRedirect('/subject/request_list')
 
 
 @login_required()
 def remove_student(request):
-    id=int(request.POST.get('id'))
+    id = int(request.POST.get('id'))
     Request.objects.filter(id=id).update(status="decline")
-    return HttpResponseRedirect(request,'/subject/request_list')
+    return HttpResponseRedirect(request,'/subject/student_list')
