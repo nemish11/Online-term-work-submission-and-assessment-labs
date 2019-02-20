@@ -64,7 +64,7 @@
 
                                     <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
                                         <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
-                                            <input type="number" name="year" min="2016" max="2050" required/>
+                                            <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
                                         </td>
                                         <td><button type="submit" class="btn" name="send">Leaderboard</button></td>
                                     </form>
@@ -120,7 +120,7 @@
 
                                     <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
                                      <td> <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
-                                        <input type="number" name="year" min="2016" max="2050" required/>
+                                        <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
                                     </td>
                                         <td><button type="submit" class="btn" name="send">Show Leaderboard</button></td>
                                     </form>
@@ -156,7 +156,7 @@
 
                                     <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
                                         <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
-                                        <input type="number" name="year" min="2016" max="2050" required/></td>
+                                        <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/></td>
                                         <td><button type="submit" class="btn" name="send">Show leaderboard</button></td>
                                     </form>
 

@@ -12,6 +12,11 @@ from django.db.models import Max,Min
 
 @login_required()
 def all_subject(request):
+        ymax = Student.objects.all().aggregate(Max('year'))['year__max']
+        ymin = Student.objects.all().aggregate(Min('year'))['year__min']
+        c={}
+        c['min_year'] = ymin
+        c['max_year'] = ymax
         if request.user.is_superuser:
             rmlist = []
             subject_list = []
@@ -21,16 +26,23 @@ def all_subject(request):
                     subject_list.append(s)
                 else:
                     rmlist.append(s)
-            return render(request, 'subject/all_subject.html', {'subject_list': subject_list, 'remove_list': rmlist})
+            c['subject_list'] = subject_list
+            c['remove_list'] = rmlist
+            return render(request, 'subject/all_subject.html', c)
         elif request.user.groups.all()[0].name == 'faculty':
             f=Faculty.objects.get(user=request.user)
             student_list=Request.objects.filter(faculty=f,status="approved")
             subject_list = Subject.objects.filter(status=True)
-            return render(request, 'subject/all_subject.html', {'subject_list': subject_list, 'role': "faculty",'stu_list':student_list})
+            c['subject_list'] = subject_list
+            c['role'] = "faculty"
+            c['stu_list'] = student_list
+            return render(request, 'subject/all_subject.html', c)
         elif request.user.groups.all()[0].name == 'student':
             s = Student.objects.get(user=request.user)
             subject_list = Request.objects.filter(student=s, status="approved")
-            return render(request, 'subject/all_subject.html', {'subject_list': subject_list, 'role': "student"})
+            c['subject_list'] = subject_list
+            c['role'] = "student"
+            return render(request, 'subject/all_subject.html', c)
         else:
             return HttpResponseRedirect('/usermodule/')
         return HttpResponseRedirect('/usermodule/')
@@ -237,7 +249,7 @@ def student_list(request):
         faculty = Faculty.objects.get(user=request.user)
         subjectid = request.session['studentlist_subjectid']
         year1 = request.session['studentlist_year']
-        subject = Subject.objects.get(id=subjectid)
+        subject = Subject.objects.get(id=int(subjectid))
         students = Request.objects.filter(faculty=faculty,  subject=subject, status="approved")
         student = []
         for s in students:
@@ -266,4 +278,4 @@ def approved_request(request):
 def remove_student(request):
     id = int(request.POST.get('id'))
     Request.objects.filter(id=id).update(status="decline")
-    return HttpResponseRedirect(request,'/subject/student_list')
+    return HttpResponseRedirect('/subject/student_list')
