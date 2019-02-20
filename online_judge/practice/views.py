@@ -14,7 +14,7 @@ from datetime import datetime
 import subprocess,threading,os,shutil
 from multiprocessing import Pool
 from online_judge.settings import *
-from compilerApiApp.views import submit_code
+from .utils import submit_code
 import filecmp
 from leaderboard.models import Leaderboard
 
@@ -65,14 +65,96 @@ def showproblem(request):
     problemid = request.GET.get('id')
     problem = Problem.objects.get(pk = int(problemid))
     request.session['problemid'] = problemid
+    submission = Submission.objects.filter(user = request.user,problem = problem).last()
+    submission_files = Submission_files.objects.filter(submission = submission,type = 'codefile')
+
+    previous_code = ''
+    if submission_files:
+        submission_files = submission_files[0]
+        fhandler = open(BASE_DIR+"/usermodule"+submission_files.filepath,'r')
+        previous_code = fhandler.read()
+        fhandler.close()
+
     c = {}
+    c['previous_code'] = previous_code
     c['problem'] = problem
     return render(request,'practice/showproblem.html',c)
 
 @login_required()
 def previous_submissions(request):
+    problemid = request.GET.get('id')
+    problem = Problem.objects.get(pk=int(problemid))
+    submissions = Submission.objects.filter(user = request.user,problem=problem)
+    accepted_submissions = submissions.filter(verdict = 'accepted')
+    wrong_submissions = submissions.filter(verdict = 'wrong')
     c = {}
+    c['submissions'] = submissions
+    c['problem'] = problem
+    c['accepted'] = len(accepted_submissions)
+    c['wrong'] = len(wrong_submissions)
+    c['partially_accepted'] = max(0,len(submissions) - len(accepted_submissions) - len(wrong_submissions))
+    c['total_submissions'] = len(submissions)
     return render(request,'practice/previous_submissions.html',c)
+
+def selectedsubmission(request):
+    try:
+        submissionid = request.POST.get('submissionid')
+        request.session['submissionid'] = submissionid
+        return HttpResponseRedirect('/practice/submission_files')
+    except:
+        return HttpResponseRedirect('/practice/')
+
+@login_required()
+def submission_files(request):
+    try:
+        submissionid = request.session.get('submissionid')
+        submission = Submission.objects.get(pk=int(submissionid))
+        problem = submission.problem
+        total_inputfiles = problem.total_inputfiles
+        submission_files = Submission_files.objects.filter(submission=submission)
+
+        c = {}
+        c['totalscore'] = submission.totalscore
+        c['submission'] = submission
+        c['true'] = True
+
+        inputfiles = ["" for i in range(total_inputfiles)]
+        outputfiles = ["" for i in range(total_inputfiles)]
+        errorfiles = ["" for i in range(total_inputfiles)]
+
+        codefile = submission_files.filter(filepath__contains = "/codefile")
+        if codefile:
+            codefile = codefile[0].filepath
+            codefile_handler = open(BASE_DIR+"/usermodule"+codefile,'r')
+            previous_code = codefile_handler.read()
+            c['previous_code'] = previous_code
+            codefile_handler.close()
+        else:
+            c['message'] = 'file properly not uploaded..please contact to faculty.'
+
+        for i in range(0,int(total_inputfiles)):
+            inputfiles[i] = submission_files.filter(filepath__contains = "/input_"+str(i+1))
+            if inputfiles[i]:
+                inputfiles[i] = inputfiles[i][0]
+            else:
+                c['message'] = 'file properly not uploaded..please contact to faculty.'
+            outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))
+            if outputfiles[i]:
+                outputfiles[i] = outputfiles[i][0]
+            else:
+                c['message'] = 'file properly not uploaded..please contact to faculty.'
+            errorfiles[i] = submission_files.filter(filepath__contains = "/error_"+str(i+1))
+            if errorfiles[i]:
+                errorfiles[i] = errorfiles[i][0]
+            else:
+                c['message'] = 'file properly not uploaded..please contact to faculty.'
+
+        c['combinedlist'] = zip(inputfiles,outputfiles,errorfiles)
+
+        c['problem'] = problem
+        return render(request,'practice/submission_files.html',c)
+    except:
+        return HttpResponseRedirect('/practice/')
 
 @login_required()
 def addproblem(request):
@@ -148,16 +230,19 @@ def addproblem(request):
 def runcode(request):
     try:
         code = request.POST.get('code')
+        language = request.POST.get('language')
+        request.session['selected_language'] = language
         request.session['problemcode'] = code
-        return HttpResponseRedirect('/assignment/submitcode')
+        return HttpResponseRedirect('/practice/submitcode')
     except:
-        return HttpResponseRedirect('/subject/')
+        return HttpResponseRedirect('/practice/')
 
 @login_required()
 def submitcode(request):
     try:
         problemid = request.session.get('problemid')
         code = request.session.get('problemcode')
+        language = request.session.get('selected_language')
         problem = Problem.objects.get(pk = int(problemid))
         c = {}
         c['problem'] = problem
@@ -174,13 +259,13 @@ def submitcode(request):
             inputfiles[i] = 'usermodule/static/problems/problem_'+str(problem.id)+'/inputfile_'+str(i+1)+".txt"
 
         #submission = submit_code(request,inputfiles,outputfiles,assignment,code,total_inputfiles,errorfiles,errortypes,runtimes,memoryused,codefile)
-        submission = submit_code(request,problem,inputfiles,code)
+        submission = submit_code(request,problem,inputfiles,code,language)
         totalscore = 0
 
         submission_files = Submission_files.objects.filter(submission=submission)
 
         for i in range(0,int(total_inputfiles)):
-            assignment_outputfilepath = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(assignment.id)+"/outputfile_"+str(i+1)+".txt"
+            problem_outputfilepath = BASE_DIR + "/usermodule/static/problems/problem_"+str(problem.id)+"/outputfile_"+str(i+1)+".txt"
 
             outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))
 
@@ -191,12 +276,10 @@ def submitcode(request):
                 data1 = fhandler.readlines()
                 fhandler.close()
 
-                fhandler = open(assignment_outputfilepath)
+                fhandler = open(problem_outputfilepath)
                 data2 = fhandler.readlines()
                 fhandler.close()
 
-                #print(data1)
-                #print(data2)
                 ldata1 = ''
                 ldata2 = ''
                 if data1:
@@ -206,14 +289,14 @@ def submitcode(request):
                     ldata2 = data2[-1]
                     data2 = data2[:len(data2)-1]
 
-                assignment_file = Assignment_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])
-                if assignment_file:
-                    assignment_file = assignment_file[0]
+                problem_file = Problem_files.objects.filter(filepath = BASE_DIR + "/" +inputfiles[i])
+                if problem_file:
+                    problem_file = problem_file[0]
                 else:
                     score[i] = 0
 
-                if assignment_file and data1 == data2 and ldata1.strip() == ldata2.strip():
-                    score[i] = int(assignment_file.score)
+                if problem_file and data1 == data2 and ldata1.strip() == ldata2.strip():
+                    score[i] = int(problem_file.score)
                 else:
                     score[i] = 0
             else:
@@ -222,7 +305,7 @@ def submitcode(request):
             totalscore = totalscore + int(score[i])
 
         submission.totalscore = totalscore
-        if totalscore == assignment.totalscore:
+        if totalscore == problem.totalscore:
             submission.verdict = "accepted"
         elif totalscore == 0:
             submission.verdict = "wrong"
@@ -258,7 +341,7 @@ def submitcode(request):
         #combinedlist = zip(inputfiles,outputfiles,runtimes,memoryused,errortypes,errorfiles,score)
         #c['submission_files'] = submission_files
         #c['combinedlist'] = combinedlist
-        if request.user.groups.all()[0].name == 'student':
+        '''if request.user.groups.all()[0].name == 'student':
             scoreA = sum(score)
             studentA = Student.objects.filter(user = request.user)[0]
             leaderboard = Leaderboard.objects.filter(student  = studentA, year = studentA.year, subject = assignment.subject, assignment = assignment, week = assignment.week)
@@ -268,12 +351,12 @@ def submitcode(request):
                 leaderboard.save()
             else:
                 leaderboard = Leaderboard(subject = assignment.subject, year = studentA.year, assignment=assignment, student = studentA, week = assignment.week, maxscore = scoreA)
-                leaderboard.save()
+                leaderboard.save()'''
 
         c['combinedlist'] = zip(inputfiles,outputfiles,errorfiles)
-        return render(request,'assignment/showAssignment.html',c)
+        return render(request,'practice/showproblem.html',c)
     except:
-        return HttpResponseRedirect('/subject/')
+        return HttpResponseRedirect('/practice/')
 
 
 '''

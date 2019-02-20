@@ -45,14 +45,15 @@
 </style>
 <script>
 
+  function my_fun(val){
+  }
   $(document).ready(function(){
     $("button.content").click(function(){
         $("div#divLoading").addClass('show');
     });
 });
   $(document).ready(function(){
-	//code here...
-  var lang = "" //select problem language
+  var lang = "c++"; //select problem language
   lang = lang.toLowerCase()
   var mode = "python"
   if( lang== 'c++' || lang=='cpp')
@@ -81,7 +82,7 @@
 </script>
 
 
-  <a href="/problem/previous_submissions/?id={{proble.id}}" >see previous submissions</a>
+  <a href="/practice/previous_submissions/?id={{problem.id}}" >see previous submissions</a>
     <p style='color:red;'>{{message}}</p><br/>
   Title :{{problem.title}}<br/><br/>
   question is : {{problem.question}} <br/><br/>
@@ -92,6 +93,17 @@
   sample output : {{problem.sampleoutput}}<br/><br/>
   explanation : {{problem.explanation}}<br/><br/>
  <form action = "/practice/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
+   Select a language :
+   <input type="radio" id="c" name="language" onchange="my_fun('c')" value="c"/>
+   <label for="c">c</label>
+
+   <input type="radio" id="c++" name="language" onchange="my_fun('c++')" value="c++" checked/>
+   <label for="c++">c++</label>
+
+   <input type="radio" id="python" name="language" onchange="my_fun('python')" value="python"/>
+   <label for="python">python</label>
+
+   <br/>
    Enter a Code : <br/><br/>
 
    <textarea class="codemirror-textarea" style="width:auto;height:10000px" name = "code" value="{{previous_code}}">{{previous_code}}</textarea><br/>

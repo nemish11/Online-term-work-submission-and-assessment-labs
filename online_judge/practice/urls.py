@@ -15,5 +15,8 @@ urlpatterns = [
     url(r'problem/$',showproblem),
     url(r'previous_submissions/$',previous_submissions),
     url(r'runcode',runcode),
+    url(r'submitcode',submitcode),
+    url(r'selectedsubmission',selectedsubmission),
+    url(r'submission_files',submission_files),
     url(r'',all_problems),
 ]

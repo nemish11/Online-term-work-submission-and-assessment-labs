@@ -1,0 +1,152 @@
+{% extends "assignment/base.html" %}
+{% block body%}
+<style>
+
+    #divLoading
+    {
+        display : none;
+    }
+    #divLoading.show
+    {
+        display : block;
+        position : fixed;
+        z-index: 100;
+        background-image : url('http://loadinggif.com/images/image-selection/3.gif');
+        background-color:#666;
+        opacity : 0.4;
+        background-repeat : no-repeat;
+        background-position : center;
+        left : 0;
+        bottom : 0;
+        right : 0;
+        top : 0;
+    }
+    #loadinggif.show
+    {
+        left : 50%;
+        top : 50%;
+        position : absolute;
+        z-index : 101;
+        width : 32px;
+        height : 32px;
+        margin-left : -16px;
+        margin-top : -16px;
+    }
+    div.content {
+       width : 1000px;
+       height : 1000px;
+    }
+</style>
+<script>
+  $(document).ready(function(){
+    $("button.content").click(function(){
+        $("div#divLoading").addClass('show');
+    });
+  });
+  $(document).ready(function(){
+	//code here...
+  var lang = "{{submission.language}}"
+  lang = lang.toLowerCase()
+  var mode = "python"
+  if( lang== 'c++' || lang=='cpp')
+     mode = "text/x-c++src"
+  if(lang=='c')
+     mode = "text/x-csrc"
+  if(lang == 'python')
+    mode = "python"
+  if(lang == 'java')
+    mode = "text/x-java"
+  if(lang == 'c#')
+    mode = "text/x-csharp"
+
+	var code = $(".codemirror-textarea")[0];
+	var editor = CodeMirror.fromTextArea(code, {
+    mode:mode,
+		lineNumbers : true,
+    spellcheck : true,
+    autocorrect : true,
+    readOnly : true,
+    matchBrackets : true,
+    lineWrapping: true,
+	});
+});
+</script>
+<div>
+  <div class="col s8 m8 l8 ">
+      {% if messages %}
+          {% for m in messages %}
+                  <script>
+          Materialize.toast('{{ m }}', 3000);
+        </script>
+          {% endfor %}
+      {% endif%}
+  </div>
+  <a href="/practice/previous_submissions/?id={{problem.id}}" >back to previous submission</a>
+
+  <p style='color:red;'>{{message}}</p><br/>
+  Title :{{problem.title}}<br/>
+  question is : {{problem.question}} <br/> <br/>
+ <form action = "/practice/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
+
+   Your Code : <br/><br/>
+
+   <textarea class="codemirror-textarea" name = "code" value="{{previous_code}}" onload="adjustHeight(this)">{{previous_code}}</textarea><br/>
+   <button class="content" type="submit">Submit</button>
+
+ </form>
+
+ <div id="divLoading">
+  </div>
+
+  <h2>Results :</h2>
+  total score is : {{totalscore}} out of {{problem.totalscore}}
+
+  <br/>
+  <br/>
+  <table class="highlight centered responsive-table col s8 m8 l8" >
+      <thead>
+        <tr>
+            <th>inputfiles</th>
+            <th>outputfiles</th>
+            <th>runtimes</th>
+            <th>memoryused</th>
+            <th>errortypes</th>
+            <th>detailfiles</th>
+            <th>score</th>
+        </tr>
+      </thead>
+      <tbody>
+
+          {% for inputfile,outputfile,errorfile in combinedlist %}
+
+              <tr>
+
+                  <td><a href="{{inputfile.filepath}}" download>inputfile</a></td>
+
+                  <td><a href = "{{outputfile.filepath}}" download>outputfile</td>
+                  <td>{{inputfile.runtime}}</td>
+                  <td>{{inputfile.memoryused}}</td>
+                  <td>{{inputfile.errortype}}</td>
+                  <td><a href="{{errorfile.filepath}}" download>detailfile</a></td>
+                  <td>{{inputfile.score}}</td>
+
+              </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  <br/>
+  <!--{% ifequal request.session.usertype "faculty" %}
+    <form action="/practice/savecomment" method="POST" > {% csrf_token %}
+      Enter a comments :<br/>
+     <input type="textarea" style = "width:500px;height:100px;" placeholder="Enter a comments..." name="commenttext" /><br/>
+     <button type="submit">submit</button>
+    </form>
+  {% endifequal %}
+  {% ifequal request.session.usertype "student" %}
+     Comment added by faculty :<br/><div> {{submission.comment}}</div>
+     {% ifequal submission.commentunread true %}
+        <a href="/practice/markcomment" > mark as read </a>
+     {% endifequal %}
+  {% endifequal %}-->
+</div>
+ {% endblock %}

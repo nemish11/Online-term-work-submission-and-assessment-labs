@@ -4,18 +4,13 @@ from django.http import HttpResponseRedirect
 import pandas as pd
 from datetime import datetime
 from django.utils import timezone
-from assignment.models import Submission,Submission_files
+from .models import Submission,Submission_files
 from online_judge.settings import *
 from django.core.files.storage import FileSystemStorage
 import subprocess,threading
 import os,shutil
 from django.contrib.auth.decorators import login_required
 from multiprocessing import Pool
-
-# Create your views here.
-@login_required()
-def program_file(request):
-    return render(request,'compilerApiApp/index.html')
 
 @login_required()
 def run_input_files(request,counter,dirname,submission,inputfiles,language,code,filename):
@@ -243,14 +238,14 @@ def run_input_files(request,counter,dirname,submission,inputfiles,language,code,
 
 
 @login_required()
-def submit_code(request,assignment,subject,inputfiles,code):
+def submit_code(request,problem,inputfiles,code,language):
     try:
-        submission = Submission(user=request.user,assignment=assignment,datetime=datetime.now(),verdict="wrong",isrunning='YES')
+        submission = Submission(user=request.user,problem=problem,language=language,datetime=datetime.now(),verdict="wrong",isrunning='YES')
         submission.save()
         id = submission.id
 
         fs = FileSystemStorage()
-        filename = BASE_DIR + "/usermodule/static/all_submissions/"
+        filename = BASE_DIR + "/usermodule/static/problem_submission/"
         dirname = filename + str(id)
 
         if os.path.exists(dirname):
@@ -258,7 +253,6 @@ def submit_code(request,assignment,subject,inputfiles,code):
         os.makedirs(dirname)
 
         counter = 1
-        language = assignment.subject.name
         codefile = ''
         #inputfilecount = 3#request.POST.get['inputfilecount']
         if language == 'c' or language == 'C':
@@ -283,7 +277,7 @@ def submit_code(request,assignment,subject,inputfiles,code):
 
         thread_arr = []
 
-        total_inputfiles = assignment.total_inputfiles
+        total_inputfiles = problem.total_inputfiles
 
         while counter <= total_inputfiles :
             thread_arr.append(str(counter))

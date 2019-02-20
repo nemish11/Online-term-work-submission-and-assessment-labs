@@ -58,11 +58,11 @@
       </tbody>
   </table>'''
 --->
+ problem title : {{problem.title}}
   <table class="highlight centered responsive-table col s8 m8 l8" >
       <thead>
         <tr>
             <th>submissionID</th>
-            <th>subject</th>
             <th>totalscore</th>
             <th>yourscore</th>
             <th>date and time</th>
@@ -74,11 +74,10 @@
       <tbody>
         {% for submission in submissions %}
           <tr>
-            <form action="/assignment/selectedsubmission" method="POST" > {% csrf_token %}
+            <form action="/practice/selectedsubmission" method="POST" > {% csrf_token %}
                 <input type="hidden" name="submissionid" value="{{submission.id}}" />
                 <td>{{submission.id}}</td>
-                <td>{{submission.assignment.subject.name}}</td>
-                <td>{{submission.assignment.totalscore}}</td>
+                <td>{{submission.problem.totalscore}}</td>
                 <td>{{submission.totalscore}}</td>
                 <td>{{submission.datetime}}</td>
                 <td>{{submission.verdict}}</td>
