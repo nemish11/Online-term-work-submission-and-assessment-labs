@@ -2,6 +2,8 @@
 __pycache__/
 /online_judge/usermodule/static/all_assignment/
 /online_judge/usermodule/static/all_submissions/
+/online_judge/usermodule/static/problems/
+/online_judge/usermodule/static/problem_submission/
 *.py[cod]
 *$py.class
 

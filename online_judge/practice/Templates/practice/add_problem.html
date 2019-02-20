@@ -1,0 +1,86 @@
+{% extends "practice/base.html" %}
+{% block body%}
+   <style>
+     textarea {
+     min-height: 60px;
+     overflow-y: auto;
+     word-wrap:break-word
+     }
+   </style>
+
+    <form action="/practice/addproblem" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
+      Enter a title :  <input type="text" name="title" id="title"/>
+      Enter a question :  <textarea class="codemirror-textarea" name="question" id="question"></textarea><br/><br/>
+      Enter a constraint :  <textarea class="codemirror-textarea" name="constraint" id="constraint"></textarea><br/><br/>
+      Enter a input format :  <textarea class="codemirror-textarea" name="inputformat" id="inputformat"></textarea><br/><br/>
+      Enter a output format :  <textarea class="codemirror-textarea" name="outputformat" id="outputformat"></textarea><br/><br/>
+      Enter a sample input :  <textarea class="codemirror-textarea" name="sampleinput" id="sampleinput"></textarea><br/><br/>
+      Enter a sample output :  <textarea class="codemirror-textarea" name="sampleoutput" id="sampleoutput"></textarea><br/><br/>
+      Enter a explanation of sample input :  <textarea class="codemirror-textarea" name="explanation" id="explanation"></textarea><br/><br/>
+      select difficulty level :
+        <input type="radio" id="basic" name="difficulty" value="basic"/>
+        <label for="basic">basic</label>
+
+        <input type="radio" id="easy" name="difficulty" value="easy" checked/>
+        <label for="easy">easy</label>
+
+        <input type="radio" id="easymedium" name="difficulty" value="easy-medium"/>
+        <label for="easymedium">easy-medium</label>
+
+        <input type="radio" id="medium" name="difficulty" value="medium"/>
+        <label for="medium">medium</label>
+
+        <input type="radio" id="mediumhard" name="difficulty" value="medium-hard"/>
+        <label for="mediumhard">medium-hard</label>
+
+        <input type="radio" id="hard" name="difficulty" value="hard"/>
+        <label for="hard">hard</label>
+      <br/>
+      select tags :
+      {% for tag in tags %}
+            <div>
+              <input type="checkbox" name="problemtags[]" id="{{tag.name}}" value="{{tag.name}}"/>
+              <label for="{{tag.name}}">{{tag.name}}</label>
+            </div>
+      {% endfor %}
+          <a href="/practice/add_tag">add new tag</a>
+      <br/>
+      Upload code file :  <input type="file" name="codefile" id="codefile" /><br/><br/>
+      Enter a number of testfiles(should be greater than 0) then click on upload before submit: <input type="number" name="total_inputfiles" id="total_inputfiles" min="1" max="20"/>
+      <div id="inputfiles"></div>
+      <button type="submit" id="sub_btn" disabled>submit</button>
+    </form>
+    <button class="btn" id="file_btn">Upload</button>
+
+   <script>
+     $('#file_btn').click(function(){
+       var st = "";
+       for(var i=1 ; i<=$("#total_inputfiles").val() ; i++){
+           st+='upload input file : '+i+'  <input type="file" name="inputfile_'+i+'" id="inputfile_'+i+'" /><br/>'+
+           'upload output file : '+i+'  <input type="file" name="outputfile_'+i+'" id="outputfile_'+i+'" /><br/>'+
+           'enter a score of this file : <input type="number" name="score_'+i+'" id="score_'+i+'" /><br/><br/>';
+        }
+        $("#inputfiles").html("Upload Testcases<br/><br/>"+st);
+        if($("#total_inputfiles").val() > 0){
+          $('#sub_btn').prop('disabled', false);
+        }
+      });
+
+        $(document).ready(function(){
+      	//code here...
+      	var code = $(".codemirror-textarea")[0];
+      	var editor = CodeMirror.fromTextArea(code, {
+          mode:"application/xml",
+          htmlMode: true,
+          matchClosing:true,
+      		lineNumbers : true,
+          spellcheck : true,
+          autocorrect : true,
+
+          matchBrackets : true,
+          lineWrapping: true,
+      	});
+      });
+
+    </script>
+{% endblock %}

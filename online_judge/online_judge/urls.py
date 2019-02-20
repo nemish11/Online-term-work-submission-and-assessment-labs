@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'assignment/',include('assignment.urls')),
     url(r'searchuser/',include('searchuser.urls')),
     url(r'leaderboard/',include('leaderboard.urls')),
+    url(r'practice/',include('practice.urls')),
     url(r'',include('usermodule.urls')),
 ]

@@ -1,0 +1,7 @@
+{% extends "practice/base.html" %}
+  {% block body%}
+   <form action="/practice/addtag" method="POST" > {% csrf_token %}
+    enter a tag name : <input type="text" name="tagname" id="tagname" /> <br/>
+    <button type="submit">add tag</button>
+   </form>
+  {% endblock %}

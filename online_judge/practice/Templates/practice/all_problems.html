@@ -1,0 +1,43 @@
+{% extends "practice/base.html" %}
+  {% block body%}
+  <table class="highlight centered responsive-table col s8 m8 l8" >
+      <thead>
+        <tr>
+            <th>id</th>
+            <th>Title</th>
+            <th>Difficulty</th>
+            <th>Accuracy</th>
+            <th>Score</th>
+            <th>Successful submission</th>
+            <th>Tags</th>
+            <th>see full problem</th>
+            {% if request.user.is_superuser %}
+            <th>-</th>
+            {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for problem in problems %}
+          <tr>
+                <td>{{problem.id}}</td>
+                <td>{{problem.title}}</td>
+                <td>{{problem.difficulty}}</td>
+                <td>{{problem.accuracy}}</td>
+                <td>{{problem.totalscore}}</td>
+                <td>{{problem.successful_submission}}</td>
+                <td>{{problem.tags}}</td>
+                <td><a href = "/practice/problem/?id={{problem.id}}">see full problem</a></td>
+                {% if request.user.is_superuser %}
+                <td>
+                  <form action="/practice/removeproblem" method="POST" > {% csrf_token %}
+                    <input type="hidden" name="problemid" value="{{problem.id}}" />
+                    <button type="submit">remove</button>
+                  </form>
+                </td>
+                {% endif %}
+            </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+
+  {% endblock %}

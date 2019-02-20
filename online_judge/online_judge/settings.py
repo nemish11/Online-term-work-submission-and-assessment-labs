@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'userprofile.apps.UserprofileConfig',
     'compilerApiApp.apps.CompilerapiappConfig',
     'searchuser.apps.SearchuserConfig',
+    'practice.apps.PracticeConfig',
 ]
 
 MIDDLEWARE = [
@@ -64,7 +65,7 @@ TEMPLATES = [
         'DIRS': [os.path.join(BASE_DIR,'usermodule/Templates'),os.path.join(BASE_DIR,'subject/Templates'),
                 os.path.join(BASE_DIR,'userprofile/Templates'), os.path.join(BASE_DIR,'assignment/Templates'),
                 os.path.join(BASE_DIR,'leaderboard/Templates'), os.path.join(BASE_DIR,'compilerApiApp/Templates'),
-                os.path.join(BASE_DIR,'searchuser/Templates') ],
+                os.path.join(BASE_DIR,'searchuser/Templates'), os.path.join(BASE_DIR,'practice/Templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,7 +126,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+#TIME_ZONE = 'UTC'
+
+TIME_ZONE =  'Asia/Kolkata'
 
 USE_I18N = True
 

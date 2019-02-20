@@ -1,0 +1,42 @@
+{% extends "leaderboard/base.html" %}
+{% block body %}
+{% with i=1 %}
+{% endwith %}
+    <div class=" container">
+        <div >
+              Leaderboard - {{ subject.name }}
+        </div>
+        <div>
+            {% if not data|length %}
+                        <h5>Submission is not available.</h5>
+            {% else%}
+            <table class="highlight centered responsive-table col s8 m8 l8" >
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Student Name</th>
+                            <th>Total Score</th>
+                            {% for week,val in weeks.items %}
+                                <th>{{ val }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                            {% for key,value in data.items %}
+
+                                <tr>
+                                   <td>{{ key }}</td>
+
+                                    {% for k,v in value.items %}
+                                        <td>{{ v }}</td>
+                                    {% endfor%}
+                                </tr>
+                            {% endfor %}
+
+                    </tbody>
+                {% endif %}
+                </table>
+        </div>
+    </div>
+{% endblock %}

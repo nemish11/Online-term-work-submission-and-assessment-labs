@@ -1,8 +1,17 @@
 {% extends "subject/base.html" %}
 {% block body %}
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
 
-<div class="row container">
+
+
+
+<div class="container">
     <div class="col s8 m8 l8 ">
         {% if messages %}
             {% for m in messages %}
@@ -12,6 +21,11 @@
             {% endfor %}
         {% endif%}
     </div>
+
+
+
+
+
     {% if not subject_list|length %}
     <div class="col s8 m8 l8"><h4>There is No subjects.</h4></div>
     {% else %}
@@ -21,9 +35,13 @@
                 <table class="highlight centered responsive-table col s8 m8 l8" >
                     <thead>
                       <tr>
-                          <th>subject code</th>
-                          <th>subject name</th>
+                          <th>Subject Code</th>
+                          <th>Subject Name</th>
                           <th>Action</th>
+                          <th>Show Week</th>
+                          <th>Select Year</th>
+                          <th>Leaderboard</th>
+
                       </tr>
                     </thead>
                     <tbody>
@@ -31,28 +49,61 @@
                             <tr>
                                 <td>{{ s.subject_code }}</td>
                                 <td>{{ s.name }}</td>
-                                <form action="/subject/removesubject" method="POST" class="col s12"> {% csrf_token %}
-                                  <td><button type="submit" class="btn" name="status" value="remove">Remove</button></td>
-                                  <td><input type="hidden" value="{{ s.pk }}" name="id"></td>
-                                </form>
+                                <td>
+                                    <form action="/subject/removesubject" method="POST" class="col s12"> {% csrf_token %}
+                                      <button type="submit" class="btn" name="status" value="remove">Remove</button>
+                                      <input type="hidden" value="{{ s.pk }}" name="id">
+                                    </form>
+                                </td>
                                 <td>
                                     <form action="/subject/selectedsubject" method="POST" class="col s12"> {% csrf_token %}
                                       <input type="hidden" name="subjectid" value="{{ s.id }}" />
                                       <button type="submit" class="btn" name="send">Show week</button>
                                     </form>
                                 </td>
+
+                                    <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
+                                        <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
+                                            <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
+                                        </td>
+                                        <td><button type="submit" class="btn" name="send">Leaderboard</button></td>
+                                    </form>
+
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+
+  <ul class="collapsible">
+    <li>
+        <div class="collapsible-header">Add Subject</div>
+            <div class="collapsible-body">
+                <form action="/subject/addsubject" method="POST" class="col s8  m8 l8"> {% csrf_token %}
+                <div class="cols s8 m8 l8">
+                    <label for="name">Subject Name</label>
+                    <input type="text" name="name" class="validate" id="name" required>
+                </div>
+                <div class="cols s8 m8 l8">
+                    <label for="subject_code">Subject_code</label>
+                    <input type="text" name="subject_code" class="validate" id="subject_code" required>
+                </div>
+                <button type="submit" class="btn">Add subject</button>
+            </form>
+        </div>
+    </li>
+
+  </ul>
+
         {% else %}
             {% if role == "student" %}
                 <table class="highlight centered responsive-table col s8 m8 l8" >
                     <thead>
                       <tr>
-                          <th>subject code</th>
-                          <th>subject name</th>
-                          <th>--</th>
+                          <th>Subject Code</th>
+                          <th>Subject Name</th>
+                          <th>Show Week</th>
+                          <th>Select Year</th>
+                          <th>Leaderboard</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -67,6 +118,14 @@
                                     </form>
                                 </td>
 
+                                    <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
+                                     <td> <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
+                                        <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
+                                    </td>
+                                        <td><button type="submit" class="btn" name="send">Show Leaderboard</button></td>
+                                    </form>
+
+
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -76,9 +135,11 @@
                 <table class="highlight centered responsive-table col s8 m8 l8" >
                     <thead>
                       <tr>
-                          <th>subject code</th>
-                          <th>subject name</th>
-                          <th>--</th>
+                          <th>Subject Code</th>
+                          <th>Subject Name</th>
+                          <th>Show Week</th>
+                          <th>Select Year</th>
+                          <th>Leaderboard</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -92,6 +153,13 @@
                                       <button type="submit" class="btn" name="send">Show week</button>
                                     </form>
                                 </td>
+
+                                    <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
+                                        <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
+                                        <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/></td>
+                                        <td><button type="submit" class="btn" name="send">Show leaderboard</button></td>
+                                    </form>
+
 
                             </tr>
                         {% endfor %}
@@ -112,8 +180,9 @@
                 <table class="highlight centered responsive-table col s8 m8 l8" >
                     <thead>
                       <tr>
-                          <th>subject code</th>
-                          <th>subject name</th>
+                          <th>Subject Code</th>
+                          <th>Subject Name</th>
+                          <th>Readd Subject</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -121,6 +190,12 @@
                             <tr>
                                 <td>{{ s.subject_code }}</td>
                                 <td>{{ s.name }} </td>
+                                <td>
+                                    <form action="/subject/readd_subject" method="POST" class="col s12"> {% csrf_token %}
+                                        <button type="submit" class="btn" name="status" value="readd">Readd</button>
+                                        <input type="hidden" value="{{ s.pk }}" name="id">
+                                    </form>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

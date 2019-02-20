@@ -50,6 +50,7 @@ def addweek(request):
         subject = Subject.objects.get(pk=int(subjectid))
         week = Week(name=weekname,subject=subject)
         week.save()
+        update_cache_week(subjectid)
         return HttpResponseRedirect('/assignment/showWeek')
     except:
         return HttpResponseRedirect('/subject/')
@@ -58,9 +59,11 @@ def addweek(request):
 def deleteweek(request):
     try:
         weekid = request.POST.get('weekid')
+        subjectid = request.session.get('subjectid')
         week = Week.objects.get(pk = int(weekid))
         week.isdeleted = True
         week.save()
+        update_cache_week(subjectid)
         return HttpResponseRedirect('/assignment/showWeek')
     except:
         return HttpResponseRedirect('/subject/')
