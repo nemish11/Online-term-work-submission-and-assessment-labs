@@ -5,7 +5,8 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'allproblems',all_problems),
-    url(r'filterproblems',filter_problems),
+    url(r'filter_problems',filter_problems),
+    url(r'filterproblems',filterproblems),
     url(r'add_problem',add_problem),
     url(r'addproblem',addproblem),
     url(r'add_tag',add_tag),
@@ -15,5 +16,9 @@ urlpatterns = [
     url(r'problem/$',showproblem),
     url(r'previous_submissions/$',previous_submissions),
     url(r'runcode',runcode),
+    url(r'submitcode',submitcode),
+    url(r'selectedsubmission',selectedsubmission),
+    url(r'submission_files',submission_files),
+    url(r'selectedproblems',selectedproblems),
     url(r'',all_problems),
 ]

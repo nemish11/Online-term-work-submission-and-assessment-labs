@@ -36,6 +36,7 @@ class Submission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Submission_user')
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name='submission_problem')
     totalscore = models.IntegerField(default=0)
+    language = models.CharField(max_length = 30,null=True,blank=True)
     datetime = models.DateTimeField(null=True,blank=True)
     verdict = models.CharField(max_length = 50,null=True)
     isrunning = models.CharField(max_length = 20)

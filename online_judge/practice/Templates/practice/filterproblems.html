@@ -1,0 +1,34 @@
+{% extends "practice/base.html" %}
+  {% block body%}
+  <form action="/practice/filterproblems" method="POST" >{% csrf_token %}
+   select difficulty level :
+   <div>
+     <input type="checkbox" id="basic" name="difficulty[]" value="basic"/>
+     <label for="basic">basic</label>
+
+     <input type="checkbox" id="easy" name="difficulty[]" value="easy" />
+     <label for="easy">easy</label>
+
+     <input type="checkbox" id="easymedium" name="difficulty[]" value="easy-medium"/>
+     <label for="easymedium">easy-medium</label>
+
+     <input type="checkbox" id="medium" name="difficulty[]" value="medium"/>
+     <label for="medium">medium</label>
+
+     <input type="checkbox" id="mediumhard" name="difficulty[]" value="medium-hard"/>
+     <label for="mediumhard">medium-hard</label>
+
+     <input type="checkbox" id="hard" name="difficulty[]" value="hard"/>
+     <label for="hard">hard</label>
+  </div>
+   <br/>
+   select tags :
+   {% for tag in tags %}
+         <div>
+           <input type="checkbox" name="problemtags[]" id="{{tag.name}}" value="{{tag.name}}"/>
+           <label for="{{tag.name}}">{{tag.name}}</label>
+         </div>
+   {% endfor %}
+   <button type="submit">filter</button>
+  </form>
+  {% endblock %}
