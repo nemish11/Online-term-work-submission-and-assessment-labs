@@ -1,18 +1,32 @@
 {% extends "userprofile/base.html" %}
 {% block body%}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
 <body>
-  {{message}}
-    <form action="/userprofile/update_student" method = "POST">{% csrf_token %}
-      username : <input type="text" name="username" value = "{{request.user.username}}" disabled/>
-      password : <input type="password" name="password" value="{{request.user.password}}" disabled/>
-      first_name : <input type="text" name="first_name" value="{{request.user.first_name}}" />
-      last_name : <input type="text" name="last_name" value="{{request.user.last_name}}" />
-      roll_no : <input type = "text" name="roll_no" value="{{request.user.student.roll_no}}" disabled/>
-      year : <input type="text" name="year" value="{{request.user.student.year}}" disabled />
-      phone_no : <input type="text" name="phone_no" value="{{request.user.student.phone_no}}" />
-      emailId : <input type="text" name="email" value="{{request.user.email}}" />
-      date of birth : <input type="date" name="dob" value="{{request.user.student.dob|date:'Y-m-d'}}" />
-      <button type="submit" value="upload">Update</button>
-    </form>
-  </body>
+    <div class="container">
+        <div class="col s8 m8 l8 ">
+               <script>
+                      Materialize.toast('{{message}}', 3000);
+                </script>
+        </div>
+        <div>
+            <form action="/userprofile/update_student" method = "POST">{% csrf_token %}
+                  username : <input type="text" name="username" value = "{{request.user.username}}" disabled/>
+                  password : <input type="password" name="password" value="{{request.user.password}}" disabled/>
+                  first_name : <input type="text" name="first_name" value="{{request.user.first_name}}" />
+                  last_name : <input type="text" name="last_name" value="{{request.user.last_name}}" />
+                  roll_no : <input type = "text" name="roll_no" value="{{request.user.student.roll_no}}" disabled/>
+                  year : <input type="text" name="year" value="{{request.user.student.year}}" disabled />
+                  phone_no : <input type="text" name="phone_no" value="{{request.user.student.phone_no}}" />
+                  emailId : <input type="text" name="email" value="{{request.user.email}}" />
+                  date of birth : <input type="date" name="dob" value="{{request.user.student.dob|date:'Y-m-d'}}" />
+                  <button type="submit" value="upload">Update</button>
+            </form>
+        </div>
+    </div>
+</body>
 {% endblock %}

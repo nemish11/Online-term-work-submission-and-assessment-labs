@@ -1,7 +1,18 @@
 {% extends "userprofile/base.html" %}
 {% block body%}
-{{message}}
-<table class="highlight centered responsive-table col s8 m8 l8" >
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
+
+<div class="container">
+    <div class="col s8 m8 l8 ">
+         <script>
+				Materialize.toast('{{message}}', 3000);
+		  </script>
+    </div><!--<table class="highlight centered responsive-table col s8 m8 l8" >
     <thead>
       <tr>
           <th>Role</th>
@@ -31,7 +42,36 @@
           </tr>
     </tbody>
 </table>
+-->
+     <div>
+        <ul class="collection with-header">
+            <li class="collection-header"><h5>{{ request.user.username }}</h5></li>
+            <li class="collection-item">Role : <span class="secondary-content black-text">Student</span></li>
+            <li class="collection-item">First Name : <span class="secondary-content black-text">{{request.user.first_name}}</span></li>
+            <li class="collection-item">Last Name : <span class="secondary-content black-text">{{request.user.last_name}}</span></li>
+            <li class="collection-item">Roll NO : <span class="secondary-content black-text">{{request.user.student.roll_no}}</span></li>
+            <li class="collection-item">Year : <span class="secondary-content black-text">{{request.user.student.year}}</span></li>
+            <li class="collection-item">Email ID : <span class="secondary-content black-text">{{request.user.email}}</span></li>
+            <li class="collection-item">Date of birth : <span class="secondary-content black-text">{{request.user.student.dob}}</span></li>
+            <li class="collection-item">Phone NO : <span class="secondary-content black-text">{{request.user.student.phone_no}}</span></li>
+            <li class="collection-item"><a href="/userprofile/updateAdmin">Edit Profile</a></li>
+            <hr class="style13">
 
+            <li class="collection-header"><h5> Submissions Details </h5></li>
+            <li class="collection-item">Total submission made by you: <span class="secondary-content black-text">{{total_submissions}}</span></li>
+            <li class="collection-item"><a href="/userprofile/allsubmissions"> All submission in details</a></li>
+            <hr class="style13">
+
+            <li class="collection-header"><h5  > Submissions Graphs </h5></li>
+            <li class="collection-item">
+                <div id="piechart" style="width: 600px; height: 500px;"></div>
+            </li>
+        </ul>
+
+
+
+    </div >
+</div>
 <script type="text/javascript">
   google.charts.load('current', {'packages':['corechart']});
   google.charts.setOnLoadCallback(drawChart);
@@ -46,17 +86,11 @@
     ]);
 
     var options = {
-      title: 'your submissions details'
+      title: ''
     };
 
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
     chart.draw(data, options);
   }
 </script>
-<br/>
-<br/>
-Total submission made by you : {{total_submissions}} <br/>
-<a href = "/userprofile/allsubmissions"> see all submission in details </a>
-<div id="piechart" style="width: 600px; height: 500px;"></div>
-
 {% endblock %}
