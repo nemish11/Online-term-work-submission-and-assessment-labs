@@ -150,7 +150,7 @@ def run_input_files(request,counter,dirname,submission,inputfiles,language,code,
                     output_f = Submission_files(type='outputfile',submission=submission,filepath=outputfilepath,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
                     output_f.save()
 
-                    error_f = Submission_files(type='errorfile',submission=submission,filepath=errorfilepath,errortype='-r',runtime=str(time_taken1),memoryused=str(memory_used1))
+                    error_f = Submission_files(type='errorfile',submission=submission,filepath=errorfilepath,errortype='-',runtime=str(time_taken1),memoryused=str(memory_used1))
                     error_f.save()
 
         elif language == 'python' or language == 'Python':
