@@ -13,6 +13,7 @@ from userprofile.models import Student,Faculty
 from userprofile.models import Faculty,Student
 import datetime
 
+
 def login(request):
     try:
         if request.user.is_authenticated:
@@ -25,6 +26,7 @@ def login(request):
             return render(request, 'usermodule/login.html', c)
     except:
         return render(request,'usermodule/login.html')
+
 
 def auth_view(request):
     try:
@@ -49,6 +51,7 @@ def auth_view(request):
     except:
         return render(request,'usermodule/login.html')
 
+
 @login_required()
 def logout(request):
     try:
@@ -61,6 +64,7 @@ def logout(request):
         messages.add_message(request, messages.WARNING, 'Exception Occured..please try again.')
         return render(request,'usermodule/login.html')
 
+
 @login_required()
 def add_faculty(request):
     try:
@@ -71,6 +75,7 @@ def add_faculty(request):
     except:
         return HttpResponseRedirect('/subject/')
 
+
 @login_required()
 def add_student(request):
     try:
@@ -80,6 +85,7 @@ def add_student(request):
         return render(request,'usermodule/add_student.html',c)
     except:
         return HttpResponseRedirect('/subject/')
+
 
 @login_required()
 def addfaculty(request):
@@ -120,6 +126,7 @@ def addfaculty(request):
     except:
         messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
         return HttpResponseRedirect('/usermodule/add_faculty')
+
 
 @login_required()
 def addstudent(request):
@@ -162,6 +169,7 @@ def addstudent(request):
         messages.add_message(request, messages.WARNING, 'Something went wrong...please check file data and shape..try again!!!')
         return HttpResponseRedirect('/usermodule/add_student')
 
+
 @login_required()
 def removefaculty(request):
     try:
@@ -173,6 +181,7 @@ def removefaculty(request):
     except:
         messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
         return HttpResponseRedirect('/usermodule/add_faculty')
+
 
 @login_required()
 def addtopastfaculty(request):
@@ -187,6 +196,7 @@ def addtopastfaculty(request):
         messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
         return HttpResponseRedirect('/usermodule/add_faculty')
 
+
 @login_required()
 def addtoactivefaculty(request):
     try:
@@ -200,6 +210,7 @@ def addtoactivefaculty(request):
         messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
         return HttpResponseRedirect('/usermodule/add_faculty')
 
+
 @login_required()
 def removestudent(request):
     try:
@@ -211,6 +222,7 @@ def removestudent(request):
     except:
         messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
         return HttpResponseRedirect('/usermodule/add_student')
+
 
 @login_required()
 def addtopaststudent(request):
@@ -224,6 +236,7 @@ def addtopaststudent(request):
     except:
         messages.add_message(request, messages.WARNING, 'Something went wrong...please try again!!!')
         return HttpResponseRedirect('/usermodule/add_student')
+
 
 @login_required()
 def addtoactivestudent(request):

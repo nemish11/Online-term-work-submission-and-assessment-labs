@@ -11,7 +11,7 @@
 
 
 
-<div class="container">
+<div class="container z-depth-3">
     <div class="col s8 m8 l8 ">
         {% if messages %}
             {% for m in messages %}
@@ -22,18 +22,14 @@
         {% endif%}
     </div>
 
-
-
-
-
     {% if not subject_list|length %}
-    <div class="col s8 m8 l8"><h4>There is No subjects.</h4></div>
+        <div class="col"><h4>There is No subjects.</h4></div>
     {% else %}
-    <div class="col s8 m8 l8"><h4>Subjects</h4></div>
+    <div class="col"><h5>Subjects</h5></div>
     <div >
         {% if request.user.is_superuser %}
                 <table class="highlight centered responsive-table col s8 m8 l8" >
-                    <thead>
+                    <thead class="grey lighten-1">
                       <tr>
                           <th>Subject Code</th>
                           <th>Subject Name</th>
@@ -44,21 +40,21 @@
 
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody >
                         {% for s in subject_list %}
                             <tr>
                                 <td>{{ s.subject_code }}</td>
                                 <td>{{ s.name }}</td>
                                 <td>
                                     <form action="/subject/removesubject" method="POST" class="col s12"> {% csrf_token %}
-                                      <button type="submit" class="btn" name="status" value="remove">Remove</button>
+                                      <button class="btn green lighten-2" type="submit" class="btn" name="status" value="remove">Remove</button>
                                       <input type="hidden" value="{{ s.pk }}" name="id">
                                     </form>
                                 </td>
                                 <td>
                                     <form action="/subject/selectedsubject" method="POST" class="col s12"> {% csrf_token %}
-                                      <input type="hidden" name="subjectid" value="{{ s.id }}" />
-                                      <button type="submit" class="btn" name="send">Show week</button>
+                                      <input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
+                                      <button type="submit" class="btn green lighten-2" name="send">Show week</button>
                                     </form>
                                 </td>
 
@@ -66,38 +62,37 @@
                                         <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
                                             <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
                                         </td>
-                                        <td><button type="submit" class="btn" name="send">Leaderboard</button></td>
+                                        <td><button class="btn green lighten-2" type="submit" class="btn" name="send">Leaderboard</button></td>
                                     </form>
 
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-
-  <ul class="collapsible">
-    <li>
-        <div class="collapsible-header">Add Subject</div>
+    <hr class="style13">
+    <ul class="collapsible">
+        <li>
+            <div class="collapsible-header">Add Subject</div>
             <div class="collapsible-body">
                 <form action="/subject/addsubject" method="POST" class="col s8  m8 l8"> {% csrf_token %}
-                <div class="cols s8 m8 l8">
-                    <label for="name">Subject Name</label>
-                    <input type="text" name="name" class="validate" id="name" required>
-                </div>
-                <div class="cols s8 m8 l8">
-                    <label for="subject_code">Subject_code</label>
-                    <input type="text" name="subject_code" class="validate" id="subject_code" required>
-                </div>
-                <button type="submit" class="btn">Add subject</button>
-            </form>
-        </div>
-    </li>
-
-  </ul>
+                    <div class="cols s8 m8 l8">
+                        <label for="name">Subject Name</label>
+                        <input type="text" name="name" class="validate" id="name" required>
+                    </div>
+                    <div class="cols s8 m8 l8">
+                        <label for="subject_code">Subject_code</label>
+                        <input type="text" name="subject_code" class="validate" id="subject_code" required>
+                    </div>
+                    <button type="submit" class="btn green lighten-2">Add subject</button>
+                </form>
+            </div>
+        </li>
+      </ul>
 
         {% else %}
             {% if role == "student" %}
                 <table class="highlight centered responsive-table col s8 m8 l8" >
-                    <thead>
+                    <thead class="grey lighten-1">
                       <tr>
                           <th>Subject Code</th>
                           <th>Subject Name</th>
@@ -114,7 +109,7 @@
                                 <td>
                                     <form action="/subject/selectedsubject" method="POST" class="col s12"> {% csrf_token %}
                                       <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
-                                      <button type="submit" class="btn" name="send">Show week</button>
+                                      <button type="submit" class="btn green lighten-2" name="send">Show week</button>
                                     </form>
                                 </td>
 
@@ -122,7 +117,7 @@
                                      <td> <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
                                         <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
                                     </td>
-                                        <td><button type="submit" class="btn" name="send">Show Leaderboard</button></td>
+                                        <td><button type="submit" class="btn green lighten-2" name="send">Show Leaderboard</button></td>
                                     </form>
 
 
@@ -133,7 +128,7 @@
             {% endif %}
             {% if role == "faculty" %}
                 <table class="highlight centered responsive-table col s8 m8 l8" >
-                    <thead>
+                    <thead class="grey lighten-1">
                       <tr>
                           <th>Subject Code</th>
                           <th>Subject Name</th>
@@ -150,14 +145,14 @@
                                 <td>
                                     <form action="/subject/selectedsubject" method="POST" class="col s12"> {% csrf_token %}
                                       <input type="hidden" name="subjectid" value="{{ s.id }}" />
-                                      <button type="submit" class="btn" name="send">Show week</button>
+                                      <button type="submit" class="btn green lighten-2" name="send">Show week</button>
                                     </form>
                                 </td>
 
                                     <form action="/leaderboard/set_leaderboard_subject" method="POST" class="col s12"> {% csrf_token %}
                                         <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
                                         <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/></td>
-                                        <td><button type="submit" class="btn" name="send">Show leaderboard</button></td>
+                                        <td><button type="submit" class="btn green lighten-2" name="send">Show leaderboard</button></td>
                                     </form>
 
 
@@ -169,16 +164,16 @@
         {% endif %}
 
     </div>
-    <div class="divider col s8 m8 l8"></div>
+    <hr class="style13">
     {% endif %}
     {% if request.user.is_superuser %}
         {% if not remove_list|length %}
-            <div class="col s8 m8 l8"><h4>There is No Removed Subjects.</h4></div>
+            <div class="col s8 m8 l8"><h5>There is No Removed Subjects.</h5></div>
         {% else %}
             <div >
                 <div class="col s8 m8 l8"><h4>Removed Subject</h4></div>
                 <table class="highlight centered responsive-table col s8 m8 l8" >
-                    <thead>
+                    <thead class="grey lighten-1">
                       <tr>
                           <th>Subject Code</th>
                           <th>Subject Name</th>
@@ -192,7 +187,7 @@
                                 <td>{{ s.name }} </td>
                                 <td>
                                     <form action="/subject/readd_subject" method="POST" class="col s12"> {% csrf_token %}
-                                        <button type="submit" class="btn" name="status" value="readd">Readd</button>
+                                        <button type="submit" class="btn green lighten-2" name="status" value="readd">Readd</button>
                                         <input type="hidden" value="{{ s.pk }}" name="id">
                                     </form>
                                 </td>
@@ -201,7 +196,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="divider col s8 m8 l8"></div>
+            <div class="divider"></div>
         {% endif%}
     {% endif%}
 

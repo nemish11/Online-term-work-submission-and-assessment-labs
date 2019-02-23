@@ -1,6 +1,6 @@
 {% extends "usermodule/base.html" %}
 {% block body%}
-<div>
+<div class="container z-depth-3">
     <div class="col s8 m8 l8 ">
         {% if messages %}
             {% for m in messages %}
@@ -10,85 +10,98 @@
             {% endfor %}
         {% endif%}
     </div>
-  Upload csv file in format (username,password) :
-    <form action="/usermodule/addfaculty" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
-      <input type="file" name="facultyfile" id="facultyfile"/>
-      <button type="submit" value="upload">Upload</button>
-    </form>
-    Active Faculty List :
-    <table class="highlight centered responsive-table col s8 m8 l8" >
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>username</th>
-            <th>full name</th>
-            <th>email id</th>
-            <th>phone_no</th>
-            <th>--</th>
-            <th>--</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for faculty in current_faculty %}
-                <tr>
-                  <td>{{faculty.id}}</td>
-                  <td>{{faculty.user.username}}</td>
-                  <td>{{faculty.user.first_name}} {{faculty.user.last_name}}</td>
-                  <td>{{faculty.user.email}}</td>
-                  <td>{{faculty.phone_no}}</td>
-                  <td>
-                    <form action="/usermodule/addtopastfaculty" method="POST" > {% csrf_token %}
-                      <input type="hidden" name="facultyid" value="{{faculty.id}}" />
-                      <button type="submit">add to past faculty</button>
-                    </form>
-                  </td>
-                  <td>
-                    <form action="/usermodule/removefaculty" method="POST" > {% csrf_token %}
-                      <input type="hidden" name="facultyid" value="{{faculty.id}}" />
-                      <button type="submit">remove</button>
-                    </form>
-                  </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br/>
-    Past Faculty List :
-    <table class="highlight centered responsive-table col s8 m8 l8" >
-        <thead>
-          <tr>
-              <th>No.</th>
-              <th>username</th>
-              <th>full name</th>
-              <th>email id</th>
-              <th>phone_no</th>
-              <th>--</th>
-              <th>--</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for faculty in past_faculty %}
-                <tr>
-                    <td>{{faculty.id}}</td>
-                    <td>{{faculty.user.username}}</td>
-                    <td>{{faculty.user.first_name}} {{faculty.user.last_name}}</td>
-                    <td>{{faculty.user.email}}</td>
-                    <td>{{faculty.phone_no}}</td>
-                    <td>
-                      <form action="/usermodule/addtoactivefaculty" method="POST" > {% csrf_token %}
-                        <input type="hidden" name="facultyid" value="{{faculty.id}}" />
-                        <button type="submit">add to active faculty</button>
-                      </form>
-                    </td>
-                    <td>
-                      <form action="/usermodule/removefaculty" method="POST" > {% csrf_token %}
-                        <input type="hidden" name="facultyid" value="{{faculty.id}}" />
-                        <button type="submit">remove</button>
-                      </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <ul class="collections">
+        <li class="collections-item"><h5>Upload csv file in format (username,password) :</h5>
+            <form action="/usermodule/addfaculty" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
+                <input type="file" name="facultyfile" id="facultyfile" />
+                <button type="submit" class="btn green lighten-2" value="upload">Upload</button>
+            </form>
+        </li>
+        <hr class="style13">
+
+        <li class="collections-item">
+            <h5>Active Faculty List :</h5>
+            <table class="highlight centered responsive-table col s8 m8 l8" >
+                <thead class="grey lighten-1">
+                    <tr>
+                        <th>No.</th>
+                        <th>username</th>
+                        <th>full name</th>
+                        <th>email id</th>
+                        <th>phone_no</th>
+                        <th>--</th>
+                        <th>--</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for faculty in current_faculty %}
+                        <tr>
+                          <td>{{faculty.id}}</td>
+                          <td>{{faculty.user.username}}</td>
+                          <td>{{faculty.user.first_name}} {{faculty.user.last_name}}</td>
+                          <td>{{faculty.user.email}}</td>
+                          <td>{{faculty.phone_no}}</td>
+                          <td>
+                            <form action="/usermodule/addtopastfaculty" method="POST" > {% csrf_token %}
+                              <input type="hidden" name="facultyid" value="{{faculty.id}}" />
+                              <button class="btn green lighten-2" type="submit">add to past </button>
+                            </form>
+                          </td>
+                          <td>
+                            <form action="/usermodule/removefaculty" method="POST" > {% csrf_token %}
+                              <input type="hidden" name="facultyid" value="{{faculty.id}}" />
+                              <button class="btn green lighten-2" type="submit">remove</button>
+                            </form>
+                          </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </li>
+        <hr class="style13">
+        <li class="collections-item">
+            <h5>Past Faculty List :</h5>
+            {% if not past_faculty|length%}
+                <h5>No past faculty... </h5>
+            {% else%}
+            <table class="highlight centered  responsive-table col s8 m8 l8" >
+                <thead class="grey lighten-1">
+                  <tr>
+                      <th>No.</th>
+                      <th>username</th>
+                      <th>full name</th>
+                      <th>email id</th>
+                      <th>phone_no</th>
+                      <th>--</th>
+                      <th>--</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for faculty in past_faculty %}
+                        <tr>
+                            <td>{{faculty.id}}</td>
+                            <td>{{faculty.user.username}}</td>
+                            <td>{{faculty.user.first_name}} {{faculty.user.last_name}}</td>
+                            <td>{{faculty.user.email}}</td>
+                            <td>{{faculty.phone_no}}</td>
+                            <td>
+                              <form action="/usermodule/addtoactivefaculty" method="POST" > {% csrf_token %}
+                                <input type="hidden" name="facultyid" value="{{faculty.id}}" />
+                                <button class="btn green lighten-2" type="submit">add to active</button>
+                              </form>
+                            </td>
+                            <td>
+                              <form action="/usermodule/removefaculty" method="POST" > {% csrf_token %}
+                                <input type="hidden" name="facultyid" value="{{faculty.id}}" />
+                                <button class="btn green lighten-2" type="submit">remove</button>
+                              </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </li>
+    </ul>
 </div>
 {% endblock %}
