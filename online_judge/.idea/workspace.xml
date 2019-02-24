@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b45b8df2-6994-498f-b0d6-bf980e601448" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/assignment/Templates/assignment/new_assignment.html" beforeDir="false" afterPath="$PROJECT_DIR$/assignment/Templates/assignment/new_assignment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assignment/Templates/assignment/showWeek.html" beforeDir="false" afterPath="$PROJECT_DIR$/assignment/Templates/assignment/showWeek.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assignment/Templates/assignment/submission_files.html" beforeDir="false" afterPath="$PROJECT_DIR$/assignment/Templates/assignment/submission_files.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,8 +15,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/subject/Templates/subject/request_subject.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="64" column="19" lean-forward="true" selection-start-line="64" selection-start-column="19" selection-end-line="64" selection-end-column="19" />
+            <state relative-caret-position="960">
+              <caret line="64" column="19" selection-start-line="64" selection-start-column="19" selection-end-line="64" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -26,7 +24,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assignment/Templates/assignment/showWeek.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
+            <state relative-caret-position="1425">
               <caret line="95" column="93" selection-start-line="95" selection-start-column="93" selection-end-line="95" selection-end-column="93" />
             </state>
           </provider>
@@ -35,20 +33,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assignment/Templates/assignment/submission_files.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1137">
+            <state relative-caret-position="2205">
               <caret line="147" column="45" selection-start-line="147" selection-start-column="45" selection-end-line="147" selection-end-column="45" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assignment/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4305">
+            <state relative-caret-position="15">
               <caret line="68" column="48" selection-start-line="68" selection-start-column="48" selection-end-line="68" selection-end-column="48" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="4" column="39" selection-start-line="4" selection-start-column="39" selection-end-line="4" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -99,7 +106,6 @@
         <option value="$PROJECT_DIR$/practice/Templates/practice/showproblem.html" />
         <option value="$PROJECT_DIR$/practice/Templates/practice/submission_files.html" />
         <option value="$PROJECT_DIR$/practice/views.py" />
-        <option value="$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html" />
         <option value="$PROJECT_DIR$/searchuser/Templates/searchuser/sortby.html" />
         <option value="$PROJECT_DIR$/practice/Templates/practice/add_problem.html" />
         <option value="$PROJECT_DIR$/practice/Templates/practice/filterproblems.html" />
@@ -115,6 +121,7 @@
         <option value="$PROJECT_DIR$/assignment/Templates/assignment/showWeek.html" />
         <option value="$PROJECT_DIR$/assignment/Templates/assignment/new_assignment.html" />
         <option value="$PROJECT_DIR$/assignment/Templates/assignment/submission_files.html" />
+        <option value="$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html" />
       </list>
     </option>
   </component>
@@ -141,20 +148,20 @@
             <path>
               <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_judge" type="462c0819:PsiDirectoryNode" />
-              <item name="assignment" type="462c0819:PsiDirectoryNode" />
+              <item name="leaderboard" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_judge" type="462c0819:PsiDirectoryNode" />
-              <item name="assignment" type="462c0819:PsiDirectoryNode" />
+              <item name="leaderboard" type="462c0819:PsiDirectoryNode" />
               <item name="Templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_judge" type="462c0819:PsiDirectoryNode" />
-              <item name="assignment" type="462c0819:PsiDirectoryNode" />
+              <item name="leaderboard" type="462c0819:PsiDirectoryNode" />
               <item name="Templates" type="462c0819:PsiDirectoryNode" />
-              <item name="assignment" type="462c0819:PsiDirectoryNode" />
+              <item name="leaderboard" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -443,13 +450,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="536">
-          <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/searchuser/Templates/searchuser/sortby.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="491">
@@ -560,34 +560,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/assignment/Templates/assignment/showWeek.html">
+    <entry file="file://$PROJECT_DIR$/subject/Templates/subject/request_subject.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="95" column="93" selection-start-line="95" selection-start-column="93" selection-end-line="95" selection-end-column="93" />
+        <state relative-caret-position="960">
+          <caret line="64" column="19" selection-start-line="64" selection-start-column="19" selection-end-line="64" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/subject/Templates/subject/request_subject.html">
+    <entry file="file://$PROJECT_DIR$/assignment/Templates/assignment/showWeek.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="64" column="19" lean-forward="true" selection-start-line="64" selection-start-column="19" selection-end-line="64" selection-end-column="19" />
+        <state relative-caret-position="1425">
+          <caret line="95" column="93" selection-start-line="95" selection-start-column="93" selection-end-line="95" selection-end-column="93" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/assignment/Templates/assignment/submission_files.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1137">
+        <state relative-caret-position="2205">
           <caret line="147" column="45" selection-start-line="147" selection-start-column="45" selection-end-line="147" selection-end-column="45" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/assignment/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4305">
+        <state relative-caret-position="15">
           <caret line="68" column="48" selection-start-line="68" selection-start-column="48" selection-end-line="68" selection-end-column="48" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="4" column="39" selection-start-line="4" selection-start-column="39" selection-end-line="4" selection-end-column="39" />
         </state>
       </provider>
     </entry>
