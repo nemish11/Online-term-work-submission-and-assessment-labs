@@ -1,6 +1,14 @@
 {% extends "usermodule/base.html" %}
 {% block body%}
-<div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
+
+
+<div class="row container z-depth-3">
   <div class="col s8 m8 l8 ">
       {% if messages %}
           {% for m in messages %}
@@ -10,37 +18,39 @@
           {% endfor %}
       {% endif%}
   </div>
-sorted students : <br/>
-<table class="highlight centered responsive-table col s8 m8 l8" >
-    <thead>
-      <tr>
-        <th>No.</th>
-        <th>username</th>
-        <th>full name</th>
-        <th>email id</th>
-        <th>phone_no</th>
-        <th>year</th>
-        <th>-</th>
-      </tr>
+    <div>
+        <h5>sorted students :</h5>
+        <table class="highlight centered responsive-table col s8 m8 l8" >
+        <thead class="grey lighten-1">
+          <tr>
+            <th>No.</th>
+            <th>username</th>
+            <th>full name</th>
+            <th>email id</th>
+            <th>phone_no</th>
+            <th>year</th>
+            <th>-</th>
+          </tr>
     </thead>
-    <tbody>
-        {% for student in students %}
-            <tr>
-              <td>{{student.id}}</td>
-              <td>{{student.user.username}}</td>
-              <td>{{student.user.first_name}} {{student.user.last_name}}</td>
-              <td>{{student.user.email}}</td>
-              <td>{{student.phone_no}}</td>
-              <td>{{student.year}}</td>
-              <td>
-                <form action="/searchuser/fullprofile" method="POST" > {% csrf_token %}
-                  <input type="hidden" name="studentid" value="{{student.id}}" />
-                  <button type="submit">see profile</button>
-                </form>
-              </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        <tbody>
+            {% for student in students %}
+                <tr>
+                  <td>{{student.id}}</td>
+                  <td>{{student.user.username}}</td>
+                  <td>{{student.user.first_name}} {{student.user.last_name}}</td>
+                  <td>{{student.user.email}}</td>
+                  <td>{{student.phone_no}}</td>
+                  <td>{{student.year}}</td>
+                  <td>
+                    <form action="/searchuser/fullprofile" method="POST" > {% csrf_token %}
+                      <input type="hidden" name="studentid" value="{{student.id}}" />
+                      <button type="submit" class="btn green lighten-2">see profile</button>
+                    </form>
+                  </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

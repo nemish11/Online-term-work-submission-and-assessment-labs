@@ -7,7 +7,7 @@
   });
 </script>
 
-<div class="container z-depth-3">
+<div class="row container z-depth-3">
     <div class="col s8 m8 l8 ">
          <script>
 				Materialize.toast('{{message}}', 3000);
@@ -43,7 +43,7 @@
     </tbody>
 </table>
 -->
-     <div>
+     <div class="col">
         <ul class="collection with-header">
             <li class="collection-header"><h5>{{ request.user.username }}</h5></li>
             <li class="collection-item">Role : <span class="secondary-content black-text">Student</span></li>
@@ -54,7 +54,7 @@
             <li class="collection-item">Email ID : <span class="secondary-content black-text">{{request.user.email}}</span></li>
             <li class="collection-item">Date of birth : <span class="secondary-content black-text">{{request.user.student.dob}}</span></li>
             <li class="collection-item">Phone NO : <span class="secondary-content black-text">{{request.user.student.phone_no}}</span></li>
-            <li class="collection-item"><a href="/userprofile/updateAdmin">Edit Profile</a></li>
+            <li class="collection-item"><a href="/userprofile/updateStudent">Edit Profile</a></li>
             <hr class="style13">
 
             <li class="collection-header"><h5> Submissions Details </h5></li>
@@ -67,10 +67,7 @@
                 <div id="piechart" style="width: 600px; height: 500px;"></div>
             </li>
         </ul>
-
-
-
-    </div >
+     </div >
 </div>
 <script type="text/javascript">
   google.charts.load('current', {'packages':['corechart']});

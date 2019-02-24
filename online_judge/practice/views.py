@@ -18,6 +18,7 @@ from .utils import submit_code
 import filecmp
 from leaderboard.models import Leaderboard
 
+
 @login_required()
 def all_problems(request):
     try:
@@ -28,6 +29,7 @@ def all_problems(request):
     except:
         return HttpResponseRedirect('/practice/')
 
+
 @login_required()
 def filter_problems(request):
     try:
@@ -36,6 +38,7 @@ def filter_problems(request):
     except:
         return HttpResponseRedirect('/practice/')
 
+
 @login_required()
 def add_problem(request):
     c = {}
@@ -43,9 +46,11 @@ def add_problem(request):
     c['tags'] = tags
     return render(request,'practice/add_problem.html',c)
 
+
 @login_required()
 def add_tag(request):
     return render(request,'practice/addtag.html')
+
 
 @login_required()
 def addtag(request):
@@ -54,11 +59,13 @@ def addtag(request):
     tag.save()
     return HttpResponseRedirect('/practice/add_problem')
 
+
 @login_required()
 def removeproblem(request):
     problemid = request.POST.get('problemid')
     Problem.objects.get(pk = int(problemid)).delete()
     return HttpResponseRedirect('/practice/')
+
 
 @login_required()
 def showproblem(request):
@@ -80,6 +87,7 @@ def showproblem(request):
     c['problem'] = problem
     return render(request,'practice/showproblem.html',c)
 
+
 @login_required()
 def previous_submissions(request):
     problemid = request.GET.get('id')
@@ -96,6 +104,7 @@ def previous_submissions(request):
     c['total_submissions'] = len(submissions)
     return render(request,'practice/previous_submissions.html',c)
 
+
 def selectedsubmission(request):
     try:
         submissionid = request.POST.get('submissionid')
@@ -103,6 +112,7 @@ def selectedsubmission(request):
         return HttpResponseRedirect('/practice/submission_files')
     except:
         return HttpResponseRedirect('/practice/')
+
 
 @login_required()
 def submission_files(request):
@@ -156,12 +166,14 @@ def submission_files(request):
     except:
         return HttpResponseRedirect('/practice/')
 
+
 @login_required()
 def filter_problems(request):
     c = {}
     tags = Tag.objects.all()
     c['tags'] = tags
     return render(request,'practice/filterproblems.html',c)
+
 
 @login_required()
 def filterproblems(request):
@@ -170,6 +182,7 @@ def filterproblems(request):
     request.session['selected_difficulty'] = difficulty
     request.session['selected_problemtags'] = problemtags
     return HttpResponseRedirect('/practice/selectedproblems')
+
 
 @login_required()
 def selectedproblems(request):
@@ -181,6 +194,7 @@ def selectedproblems(request):
     c = {}
     c['problems'] = problems
     return render(request,'practice/all_problems.html',c)
+
 
 @login_required()
 def addproblem(request):
@@ -252,6 +266,7 @@ def addproblem(request):
 
     return HttpResponseRedirect('/practice/')
 
+
 @login_required()
 def runcode(request):
     try:
@@ -262,6 +277,7 @@ def runcode(request):
         return HttpResponseRedirect('/practice/submitcode')
     except:
         return HttpResponseRedirect('/practice/')
+
 
 @login_required()
 def submitcode(request):

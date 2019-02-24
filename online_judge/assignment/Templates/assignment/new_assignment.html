@@ -2,30 +2,11 @@
 {% block body%}
    <style>
      textarea {
-     min-height: 60px;
+     min-height: 90px;
      overflow-y: auto;
      word-wrap:break-word
      }
    </style>
-  week name is : {{week.name}}<br/><br/>
-
-    <form action="/assignment/newassignment" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
-      <input type="hidden" name="weekid" value="{{week.id}}" />
-      Enter a title :  <input type="text" name="title" id="title"/>
-      Enter a question :  <textarea class="codemirror-textarea" name="question" id="question"></textarea><br/><br/>
-      Enter a constraint :  <textarea class="codemirror-textarea" name="constraint" id="constraint"></textarea><br/><br/>
-      Enter a input format :  <textarea class="codemirror-textarea" name="inputformat" id="inputformat"></textarea><br/><br/>
-      Enter a output format :  <textarea class="codemirror-textarea" name="outputformat" id="outputformat"></textarea><br/><br/>
-      Enter a sample input :  <textarea class="codemirror-textarea" name="sampleinput" id="sampleinput"></textarea><br/><br/>
-      Enter a sample output :  <textarea class="codemirror-textarea" name="sampleoutput" id="sampleoutput"></textarea><br/><br/>
-      Enter a explanation of sample input :  <textarea class="codemirror-textarea" name="explanation" id="explanation"></textarea><br/><br/>
-
-      Upload code file :  <input type="file" name="codefile" id="codefile" /><br/><br/>
-      Enter a number of testfiles(should be greater than 0) then click on upload before submit: <input type="number" name="total_inputfiles" id="total_inputfiles" min="1" max="20"/>
-      <div id="inputfiles"></div>
-      <button type="submit" id="sub_btn" disabled>submit</button>
-    </form>
-    <button class="btn" id="file_btn">Upload</button>
 
    <script>
      $('#file_btn').click(function(){
@@ -35,7 +16,7 @@
            'upload output file : '+i+'  <input type="file" name="outputfile_'+i+'" id="outputfile_'+i+'" /><br/>'+
            'enter a score of this file : <input type="number" name="score_'+i+'" id="score_'+i+'" /><br/><br/>';
         }
-        $("#inputfiles").html("Upload Testcases<br/><br/>"+st);
+        $("#inputfiles").html("Upload Testcases <br/>"+st);
         if($("#total_inputfiles").val() > 0){
           $('#sub_btn').prop('disabled', false);
         }
@@ -58,4 +39,32 @@
       });
 
     </script>
+
+<div class="row container z-depth-3">
+  <div class="col">
+  <h5> {{week.name}}</h5>
+
+    <form action="/assignment/newassignment" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
+      <input type="hidden" name="weekid" value="{{week.id}}" />
+      Enter a title :  <input type="text" name="title" id="title"/>
+      Enter a question :  <textarea class="codemirror-textarea" name="question" id="question"></textarea>
+      Enter a constraint :  <textarea class="codemirror-textarea" name="constraint" id="constraint"></textarea>
+      Enter a input format :  <textarea class="codemirror-textarea" name="inputformat" id="inputformat"></textarea>
+      Enter a output format :  <textarea class="codemirror-textarea" name="outputformat" id="outputformat"></textarea>
+      Enter a sample input :  <textarea class="codemirror-textarea" name="sampleinput" id="sampleinput"></textarea>
+      Enter a sample output :  <textarea class="codemirror-textarea" name="sampleoutput" id="sampleoutput"></textarea>
+      Enter a explanation of sample input :  <textarea class="codemirror-textarea" name="explanation" id="explanation"></textarea>
+      <hr>
+
+      <h5>Upload code file : </h5>
+      <input type="file" name="codefile" id="codefile" />
+      <hr>
+      Enter a number of testfiles(should be greater than 0) then click on upload before submit:
+      <input type="number" name="total_inputfiles" id="total_inputfiles" min="1" max="20" required/>
+      <div id="inputfiles"></div>
+      <button type="submit" class="btn green lighten-2"  id="sub_btn" disabled>submit</button>
+    </form>
+    <button class="btn green lighten-2" id="file_btn">Upload</button>
+  </div>
+</div>
 {% endblock %}

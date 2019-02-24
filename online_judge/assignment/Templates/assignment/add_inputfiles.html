@@ -1,12 +1,22 @@
 {% extends "assignment/base.html" %}
 {% block body%}
-please upload all input and output files:
-<form action="/assignment/uploadfiles" method="POST" enctype="multipart/form-data" > {% csrf_token %}
-  {% for file in total_inputfiles %}
-    upload input file : {{file}}<br/><input type="file" name="inputfile_{{file}}" id="inputfile_{{file}}" /><br/>
-    upload output file : {{file}}<br/><input type="file" name="outputfile_{{file}}" id="outputfile_{{file}}" /><br/>
-    enter a score of this file : <input type="number" name="score_{{file}}" id="score_{{file}}" /><br/><br/>
-  {% endfor %}
-  <button type="submit" >submit</button>
-</form>
+<div class="row container z-depth-3">
+  <div class="col">
+    <h5>please upload all input and output files:</h5>
+        <form action="/assignment/uploadfiles" method="POST" enctype="multipart/form-data" > {% csrf_token %}
+          {% for file in total_inputfiles %}
+          <div>
+              upload input file : {{file}}<br/><input type="file" name="inputfile_{{file}}" id="inputfile_{{file}}" />
+          </div>
+          <div>
+              upload output file : {{file}}<br/><input type="file" name="outputfile_{{file}}" id="outputfile_{{file}}" />
+          </div>
+          <div>
+              enter a score of this file : <input type="number" name="score_{{file}}" id="score_{{file}}" /><br/><br/>
+          </div>
+          {% endfor %}
+          <button class="btn green lighten-2" type="submit" >submit</button>
+      </form>
+    </div>
+</div>
 {% endblock %}

@@ -7,13 +7,13 @@
   });
 </script>
 <body>
-    <div class="container z-depth-3">
+    <div class="row container z-depth-3">
         <div class="col s8 m8 l8 ">
                <script>
                       Materialize.toast('{{message}}', 3000);
                 </script>
         </div>
-        <div >
+        <div class="col s8">
             <form action="/userprofile/update_student" method = "POST">{% csrf_token %}
                   username : <input type="text" name="username" value = "{{request.user.username}}" disabled/>
                   password : <input type="password" name="password" value="{{request.user.password}}" disabled/>

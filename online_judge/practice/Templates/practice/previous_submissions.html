@@ -1,11 +1,6 @@
 {% extends "practice/base.html" %}
 {% block body%}
-
-  <a href="/practice/all_problems"> back to problems </a>
-
-  <br/>
-   your total submission : {{total_submissions}} </br>
-    <script type="text/javascript">
+ <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
@@ -26,6 +21,11 @@
         chart.draw(data, options);
       }
     </script>
+<div class="row container">
+    <a href="/practice/all_problems"> back to problems </a>
+    <div>
+        your total submission : {{total_submissions}} </br>
+    </div>
 
     <div id="piechart" style="width: 600px; height: 500px;"></div>
 
@@ -58,35 +58,36 @@
       </tbody>
   </table>'''
 --->
- problem title : {{problem.title}}
-  <table class="highlight centered responsive-table col s8 m8 l8" >
-      <thead>
-        <tr>
-            <th>submissionID</th>
-            <th>totalscore</th>
-            <th>yourscore</th>
-            <th>date and time</th>
-            <th>verdict</th>
-            <th>isrunning</th>
-            <th>In details</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for submission in submissions %}
-          <tr>
-            <form action="/practice/selectedsubmission" method="POST" > {% csrf_token %}
-                <input type="hidden" name="submissionid" value="{{submission.id}}" />
-                <td>{{submission.id}}</td>
-                <td>{{submission.problem.totalscore}}</td>
-                <td>{{submission.totalscore}}</td>
-                <td>{{submission.datetime}}</td>
-                <td>{{submission.verdict}}</td>
-                <td>{{submission.isrunning}}</td>
-                <td><button type="submit">see details about submission</button></td>
-            </form>
+    <hr class="style13">
+    <h5>problem title : {{problem.title}}</h5>
+      <table class="highlight centered responsive-table col s8 m8 l8" >
+          <thead class="grey lighten-1">
+            <tr>
+                <th>submissionID</th>
+                <th>Totalscore</th>
+                <th>yourscore</th>
+                <th>Date and time</th>
+                <th>Verdict</th>
+                <th>Isrunning</th>
+                <th>Submission details</th>
             </tr>
-       {% endfor %}
-      </tbody>
-  </table>
-
+          </thead>
+          <tbody>
+            {% for submission in submissions %}
+              <tr>
+                <form action="/practice/selectedsubmission" method="POST" > {% csrf_token %}
+                    <input type="hidden" name="submissionid" value="{{submission.id}}" />
+                    <td>{{submission.id}}</td>
+                    <td>{{submission.problem.totalscore}}</td>
+                    <td>{{submission.totalscore}}</td>
+                    <td>{{submission.datetime}}</td>
+                    <td>{{submission.verdict}}</td>
+                    <td>{{submission.isrunning}}</td>
+                    <td><button class="btn green lighten-2" type="submit">see details </button></td>
+                </form>
+                </tr>
+           {% endfor %}
+          </tbody>
+      </table>
+</div>
 {% endblock %}

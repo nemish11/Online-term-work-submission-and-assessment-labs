@@ -2,16 +2,16 @@
 {% block body %}
 {% with i=1 %}
 {% endwith %}
-    <div class=" container">
-        <div >
-              Leaderboard - {{ subject.name }}
+    <div class="row container">
+        <div>
+            <h5>  Leaderboard - {{ subject.name }}</h5>
         </div>
         <div>
             {% if not data|length %}
                         <h5>Submission is not available.</h5>
             {% else%}
-            <table class="highlight centered responsive-table col s8 m8 l8" >
-                    <thead>
+            <table class="highlight centered responsive-table col " >
+                    <thead class="grey lighten-1">
                         <tr>
                             <th>Rank</th>
                             <th>Student Name</th>

@@ -8,8 +8,14 @@
     });
   });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
 
-<div class="container">
+<div class="row container z-depth-3">
 {{message}}
  All week of {{subject.name}} subject <br/>
  <ul class="collapsible">
