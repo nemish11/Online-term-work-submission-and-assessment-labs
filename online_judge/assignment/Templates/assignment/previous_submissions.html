@@ -1,11 +1,6 @@
 {% extends "assignment/base.html" %}
 {% block body%}
-  subject : {{assignment.subject.name}}<br/>
-  <a href="/assignment/showAssignment"> back to assignment </a>
-
-  <br/>
-   your total submission : {{total_submissions}} </br>
-    <script type="text/javascript">
+<script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
@@ -26,8 +21,59 @@
         chart.draw(data, options);
       }
     </script>
+<div class="row container z-depth-3">
+    <div class="col">
 
-    <div id="piechart" style="width: 600px; height: 500px;"></div>
+
+    <ul class="collection with-header">
+        <li class="collection-item"><a href="/assignment/showAssignment">back to assignment</a></li>
+        <li class="collection-header"><h5>{{assignment.subject.name}}</h5></li>
+        <li class="collection-item"> Total submission : <span class="secondary-content black-text">{{total_submissions}}</span></li>
+
+        <li class="collection-item">
+            <h5  > Submissions Graphs </h5>
+            <div id="piechart" style="width: 600px; height: 500px;"></div>
+        </li>
+        <li>
+            <h5>My Submissions</h5>
+            <table class="highlight centered responsive-table col " >
+              <thead class="grey lighten-1">
+                <tr>
+                    <th>SubmissionID</th>
+                    <th>Subject</th>
+                    <th>Totalscore</th>
+                    <th>Yourscore</th>
+                    <th>Date and time</th>
+                    <th>Verdict</th>
+                    <th>Isrunning</th>
+                    <th>Submission's details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for submission in submissions %}
+                  <tr>
+                    <form action="/assignment/selectedsubmission" method="POST" > {% csrf_token %}
+                        <input type="hidden" name="submissionid" value="{{submission.id}}" />
+                        <td>{{submission.id}}</td>
+                        <td>{{submission.assignment.subject.name}}</td>
+                        <td>{{submission.assignment.totalscore}}</td>
+                        <td>{{submission.totalscore}}</td>
+                        <td>{{submission.datetime}}</td>
+                        <td>{{submission.verdict}}</td>
+                        <td>{{submission.isrunning}}</td>
+                        <td><button class="btn green lighten-2" type="submit">See details</button></td>
+                    </form>
+                    </tr>
+               {% endfor %}
+              </tbody>
+          </table>
+
+        </li>
+    </ul>
+
+    </div>
+</div>
+{% endblock %}
 
 <!--- '''  <table class="highlight centered responsive-table col s8 m8 l8" >
       <thead>
@@ -58,36 +104,4 @@
       </tbody>
   </table>'''
 --->
-  <table class="highlight centered responsive-table col s8 m8 l8" >
-      <thead>
-        <tr>
-            <th>submissionID</th>
-            <th>subject</th>
-            <th>totalscore</th>
-            <th>yourscore</th>
-            <th>date and time</th>
-            <th>verdict</th>
-            <th>isrunning</th>
-            <th>In details</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for submission in submissions %}
-          <tr>
-            <form action="/assignment/selectedsubmission" method="POST" > {% csrf_token %}
-                <input type="hidden" name="submissionid" value="{{submission.id}}" />
-                <td>{{submission.id}}</td>
-                <td>{{submission.assignment.subject.name}}</td>
-                <td>{{submission.assignment.totalscore}}</td>
-                <td>{{submission.totalscore}}</td>
-                <td>{{submission.datetime}}</td>
-                <td>{{submission.verdict}}</td>
-                <td>{{submission.isrunning}}</td>
-                <td><button type="submit">see details about submission</button></td>
-            </form>
-            </tr>
-       {% endfor %}
-      </tbody>
-  </table>
 
-{% endblock %}

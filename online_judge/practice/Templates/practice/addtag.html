@@ -1,7 +1,10 @@
 {% extends "practice/base.html" %}
   {% block body%}
-   <form action="/practice/addtag" method="POST" > {% csrf_token %}
-    enter a tag name : <input type="text" name="tagname" id="tagname" /> <br/>
-    <button type="submit">add tag</button>
+<div class="row container z-depth-3">
+   <form class="col s4" action="/practice/addtag" method="POST" > {% csrf_token %}
+        enter a tag name :
+        <input type="text" name="tagname" id="tagname" />
+        <button class="btn green lighten-2" type="submit">add tag</button>
    </form>
+</div>
   {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "usermodule/base.html" %}
 {% block body%}
-<div>
+<div class="container z-depth-3">
     <div class="col s8 m8 l8 ">
         {% if messages %}
             {% for m in messages %}
@@ -10,88 +10,98 @@
             {% endfor %}
         {% endif%}
     </div>
-  Upload csv file in format (username,password,roll_no,year) :
-    <form action="/usermodule/addstudent" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
-      <input type="file" name="studentfile" id="studentfile"/>
-      <button type="submit" value="upload">Upload</button>
-    </form>
-    Active Student List :
-    <table class="highlight centered responsive-table col s8 m8 l8" >
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>username</th>
-            <th>full name</th>
-            <th>email id</th>
-            <th>phone_no</th>
-            <th>year</th>
-            <th>--</th>
-            <th>--</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for student in current_student %}
-                <tr>
-                  <td>{{student.id}}</td>
-                  <td>{{student.user.username}}</td>
-                  <td>{{student.user.first_name}} {{student.user.last_name}}</td>
-                  <td>{{student.user.email}}</td>
-                  <td>{{student.phone_no}}</td>
-                  <td>{{student.year}}</td>
-                  <td>
-                    <form action="/usermodule/addtopaststudent" method="POST" > {% csrf_token %}
-                      <input type="hidden" name="studentid" value="{{student.id}}" />
-                      <button type="submit">add to past student</button>
-                    </form>
-                  </td>
-                  <td>
-                    <form action="/usermodule/removestudent" method="POST" > {% csrf_token %}
-                      <input type="hidden" name="studentid" value="{{student.id}}" />
-                      <button type="submit">remove</button>
-                    </form>
-                  </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br/>
-    Past Student List :
-    <table class="highlight centered responsive-table col s8 m8 l8" >
-        <thead>
-          <tr>
-              <th>No.</th>
-              <th>username</th>
-              <th>full name</th>
-              <th>email id</th>
-              <th>phone_no</th>
-              <th>--</th>
-              <th>--</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for student in past_student %}
-                <tr>
-                    <td>{{student.id}}</td>
-                    <td>{{student.user.username}}</td>
-                    <td>{{student.user.first_name}} {{student.user.last_name}}</td>
-                    <td>{{student.user.email}}</td>
-                    <td>{{student.phone_no}}</td>
-                    <td>{{student.year}}</td>
-                    <td>
-                      <form action="/usermodule/addtoactivestudent" method="POST" > {% csrf_token %}
-                        <input type="hidden" name="studentid" value="{{student.id}}" />
-                        <button type="submit">add to active student</button>
-                      </form>
-                    </td>
-                    <td>
-                      <form action="/usermodule/removestudent" method="POST" > {% csrf_token %}
-                        <input type="hidden" name="studentid" value="{{student.id}}" />
-                        <button type="submit">remove</button>
-                      </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <ul class="collections">
+        <li class="collections-item">
+            <h5>Upload csv file in format (username,password,roll_no,year) :</h5>
+            <form action="/usermodule/addstudent" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
+              <input type="file" name="studentfile" id="studentfile"/>
+              <button class="btn green lighten-2" type="submit" value="upload">Upload</button>
+            </form>
+        </li>
+        <hr class="style13">
+        <li class="collections-item">
+            <h5>Active Student List :</h5>
+            <table class="highlight centered responsive-table col s8 m8 l8" >
+                <thead class="grey lighten-1">
+                  <tr>
+                    <th>No.</th>
+                    <th>username</th>
+                    <th>full name</th>
+                    <th>email id</th>
+                    <th>phone_no</th>
+                    <th>year</th>
+                    <th>--</th>
+                    <th>--</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for student in current_student %}
+                        <tr>
+                          <td>{{student.id}}</td>
+                          <td>{{student.user.username}}</td>
+                          <td>{{student.user.first_name}} {{student.user.last_name}}</td>
+                          <td>{{student.user.email}}</td>
+                          <td>{{student.phone_no}}</td>
+                          <td>{{student.year}}</td>
+                          <td>
+                            <form action="/usermodule/addtopaststudent" method="POST" > {% csrf_token %}
+                              <input type="hidden" name="studentid" value="{{student.id}}" />
+                              <button class="btn green lighten-2" type="submit">Add to past</button>
+                            </form>
+                          </td>
+                          <td>
+                            <form action="/usermodule/removestudent" method="POST" > {% csrf_token %}
+                              <input type="hidden" name="studentid" value="{{student.id}}" />
+                              <button class="btn green lighten-2" type="submit">Remove</button>
+                            </form>
+                          </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </li>
+
+        <hr class="style13">
+        <li class="collection-item">
+            <h5>Past Student List :</h5>
+            <table class="highlight centered responsive-table col s8 m8 l8" >
+                <thead class="grey lighten-1">
+                  <tr>
+                      <th>No.</th>
+                      <th>username</th>
+                      <th>full name</th>
+                      <th>email id</th>
+                      <th>phone_no</th>
+                      <th>--</th>
+                      <th>--</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for student in past_student %}
+                        <tr>
+                            <td>{{student.id}}</td>
+                            <td>{{student.user.username}}</td>
+                            <td>{{student.user.first_name}} {{student.user.last_name}}</td>
+                            <td>{{student.user.email}}</td>
+                            <td>{{student.phone_no}}</td>
+                            <td>{{student.year}}</td>
+                            <td>
+                              <form action="/usermodule/addtoactivestudent" method="POST" > {% csrf_token %}
+                                <input type="hidden" name="studentid" value="{{student.id}}" />
+                                <button class="btn green lighten-2" type="submit">Add to active student</button>
+                              </form>
+                            </td>
+                            <td>
+                              <form action="/usermodule/removestudent" method="POST" > {% csrf_token %}
+                                <input type="hidden" name="studentid" value="{{student.id}}" />
+                                <button class="btn green lighten-2" type="submit">Remove</button>
+                              </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </li>
+    </ul>
   </div>
   {% endblock %}

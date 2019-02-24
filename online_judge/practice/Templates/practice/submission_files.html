@@ -71,8 +71,16 @@
 	});
 });
 </script>
-<div>
-  <div class="col s8 m8 l8 ">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
+
+<div class="row container">
+  <div class="col ">
       {% if messages %}
           {% for m in messages %}
                   <script>
@@ -83,36 +91,36 @@
   </div>
   <a href="/practice/previous_submissions/?id={{problem.id}}" >back to previous submission</a>
 
-  <p style='color:red;'>{{message}}</p><br/>
-  Title :{{problem.title}}<br/>
-  question is : {{problem.question}} <br/> <br/>
+  <p style='color:red;'>{{message}}</p>
+  Title :{{problem.title}}
+  question is : {{problem.question}}
  <form action = "/practice/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
 
-   Your Code : <br/><br/>
+     <h5>Your Code :</h5>
 
-   <textarea class="codemirror-textarea" name = "code" value="{{previous_code}}" onload="adjustHeight(this)">{{previous_code}}</textarea><br/>
-   <button class="content" type="submit">Submit</button>
+   <textarea class="codemirror-textarea" name = "code" value="{{previous_code}}" onload="adjustHeight(this)">{{previous_code}}</textarea>
+   <button class="content" class="btn green lighten-2" type="submit">Submit</button>
 
  </form>
 
  <div id="divLoading">
   </div>
 
-  <h2>Results :</h2>
+  <h4>Results :</h4>
   total score is : {{totalscore}} out of {{problem.totalscore}}
 
-  <br/>
-  <br/>
+
+
   <table class="highlight centered responsive-table col s8 m8 l8" >
-      <thead>
+      <thead class="grey lighten-1">
         <tr>
-            <th>inputfiles</th>
-            <th>outputfiles</th>
-            <th>runtimes</th>
-            <th>memoryused</th>
-            <th>errortypes</th>
-            <th>detailfiles</th>
-            <th>score</th>
+            <th>Inputfiles</th>
+            <th>Outputfiles</th>
+            <th>Runtimes</th>
+            <th>Memoryused</th>
+            <th>Errortypes</th>
+            <th>Detailfiles</th>
+            <th>Score</th>
         </tr>
       </thead>
       <tbody>
@@ -134,16 +142,16 @@
           {% endfor %}
       </tbody>
   </table>
-  <br/>
+
   <!--{% ifequal request.session.usertype "faculty" %}
     <form action="/practice/savecomment" method="POST" > {% csrf_token %}
-      Enter a comments :<br/>
-     <input type="textarea" style = "width:500px;height:100px;" placeholder="Enter a comments..." name="commenttext" /><br/>
+      Enter a comments :
+     <input type="textarea" style = "width:500px;height:100px;" placeholder="Enter a comments..." name="commenttext" />
      <button type="submit">submit</button>
     </form>
   {% endifequal %}
   {% ifequal request.session.usertype "student" %}
-     Comment added by faculty :<br/><div> {{submission.comment}}</div>
+     Comment added by faculty : <div> {{submission.comment}}</div>
      {% ifequal submission.commentunread true %}
         <a href="/practice/markcomment" > mark as read </a>
      {% endifequal %}

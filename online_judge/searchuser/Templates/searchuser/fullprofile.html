@@ -15,7 +15,7 @@
     ]);
 
     var options = {
-      title: 'your submissions details'
+      title: ''
     };
 
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -23,17 +23,25 @@
   }
 </script>
 
-<div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
+
+
+<div class="container z-depth-3">
   <div class="col s8 m8 l8 ">
       {% if messages %}
           {% for m in messages %}
-                  <script>
-          Materialize.toast('{{ m }}', 3000);
+            <script>
+                    Materialize.toast('{{ m }}', 3000);
         </script>
           {% endfor %}
       {% endif%}
   </div>
-<table class="highlight centered responsive-table col s8 m8 l8" >
+<!--<table class="highlight centered responsive-table col s8 m8 l8" >
     <thead>
       <tr>
           <th>Role</th>
@@ -60,14 +68,40 @@
               <td>{{student.year}}</td>
           </tr>
     </tbody>
-</table>
+</table>-->
 
-<br/>
+    <div>
+        <ul class="collection with-header">
+            <li class="collection-header"><h5>{{ student.user.username }}</h5></li>
+            <li class="collection-item">Role : <span class="secondary-content black-text">Student</span></li>
+            <li class="collection-item">First Name : <span class="secondary-content black-text">{{student.user.first_name}}</span></li>
+            <li class="collection-item">Last Name : <span class="secondary-content black-text">{{student.user.last_name}}</span></li>
+            <li class="collection-item">Roll NO : <span class="secondary-content black-text">{{student.user.student.roll_no}}</span></li>
+            <li class="collection-item">Year : <span class="secondary-content black-text">{{student.user.student.year}}</span></li>
+            <li class="collection-item">Email ID : <span class="secondary-content black-text">{{student.user.email}}</span></li>
+            <li class="collection-item">Date of birth : <span class="secondary-content black-text">{{student.user.student.dob}}</span></li>
+            <li class="collection-item">Phone NO : <span class="secondary-content black-text">{{student.user.student.phone_no}}</span></li>
+            <hr class="style13">
+
+            <li class="collection-header"><h5> Submissions Details </h5></li>
+            <li class="collection-item">Total submission made by {{student.user.username}} : <span class="secondary-content black-text">{{total_submissions}}</span></li>
+            {% ifequal request.session.usertype "faculty" %}
+                <li><a href = "/searchuser/allsubmissions" > see all submissions </a></li>
+            {% endifequal %}
+            <hr class="style13">
+
+            <li class="collection-header"><h5  > Submissions Graphs </h5></li>
+            <li class="collection-item">
+                <div id="piechart" style="width: 600px; height: 500px;"></div>
+            </li>
+        </ul>
+     </div >
+
+<!--<br/>
 <br/>
 Total submission made by {{student.user.username}} : {{total_submissions}} <br/>
 {% ifequal request.session.usertype "faculty" %}
     <a href = "/searchuser/allsubmissions" > see all submissions </a>
-{% endifequal %}
-<div id="piechart" style="width: 600px; height: 500px;"></div>
+{% endifequal %}-->
 </div>
 {% endblock %}

@@ -12,13 +12,16 @@ import pandas as pd
 from assignment.models import *
 from userprofile.models import Faculty,Student
 
+
 @login_required()
 def updateFaculty(request):
     return render(request,'userprofile/update_faculty.html')
 
+
 @login_required()
 def updateStudent(request):
     return render(request,'userprofile/update_student.html')
+
 
 @login_required()
 def update_faculty(request):
@@ -44,11 +47,13 @@ def update_faculty(request):
         c['message'] = "exception Occured!! please try again..."
         return render(request,'userprofile/update_faculty.html',c)
     #return render(request,'userprofile/faculty_profile.html')
+
+
 @login_required()
 def update_student(request):
     try:
         first_name = request.POST.get('first_name')
-        last_name =  request.POST.get('last_name')
+        last_name = request.POST.get('last_name')
         phone_no = request.POST.get('phone_no')
         email = request.POST.get('email')
         dob = request.POST.get('dob')
@@ -69,9 +74,11 @@ def update_student(request):
         c['message'] = "exception Occured!! please try again..."
         return render(request,'userprofile/update_student.html',c)
 
+
 @login_required()
 def updateAdmin(request):
     return render(request,'userprofile/update_admin.html')
+
 
 @login_required()
 def update_admin(request):
@@ -90,6 +97,7 @@ def update_admin(request):
         c = {}
         c['message'] = "exception Occured!! please try again..."
         return render(request,'userprofile/update_admin.html',c)
+
 
 @login_required()
 def profile(request):
@@ -117,6 +125,7 @@ def profile(request):
         c['message'] = "exception Occured!! please try again..."
         return render(request,'userprofile/base.html',c)
 
+
 @login_required()
 def allsubmissions(request):
     try:
@@ -128,6 +137,7 @@ def allsubmissions(request):
         c = {}
         c['message'] = "exception Occured!! please try again..."
         return render(request,'userprofile/all_submissions.html',c)
+
 
 @login_required()
 def shownotifications(request):

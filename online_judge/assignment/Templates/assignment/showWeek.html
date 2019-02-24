@@ -8,85 +8,98 @@
     });
   });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
 
-<div class="container">
-{{message}}
- All week of {{subject.name}} subject <br/>
- <ul class="collapsible">
-   {% for week in all_week %}
-    <li>
-      <div class="collapsible-header"><i class="material-icons"> {{week.name}} </i></div>
-      <div class="collapsible-body">
-          {% for assignment in all_assignment %}
-            {% ifequal assignment.week.id week.id %}
-             <form action = "/assignment/selectedAssignment" method="POST" > {% csrf_token %}
-              <div class = "row" >
-                <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
-                <button type="submit" name="button">{{assignment.title}}</button>
-              </div>
-              </form>
+<div class="row container z-depth-3">
+    <script>
+		Materialize.toast('{{message}}', 3000);
+	</script>
+    <div class="col s12">
+        <h5>All week of {{subject.name}} subject</h5>
+        <ul class="collapsible ">
+            {% for week in all_week %}
+            <li>
+                <div class="collapsible-header"><i class="material-icons"> {{week.name}} </i></div>
+                <div class="collapsible-body">
+                  {% for assignment in all_assignment %}
+                    {% ifequal assignment.week.id week.id %}
+                    <div class="row">
+                        <form action = "/assignment/selectedAssignment" method="POST" > {% csrf_token %}
+                            <div  class="col s6 m6 l6">
+                                <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
+                                <button type="submit" class="btn green lighten-2" name="button">{{assignment.title}}</button>
+                            </div>
+                        </form>
+                      {% ifequal usertype faculty %}
+                      <form action = "/assignment/deleteAssignment" method="POST" > {% csrf_token %}
+                          <div  class="col s6 m6 l6">
+                              <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
+                              <button type="submit" class="btn  red lighten-1" name="button">Delete {{assignment.title}}</button>
+                          </div>
+                       </form>
+
+                      {% endifequal %}
+                      {% ifequal usertype "admin" %}
+                        <form action = "/assignment/deleteAssignment" method="POST" > {% csrf_token %}
+                         <div class="col s6 m6 l6" >
+                           <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
+                           <button type="submit" class="btn  red lighten-1" name="button">Delete {{assignment.title}}</button>
+                         </div>
+                         </form>
+                        </div>
+                      {% endifequal %}
+                    {% endifequal %}
+                  {% endfor %}
+
               {% ifequal usertype faculty %}
-              <form action = "/assignment/deleteAssignment" method="POST" > {% csrf_token %}
-               <div class = "row" >
-                 <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
-                 <button type="submit" name="button">Delete {{assignment.title}}</button>
-               </div>
-               </form>
+              <form action="/assignment/new_assignment" method="post">{% csrf_token %}
+                    <input type="hidden" name="weekid" value="{{week.id}}">
+                    <button type="submit" class="btn green lighten-2" name="button">add new assignment</button>
+              </form>
+              <form action="/assignment/deleteweek" method="POST"> {% csrf_token %}
+                <input type="hidden" name="weekid" value="{{week.id}}">
+                <button type="submit" class="btn  red lighten-1  " name="button">Delete week</button>
+              </form>
               {% endifequal %}
               {% ifequal usertype "admin" %}
-                <form action = "/assignment/deleteAssignment" method="POST" > {% csrf_token %}
-                 <div class = "row" >
-                   <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
-                   <button type="submit" name="button">Delete {{assignment.title}}</button>
-                 </div>
-                 </form>
+              <form action="/assignment/new_assignment" method="post">{% csrf_token %}
+                    <input type="hidden" name="weekid" value="{{week.id}}">
+                    <button type="submit" class="btn green lighten-2" name="button">add new assignment</button>
+              </form>
+              <form action="/assignment/deleteweek" method="POST"> {% csrf_token %}
+                <input type="hidden" name="weekid" value="{{week.id}}">
+                <button type="submit" class="btn  red lighten-1  " name="button">Delete week</button>
+              </form>
               {% endifequal %}
+              </div>
+            </li>
+            {% endfor %}
+           <li>
+            {% ifequal usertype faculty %}
+            <div class="collapsible-header">Add New Week </div>
+            <div class="collapsible-body">
+            <form action="/assignment/addweek" method="POST" > {% csrf_token %}
+              enter a name of week :<input type="text" name="weekname" id="weekname" required/>
+              <button type="submit" class="btn green lighten-2" name="button">add week</button>
+            </form>
+            </div>
             {% endifequal %}
-          {% endfor %}
-
-      {% ifequal usertype faculty %}
-      <form action="/assignment/new_assignment" method="post">{% csrf_token %}
-            <input type="hidden" name="weekid" value="{{week.id}}">
-            <button type="submit" name="button">add new assignment</button>
-      </form>
-      <form action="/assignment/deleteweek" method="POST"> {% csrf_token %}
-        <input type="hidden" name="weekid" value="{{week.id}}">
-        <button type="submit" name="button">Delete week</button>
-      </form>
-      {% endifequal %}
-      {% ifequal usertype "admin" %}
-      <form action="/assignment/new_assignment" method="post">{% csrf_token %}
-            <input type="hidden" name="weekid" value="{{week.id}}">
-            <button type="submit" name="button">add new assignment</button>
-      </form>
-      <form action="/assignment/deleteweek" method="POST"> {% csrf_token %}
-        <input type="hidden" name="weekid" value="{{week.id}}">
-        <button type="submit" name="button">Delete week</button>
-      </form>
-      {% endifequal %}
-      </div>
-    </li>
-    {% endfor %}
-   <li>
-    {% ifequal usertype faculty %}
-    <div class="collapsible-header">Add New Week </div>
-    <div class="collapsible-body">
-    <form action="/assignment/addweek" method="POST" > {% csrf_token %}
-      enter a name of week :<input type="text" name="weekname" id="weekname"/>
-      <button type="submit" name="button">add week</button>
-    </form>
+            {% ifequal usertype "admin" %}
+            <div class="collapsible-header">Add New Week </div>
+            <div class="collapsible-body ">
+            <form action="/assignment/addweek" method="POST" > {% csrf_token %}
+              enter a name of week :<input type="text" name="weekname" id="weekname" required/>
+              <button type="submit" class="btn green lighten-2" name="button">add week</button>
+            </form>
+            </div>
+            {% endifequal %}
+          </li>
+      </ul>
     </div>
-    {% endifequal %}
-    {% ifequal usertype "admin" %}
-    <div class="collapsible-header">Add New Week </div>
-    <div class="collapsible-body">
-    <form action="/assignment/addweek" method="POST" > {% csrf_token %}
-      enter a name of week :<input type="text" name="weekname" id="weekname"/>
-      <button type="submit" name="button">add week</button>
-    </form>
-    </div>
-    {% endifequal %}
-  </li>
-  </ul>
 </div>
 {% endblock %}

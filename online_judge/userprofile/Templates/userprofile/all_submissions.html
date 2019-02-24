@@ -1,37 +1,54 @@
 {% extends "userprofile/base.html" %}
 {% block body%}
-{{message}}
-your all submissions : <br/>
-<table class="highlight centered responsive-table col s8 m8 l8" >
-    <thead>
-      <tr>
-          <th>submissionID</th>
-          <th>subject</th>
-          <th>totalscore</th>
-          <th>yourscore</th>
-          <th>date and time</th>
-          <th>verdict</th>
-          <th>isrunning</th>
-          <th>In details</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for submission in submissions %}
-        <tr>
-          <form action="/assignment/selectedsubmission" method="POST" > {% csrf_token %}
-              <input type="hidden" name="submissionid" value="{{submission.id}}" />
-              <td>{{submission.id}}</td>
-              <td>{{submission.assignment.subject.name}}</td>
-              <td>{{submission.assignment.totalscore}}</td>
-              <td>{{submission.totalscore}}</td>
-              <td>{{submission.datetime}}</td>
-              <td>{{submission.verdict}}</td>
-              <td>{{submission.isrunning}}</td>
-              <td><button type="submit">see details about submission</button></td>
-          </form>
-          </tr>
-     {% endfor %}
-    </tbody>
-</table>
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
+<div class="container z-depth-3">
+     <div class="col s8 m8 l8 ">
+         <script>
+				Materialize.toast('{{message}}', 3000);
+		  </script>
+    </div>
+    <div><h5>your all submissions :</h5></div>
+    <div>
+        {% if not submissions|length %}
+            <h5>No submissions at all.</h5>
+        {% else%}
+        <table class="highlight centered responsive-table " >
+            <thead class="grey lighten-1">
+              <tr>
+                  <th>submissionID</th>
+                  <th>subject</th>
+                  <th>totalscore</th>
+                  <th>yourscore</th>
+                  <th>date and time</th>
+                  <th>verdict</th>
+                  <th>isrunning</th>
+                  <th>In details</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for submission in submissions %}
+                <tr>
+                  <form action="/assignment/selectedsubmission" method="POST" > {% csrf_token %}
+                      <input type="hidden" name="submissionid" value="{{submission.id}}" />
+                      <td>{{submission.id}}</td>
+                      <td>{{submission.assignment.subject.name}}</td>
+                      <td>{{submission.assignment.totalscore}}</td>
+                      <td>{{submission.totalscore}}</td>
+                      <td>{{submission.datetime}}</td>
+                      <td>{{submission.verdict}}</td>
+                      <td>{{submission.isrunning}}</td>
+                      <td><button class="btn green lighten-2" type="submit">See details</button></td>
+                  </form>
+                  </tr>
+             {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

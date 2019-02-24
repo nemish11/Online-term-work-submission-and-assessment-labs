@@ -8,7 +8,7 @@
   });
 </script>
 
-<div class="container">
+<div class="container z-depth-3">
     <div class="col s8 m8 l8 ">
         {% if messages %}
             {% for m in messages %}
@@ -18,7 +18,7 @@
             {% endfor %}
         {% endif%}
     </div>
-    {% if  req_list|length%}
+    {% if  not req_list|length%}
         <div class="col s8 m8 l8 ">
             <h5>No subject for request.</h5>
         </div>
@@ -57,16 +57,14 @@
 
                     <section>
                         <div class="center">
-                            <button type="submit" class="btn ">Request</button>
+                            <button type="submit" class="btn green lighten-2">Request</button>
                         </div>
                     </section>
 
             </form>
         {% endif %}
     {% endif %}
-</div>
-
-<div class=" container" >
+    <hr class="style13">
   <ul class="collapsible ">
     <li>
       <div class="collapsible-header">Pending Request</div>
@@ -77,7 +75,7 @@
             {% if not pending_list|length%}
             <h5>No Request.</h5>
             {% else %}
-                <thead>
+                <thead class="grey lighten-1">
                   <tr>
                       <th>Subject name</th>
                       <th>Faculty name</th>
@@ -92,7 +90,7 @@
                         <td>{{ s.status }}</td>
                         <td>
                             <form action="/subject/removerequest" method="POST" >{% csrf_token%}
-                                <button type="submit" name="remove_s">Remove Request</button>
+                                <button type="submit" class="btn green lighten-2" name="remove_s">Remove Request</button>
                                 <input type="hidden" name="id" value="{{ s.pk }}">
                             </form>
                         </td>
@@ -112,7 +110,7 @@
                 {% if not approved_list|length%}
                 <h5>No Request.</h5>
                 {% else %}
-                    <thead>
+                    <thead class="grey lighten-1">
                   <tr>
                       <th>Subject name</th>
                       <th>Faculty name</th>
@@ -140,7 +138,7 @@
                 {% if not decline_list|length%}
                 <h5>No Request.</h5>
             {% else %}
-                <thead>
+                <thead class="grey lighten-1">
                   <tr>
                       <th>Subject name</th>
                       <th>Faculty name</th>
@@ -167,7 +165,7 @@
                 {% if not block_list|length%}
             <h5>No Request.</h5>
             {% else %}
-                <thead>
+                <thead class="grey lighten-1">
                   <tr>
                       <th>Subject name</th>
                       <th>Faculty name</th>
@@ -191,114 +189,4 @@
 
 </div>
 
-<!--<div class="row">
-    <div class="col s8 m8 l8">
-    <h5>Pending Request</h5>
-    <table class="highlight centered responsive-table col s8 m8 l8" >
-            <tbody>
-            {% if not pending_list|length%}
-            <h5>No Request.</h5>
-            {% else %}
-                <thead>
-                  <tr>
-                      <th>Subject name</th>
-                      <th>Faculty name</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                  </tr>
-                </thead>
-                {% for s in pending_list %}
-                    <tr>
-                        <td>{{ s.subject.name }}</td>
-                        <td>{{ s.faculty.user }}</td>
-                        <td>{{ s.status }}</td>
-                        <td>
-                            <form action="/subject/removerequest" method="POST" >{% csrf_token%}
-                                <button type="submit" name="remove_s">Remove Request</button>
-                                <input type="hidden" name="id" value="{{ s.pk }}">
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-            </tbody>
-        </table>
-    </div>
-    <div class="col s8 m8 l8">
-    <h5>Approved Request</h5>
-    <table class="highlight centered responsive-table col s8 m8 l8" >
-            <tbody>
-                {% if not approved_list|length%}
-                <h5>No Request.</h5>
-                {% else %}
-                    <thead>
-                  <tr>
-                      <th>Subject name</th>
-                      <th>Faculty name</th>
-                      <th>Status</th>
-                  </tr>
-                </thead>
-                {% for s in approved_list %}
-                        <tr>
-                            <td>{{ s.subject.name }}</td>
-                            <td>{{ s.faculty.user }}</td>
-                            <td>{{ s.status }}</td>
-                        </tr>
-                    {% endfor %}
-                {% endif %}
-            </tbody>
-        </table>
-    </div>
-    <div class="col s8 m8 l8">
-    <h5>Decline Request</h5>
-    <table class="highlight centered responsive-table col s8 m8 l8" >
-            <tbody>
-                {% if not decline_list|length%}
-                <h5>No Request.</h5>
-            {% else %}
-                <thead>
-                  <tr>
-                      <th>Subject name</th>
-                      <th>Faculty name</th>
-                      <th>Status</th>
-                  </tr>
-                </thead>
-                {% for s in decline_list %}
-                    <tr>
-                        <td>{{ s.subject.name }}</td>
-                        <td>{{ s.faculty.user }}</td>
-                        <td>{{ s.status }}</td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-            </tbody>
-        </table>
-    </div>
-    <div class="col s8 m8 l8">
-    <h5>Block Request</h5>
-    <table class="highlight centered responsive-table col s8 m8 l8" >
-                {% if not block_list|length%}
-            <h5>No Request.</h5>
-            {% else %}
-                <thead>
-                  <tr>
-                      <th>Subject name</th>
-                      <th>Faculty name</th>
-                      <th>Status</th>
-                  </tr>
-                </thead>
-            <tbody>
-                {% for s in block_list %}
-                    <tr>
-                        <td>{{ s.subject.name }}</td>
-                        <td>{{ s.faculty.user }}</td>
-                        <td>{{ s.status }}</td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-            </tbody>
-        </table>
-    </div>
-</div>
-{% endblock %}
--->
+{% endblock%}

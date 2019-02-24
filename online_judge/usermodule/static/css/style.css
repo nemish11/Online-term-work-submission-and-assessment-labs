@@ -22,3 +22,10 @@ main {
 #body{
   padding-top: 20px;
 }
+
+
+hr.style13 {
+	height: 5px;
+	border: 1;
+	box-shadow: 0 10px 10px -10px #8c8b8b inset;
+}

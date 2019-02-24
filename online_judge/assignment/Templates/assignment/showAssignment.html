@@ -80,64 +80,78 @@
 
 </script>
 
+<div class="row container z-depth-3">
+    <div class="col s12">
+        <a href="/assignment/previous_submissions" >see previous submissions</a>
+        <p style='color:red;'>{{message}}</p>
 
-  <a href="/assignment/previous_submissions" >see previous submissions</a>
-    <p style='color:red;'>{{message}}</p><br/>
-  Title :{{assignment.title}}<br/><br/>
-  question is : {{assignment.question}} <br/><br/>
-  constraint : {{assignment.constraint}}<br/><br/>
-  input format : {{assignment.inputformat}}<br/><br/>
-  output format : {{assignment.outputformat}}<br/><br/>
-  sample input: {{assignment.sampleinput}}<br/><br/>
-  sample output : {{assignment.sampleoutput}}<br/><br/>
-  explanation : {{assignment.explanation}}<br/><br/>
- <form action = "/assignment/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
-   Enter a Code : <br/><br/>
+            <h5>Title</h5>
+            <p>{{assignment.title}}</p>
+        <hr>
+            <h5>question </h5>
+            <p>{{assignment.question}}</p>
+        <hr>
 
-   <textarea class="codemirror-textarea" style="width:auto;height:10000px" name = "code" value="{{previous_code}}">{{previous_code}}</textarea><br/>
+        <h5>constraint </h5> <p>{{assignment.constraint}}</p>
+        <hr>
+        <h5>input format</h5><p> {{assignment.inputformat}}</p>
+        <hr>
+        <h5>output format</h5><p>{{assignment.outputformat}}</p>
+        <hr>
+            <h5>sample input</h5><p>{{assignment.sampleinput}}</p>
+        <hr>
+        <h5>sample output</h5><p>{{assignment.sampleoutput}}</p>
+        <hr>
+        <h5>explanation</h5><p>{{assignment.explanation}}</p>
+        <hr>
+        <form action = "/assignment/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
+            <h5>Enter a Code</h5>
 
-   <button class="content" type="submit">Submit</button>
+            <textarea class="codemirror-textarea" style="width:auto;height:10000px" name = "code" value="{{previous_code}}">{{previous_code}}</textarea><br/>
 
- </form>
+            <button class="content" class="btn green lighten-2" type="submit">Submit</button>
 
- <div id="divLoading">
-  </div>
-  {% if combinedlist %}
-    <h2>Results :</h2>
-    total score is : {{totalscore}} out of {{assignment.totalscore}} <br/>
-    verdict : {{verdict}}
-    <br/>
-    <br/>
-    <table class="highlight centered responsive-table col s8 m8 l8" >
-        <thead>
-          <tr>
-              <th>inputfiles</th>
-              <th>outputfiles</th>
-              <th>runtimes</th>
-              <th>memoryused</th>
-              <th>errortypes</th>
-              <th>detailfiles</th>
-              <th>score</th>
-          </tr>
-        </thead>
-        <tbody>
+        </form>
 
-            {% for inputfile,outputfile,errorfile in combinedlist %}
+     <div id="divLoading">
+      </div>
+      {% if combinedlist %}
+        <h4>Results :</h4>
+        <h5>total score is : {{totalscore}} out of {{assignment.totalscore}} </h5>
+        <h5>verdict : {{verdict}}</h5>
 
-                <tr>
+        <table class="highlight centered responsive-table col" >
+            <thead class="grey lighten-1">
+              <tr>
+                  <th>inputfiles</th>
+                  <th>outputfiles</th>
+                  <th>runtimes</th>
+                  <th>memoryused</th>
+                  <th>errortypes</th>
+                  <th>detailfiles</th>
+                  <th>score</th>
+              </tr>
+            </thead>
+            <tbody>
 
-                    <td><a href="{{inputfile.filepath}}" download>inputfile</a></td>
+                {% for inputfile,outputfile,errorfile in combinedlist %}
 
-                    <td><a href = "{{outputfile.filepath}}" download>outputfile</td>
-                    <td>{{inputfile.runtime}}</td>
-                    <td>{{inputfile.memoryused}}</td>
-                    <td>{{inputfile.errortype}}</td>
-                    <td><a href="{{errorfile.filepath}}" download>detailfile</a></td>
-                    <td>{{inputfile.score}}</td>
+                    <tr>
 
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-   {% endif %}
+                        <td><a href="{{inputfile.filepath}}" download>inputfile</a></td>
+
+                        <td><a href = "{{outputfile.filepath}}" download>outputfile</td>
+                        <td>{{inputfile.runtime}}</td>
+                        <td>{{inputfile.memoryused}}</td>
+                        <td>{{inputfile.errortype}}</td>
+                        <td><a href="{{errorfile.filepath}}" download>detailfile</a></td>
+                        <td>{{inputfile.score}}</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+       {% endif %}
+    </div>
+</div>
  {% endblock %}

@@ -13,12 +13,11 @@
 </head>
  <body>
      <nav>
-         <div class="nav-wrapper teal">
+         <div class="nav-wrapper teal blue-grey">
              <ul id="nav-mobile" class="right">
 							  <li><a href="/subject/all_subject" class="waves-effect waves-light">All subject</a> </li>
 								<li><a href="/practice/" class="waves-effect waves-light">practice</a></li>
 							  {% if request.user.is_superuser %}
-										<li><a href="/subject/add_subject" class="waves-effect waves-light">Add subject</a> </li>
 										<li><a href="/usermodule/add_faculty" class="waves-effect waves-light">Add Faculty</a> </li>
 										<li><a href="/usermodule/add_student" class="waves-effect waves-light ">Add Student</a></li>
 										<li><a href="/searchuser/" class="waves-effect waves-light">search user</a></li>

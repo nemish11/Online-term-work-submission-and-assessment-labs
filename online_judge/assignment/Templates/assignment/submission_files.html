@@ -71,8 +71,16 @@
 	});
 });
 </script>
-<div>
-  <div class="col s8 m8 l8 ">
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
+
+<div class="row container z-depth-3">
+
+    <div class="col s8 m8 l8 ">
       {% if messages %}
           {% for m in messages %}
                   <script>
@@ -80,73 +88,72 @@
         </script>
           {% endfor %}
       {% endif%}
-  </div>
-  <a href="/assignment/previous_submissions" >back to previous submission</a>
+    </div>
 
-  <p style='color:red;'>{{message}}</p><br/>
-  Title :{{assignment.title}}<br/>
-  question is : {{assignment.question}} <br/> <br/>
- <form action = "/assignment/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
+    <div class="col">
+        <a href="/assignment/previous_submissions" >back to previous submission</a>
 
-   Your Code : <br/><br/>
+        <p style='color:red;'>{{message}}</p>
+        <h5>Title :</h5><p>{{assignment.title}}</p>
+        <h5>Question</h5> <p>{{assignment.question}}</p>
+        <form action = "/assignment/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
 
-   <textarea class="codemirror-textarea" name = "code" value="{{previous_code}}" onload="adjustHeight(this)">{{previous_code}}</textarea><br/>
-   <button class="content" type="submit">Submit</button>
+            <h5>Your Code</h5>
 
- </form>
+        <textarea class="codemirror-textarea" name = "code" value="{{previous_code}}" onload="adjustHeight(this)">{{previous_code}}</textarea><br/>
+       <button class="content" type="submit">Submit</button>
 
- <div id="divLoading">
-  </div>
+        </form>
 
-  <h2>Results :</h2>
-  total score is : {{totalscore}} out of {{assignment.totalscore}}
+            <div id="divLoading"></div>
 
-  <br/>
-  <br/>
-  <table class="highlight centered responsive-table col s8 m8 l8" >
-      <thead>
-        <tr>
-            <th>inputfiles</th>
-            <th>outputfiles</th>
-            <th>runtimes</th>
-            <th>memoryused</th>
-            <th>errortypes</th>
-            <th>detailfiles</th>
-            <th>score</th>
-        </tr>
-      </thead>
-      <tbody>
+            <h4>Results :</h4>
+            total score is : {{totalscore}} out of {{assignment.totalscore}}
+      <table class="highlight centered responsive-table col s8 m8 l8" >
+          <thead class="grey lighten-1">
+            <tr>
+                <th>inputfiles</th>
+                <th>outputfiles</th>
+                <th>runtimes</th>
+                <th>memoryused</th>
+                <th>errortypes</th>
+                <th>detailfiles</th>
+                <th>score</th>
+            </tr>
+          </thead>
+          <tbody>
 
-          {% for inputfile,outputfile,errorfile in combinedlist %}
+              {% for inputfile,outputfile,errorfile in combinedlist %}
 
-              <tr>
+                  <tr>
 
-                  <td><a href="{{inputfile.filepath}}" download>inputfile</a></td>
+                      <td><a href="{{inputfile.filepath}}" download>inputfile</a></td>
 
-                  <td><a href = "{{outputfile.filepath}}" download>outputfile</td>
-                  <td>{{inputfile.runtime}}</td>
-                  <td>{{inputfile.memoryused}}</td>
-                  <td>{{inputfile.errortype}}</td>
-                  <td><a href="{{errorfile.filepath}}" download>detailfile</a></td>
-                  <td>{{inputfile.score}}</td>
+                      <td><a href = "{{outputfile.filepath}}" download>outputfile</td>
+                      <td>{{inputfile.runtime}}</td>
+                      <td>{{inputfile.memoryused}}</td>
+                      <td>{{inputfile.errortype}}</td>
+                      <td><a href="{{errorfile.filepath}}" download>detailfile</a></td>
+                      <td>{{inputfile.score}}</td>
 
-              </tr>
-          {% endfor %}
-      </tbody>
-  </table>
-  <br/>
-  {% ifequal request.session.usertype "faculty" %}
-    <form action="/assignment/savecomment" method="POST" > {% csrf_token %}
-      Enter a comments :<br/>
-     <input type="textarea" style = "width:500px;height:100px;" placeholder="Enter a comments..." name="commenttext" /><br/>
-     <button type="submit">submit</button>
-    </form>
-  {% endifequal %}
-  {% ifequal request.session.usertype "student" %}
-     Comment added by faculty :<br/><div> {{submission.comment}}</div>
-     {% ifequal submission.commentunread true %}
-        <a href="/assignment/markcomment" > mark as read </a>
-     {% endifequal %}
-  {% endifequal %}
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+      <br/>
+      {% ifequal request.session.usertype "faculty" %}
+        <form action="/assignment/savecomment" method="POST" > {% csrf_token %}
+          Enter a comments :<br/>
+         <input type="textarea" style = "width:500px;height:100px;" placeholder="Enter a comments..." name="commenttext" /><br/>
+         <button class="btn green lighten-2" type="submit">submit</button>
+        </form>
+      {% endifequal %}
+      {% ifequal request.session.usertype "student" %}
+         Comment added by faculty :<br/><div> {{submission.comment}}</div>
+         {% ifequal submission.commentunread true %}
+            <a href="/assignment/markcomment" > mark as read </a>
+         {% endifequal %}
+      {% endifequal %}
+    </div>
 </div>
  {% endblock %}
