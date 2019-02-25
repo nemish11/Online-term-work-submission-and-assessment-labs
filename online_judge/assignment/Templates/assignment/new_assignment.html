@@ -8,38 +8,6 @@
      }
    </style>
 
-   <script>
-     $('#file_btn').click(function(){
-       var st = "";
-       for(var i=1 ; i<=$("#total_inputfiles").val() ; i++){
-           st+='upload input file : '+i+'  <input type="file" name="inputfile_'+i+'" id="inputfile_'+i+'" /><br/>'+
-           'upload output file : '+i+'  <input type="file" name="outputfile_'+i+'" id="outputfile_'+i+'" /><br/>'+
-           'enter a score of this file : <input type="number" name="score_'+i+'" id="score_'+i+'" /><br/><br/>';
-        }
-        $("#inputfiles").html("Upload Testcases <br/>"+st);
-        if($("#total_inputfiles").val() > 0){
-          $('#sub_btn').prop('disabled', false);
-        }
-      });
-
-        $(document).ready(function(){
-      	//code here...
-      	var code = $(".codemirror-textarea")[0];
-      	var editor = CodeMirror.fromTextArea(code, {
-          mode:"application/xml",
-          htmlMode: true,
-          matchClosing:true,
-      		lineNumbers : true,
-          spellcheck : true,
-          autocorrect : true,
-
-          matchBrackets : true,
-          lineWrapping: true,
-      	});
-      });
-
-    </script>
-
 <div class="row container z-depth-3">
   <div class="col">
   <h5> {{week.name}}</h5>
@@ -47,8 +15,8 @@
     <form action="/assignment/newassignment" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
       <input type="hidden" name="weekid" value="{{week.id}}" />
       Enter a title :  <input type="text" name="title" id="title"/>
-      Enter a question :  <textarea class="codemirror-textarea" name="question" id="question" required></textarea>
-      Enter a constraint :  <textarea class="codemirror-textarea" name="constraint" id="constraint" required></textarea>
+      Enter a question :  <textarea class="codemirror-textarea" name="question" id="question"></textarea>
+      Enter a constraint :  <textarea class="codemirror-textarea" name="constraint" id="constraint"></textarea>
       Enter a input format :  <textarea class="codemirror-textarea" name="inputformat" id="inputformat"></textarea>
       Enter a output format :  <textarea class="codemirror-textarea" name="outputformat" id="outputformat"></textarea>
       Enter a sample input :  <textarea class="codemirror-textarea" name="sampleinput" id="sampleinput"></textarea>
@@ -57,6 +25,7 @@
       <hr>
 
       <h5>Upload code file : </h5>
+
       <input type="file" name="codefile" id="codefile" />
       <hr>
       Enter a number of testfiles(should be greater than 0) then click on upload before submit:
@@ -67,4 +36,32 @@
     <button class="btn green lighten-2" id="file_btn">Upload</button>
   </div>
 </div>
+<script>
+     $('#file_btn').click(function(){
+       var st = "";
+       for(var i=1 ; i<=$("#total_inputfiles").val() ; i++){
+           st+='upload input file : '+i+'  <input type="file" name="inputfile_'+i+'" id="inputfile_'+i+'" /><br/>'+
+           'upload output file : '+i+'  <input type="file" name="outputfile_'+i+'" id="outputfile_'+i+'" /><br/>'+
+           'enter a score of this file : <input type="number" name="score_'+i+'" id="score_'+i+'" /><br/><br/>';
+        }
+        $("#inputfiles").html("Upload Testcases<br/><br/>"+st);
+        if($("#total_inputfiles").val() > 0){
+          $('#sub_btn').prop('disabled', false);
+        }
+      });
+        $(document).ready(function(){
+      	//code here...
+      	var code = $(".codemirror-textarea")[0];
+      	var editor = CodeMirror.fromTextArea(code, {
+          mode:"application/xml",
+          htmlMode: true,
+          matchClosing:true,
+      		lineNumbers : true,
+          spellcheck : true,
+          autocorrect : true,
+          matchBrackets : true,
+          lineWrapping: true,
+      	});
+      });
+    </script>
 {% endblock %}
