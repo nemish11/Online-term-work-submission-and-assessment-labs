@@ -6,14 +6,15 @@
     var instances = M.Collapsible.init(elems, options);
   });
 </script>
-<div class="container z-depth-3">
+<div class="row container z-depth-3">
      <div class="col s8 m8 l8 ">
          <script>
 				Materialize.toast('{{message}}', 3000);
 		  </script>
     </div>
-    <div><h5>your all submissions :</h5></div>
-    <div>
+    <div class="col s12">
+        <h5>your all submissions :</h5>
+
         {% if not submissions|length %}
             <h5>No submissions at all.</h5>
         {% else%}

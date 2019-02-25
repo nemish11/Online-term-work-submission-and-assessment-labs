@@ -6,17 +6,17 @@
     var instances = M.Collapsible.init(elems, options);
   });
 </script>
-<div class="container z-depth-3">
-
-    <div class="col s8 m8 l8 ">
+<div class="row container z-depth-3">
+    <div class="col s12">
+    <div class="col ">
          <script>
 				Materialize.toast('{{message}}', 3000);
 		  </script>
     </div>
     <div><h5>your all Notifications :</h5></div>
         <div>
-        <table class="highlight centered responsive-table col s8 m8 l8" >
-            <thead>
+        <table class="highlight centered responsive-table " >
+            <thead class="grey lighten-1">
               <tr>
                   <th>submissionID</th>
                   <th>subject</th>
@@ -25,7 +25,7 @@
                   <th>date and time</th>
                   <th>verdict</th>
                   <th>isrunning</th>
-                  <th>In details</th>
+                  <th>Submission details</th>
               </tr>
             </thead>
             <tbody>
@@ -40,12 +40,13 @@
                       <td>{{submission.datetime}}</td>
                       <td>{{submission.verdict}}</td>
                       <td>{{submission.isrunning}}</td>
-                      <td><button type="submit">see details about submission</button></td>
+                      <td><button class="btn green lighten-2" type="submit">see details </button></td>
                   </form>
                   </tr>
              {% endfor %}
             </tbody>
         </table>
         </div>
+    </div>
 </div>
 {% endblock %}

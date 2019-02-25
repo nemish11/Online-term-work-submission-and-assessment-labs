@@ -7,7 +7,7 @@
   });
 </script>
 
-<div class="container z-depth-3">
+<div class="row container z-depth-3">
   <div class="col s8 m8 l8 ">
       {% if messages %}
           {% for m in messages %}
@@ -17,14 +17,16 @@
           {% endfor %}
       {% endif%}
   </div>
-    <div>
+    <div class="col s12">
         <h5>please fill details for sort the students..</h5>
+
         <form action = "/searchuser/sortby" method="POST" > {% csrf_token %}
             year : <input type = "number" name="selectedyear" min="2015" max="2099" required/>
                    <button type="submit" class="btn green lighten-2" value="submit">search</button>
         </form>
+        <hr>
         <h5>all students :</h5>
-        <table class="highlight centered responsive-table col s8 m8 l8" >
+        <table class="highlight centered responsive-table " >
             <thead class="grey lighten-1">
               <tr>
                 <th>No.</th>

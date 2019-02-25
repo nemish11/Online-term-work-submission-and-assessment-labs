@@ -55,11 +55,12 @@ def auth_view(request):
 @login_required()
 def logout(request):
     try:
-    	if request.user.is_authenticated:
-    		auth.logout(request)
-    	messages.add_message(request, messages.INFO, 'You are Successfully Logged Out')
-    	messages.add_message(request, messages.INFO, 'Thanks for visiting.')
-    	return HttpResponseRedirect('/usermodule/login/')
+        if request.user.is_authenticated:
+            auth.logout(request)
+        messages.add_message(request, messages.INFO, 'You are Successfully Logged Out')
+        messages.add_message(request, messages.INFO, 'Thanks for visiting.')
+        #request.session.clear()
+        return HttpResponseRedirect('/usermodule/login/')
     except:
         messages.add_message(request, messages.WARNING, 'Exception Occured..please try again.')
         return render(request,'usermodule/login.html')

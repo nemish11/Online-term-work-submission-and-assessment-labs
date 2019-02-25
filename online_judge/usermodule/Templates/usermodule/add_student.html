@@ -1,6 +1,6 @@
 {% extends "usermodule/base.html" %}
 {% block body%}
-<div class="container z-depth-3">
+<div class="row container z-depth-3">
     <div class="col s8 m8 l8 ">
         {% if messages %}
             {% for m in messages %}
@@ -10,6 +10,7 @@
             {% endfor %}
         {% endif%}
     </div>
+    <div class="col s12">
     <ul class="collections">
         <li class="collections-item">
             <h5>Upload csv file in format (username,password,roll_no,year) :</h5>
@@ -21,7 +22,7 @@
         <hr class="style13">
         <li class="collections-item">
             <h5>Active Student List :</h5>
-            <table class="highlight centered responsive-table col s8 m8 l8" >
+            <table class="highlight centered responsive-table " >
                 <thead class="grey lighten-1">
                   <tr>
                     <th>No.</th>
@@ -52,7 +53,7 @@
                           <td>
                             <form action="/usermodule/removestudent" method="POST" > {% csrf_token %}
                               <input type="hidden" name="studentid" value="{{student.id}}" />
-                              <button class="btn green lighten-2" type="submit">Remove</button>
+                              <button class="btn red lighten-2" type="submit">Remove</button>
                             </form>
                           </td>
                         </tr>
@@ -64,7 +65,7 @@
         <hr class="style13">
         <li class="collection-item">
             <h5>Past Student List :</h5>
-            <table class="highlight centered responsive-table col s8 m8 l8" >
+            <table class="highlight centered responsive-table " >
                 <thead class="grey lighten-1">
                   <tr>
                       <th>No.</th>
@@ -104,4 +105,5 @@
         </li>
     </ul>
   </div>
+</div>
   {% endblock %}

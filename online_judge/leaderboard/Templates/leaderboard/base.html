@@ -13,9 +13,9 @@
 </head>
  <body>
      <nav>
-         <div class="nav-wrapper teal blue-grey">
+         <div class="nav-wrapper teal ">
              <ul id="nav-mobile" class="right">
-							  <li><a href="/subject/all_subject" class="waves-effect waves-light">All subject</a> </li>
+							  <li><a href="/subject/all_subject" class="waves-effect waves-light">Home</a> </li>
 							  {% if request.user.is_superuser %}
 										<li><a href="/subject/add_subject" class="waves-effect waves-light">Add subject</a> </li>
 										<li><a href="/usermodule/add_faculty" class="waves-effect waves-light">Add Faculty</a> </li>
@@ -23,7 +23,7 @@
 								{% endif %}
 										{% ifequal request.session.usertype "faculty" %}
 												<li><a href="/subject/request_list" class="waves-effect waves-light ">Request List</a></li>
-												<li><a href="/searchuser/" class="waves-effect waves-light">search user</a></li>
+												<li><a href="/searchuser/" class="waves-effect waves-light">Search user</a></li>
 										{% endifequal %}
 										{% ifequal request.session.usertype "student" %}
 												<li><a href="/subject/request_subject" class="waves-effect waves-light ">Request Subject</a></li>

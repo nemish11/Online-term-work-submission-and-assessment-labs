@@ -1,5 +1,7 @@
 {% extends "practice/base.html" %}
   {% block body%}
+<div class="row container z-depth-3">
+    <div class="col">
   <form action="/practice/filterproblems" method="POST" >{% csrf_token %}
    select difficulty level :
    <div>
@@ -29,6 +31,8 @@
            <label for="{{tag.name}}">{{tag.name}}</label>
          </div>
    {% endfor %}
-   <button type="submit">filter</button>
+   <button type="submit" class="btn green lighten-2">Filter</button>
   </form>
+    </div>
+</div>
   {% endblock %}

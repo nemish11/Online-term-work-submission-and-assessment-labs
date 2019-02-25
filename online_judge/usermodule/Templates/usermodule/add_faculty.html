@@ -1,7 +1,7 @@
 {% extends "usermodule/base.html" %}
 {% block body%}
-<div class="container z-depth-3">
-    <div class="col s8 m8 l8 ">
+<div class="row container z-depth-3">
+    <div class="col s12 ">
         {% if messages %}
             {% for m in messages %}
                     <script>
@@ -10,6 +10,7 @@
             {% endfor %}
         {% endif%}
     </div>
+    <div class="col s12 ">
     <ul class="collections">
         <li class="collections-item"><h5>Upload csv file in format (username,password) :</h5>
             <form action="/usermodule/addfaculty" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
@@ -21,7 +22,7 @@
 
         <li class="collections-item">
             <h5>Active Faculty List :</h5>
-            <table class="highlight centered responsive-table col s8 m8 l8" >
+            <table class="highlight centered responsive-table " >
                 <thead class="grey lighten-1">
                     <tr>
                         <th>No.</th>
@@ -64,7 +65,7 @@
             {% if not past_faculty|length%}
                 <h5>No past faculty... </h5>
             {% else%}
-            <table class="highlight centered  responsive-table col s8 m8 l8" >
+            <table class="highlight centered  responsive-table " >
                 <thead class="grey lighten-1">
                   <tr>
                       <th>No.</th>
@@ -103,5 +104,6 @@
             {% endif %}
         </li>
     </ul>
+        </div>
 </div>
 {% endblock %}

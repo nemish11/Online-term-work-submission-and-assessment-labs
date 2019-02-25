@@ -1,7 +1,7 @@
 {% extends "subject/base.html" %}
 {% block body %}
-<div class="container z-depth-3">
-    <div>
+<div class="row container z-depth-3">
+    <div class="col s12">
         <h5>Subject : {{ subject.name }}</h5>
         {% if not students|length %}
             <h5>No Students.</h5>
@@ -20,7 +20,7 @@
                         <td>{{ student.student.roll_no }}</td>
                         <td>{{ student.student.user.username }}</td>
                         <td>
-                            <form action="/subject/remove_student" method="POST" class="col s12"> {% csrf_token %}
+                            <form action="/subject/remove_student" method="POST" > {% csrf_token %}
                                 <button type="submit" class="btn green lighten-2" name="status" value="remove">Remove</button>
                                 <input type="hidden" value="{{ student.pk }}" name="id">
                             </form>
