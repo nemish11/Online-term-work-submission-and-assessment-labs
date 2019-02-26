@@ -2,40 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b45b8df2-6994-498f-b0d6-bf980e601448" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assignment/Templates/assignment/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/assignment/Templates/assignment/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assignment/Templates/assignment/showAssignment.html" beforeDir="false" afterPath="$PROJECT_DIR$/assignment/Templates/assignment/showAssignment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assignment/Templates/assignment/showWeek.html" beforeDir="false" afterPath="$PROJECT_DIR$/assignment/Templates/assignment/showWeek.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assignment/Templates/assignment/submission_files.html" beforeDir="false" afterPath="$PROJECT_DIR$/assignment/Templates/assignment/submission_files.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/leaderboard/Templates/leaderboard/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard/Templates/leaderboard/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/practice/Templates/practice/all_problems.html" beforeDir="false" afterPath="$PROJECT_DIR$/practice/Templates/practice/all_problems.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/practice/Templates/practice/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/practice/Templates/practice/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/practice/Templates/practice/filterproblems.html" beforeDir="false" afterPath="$PROJECT_DIR$/practice/Templates/practice/filterproblems.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/practice/Templates/practice/previous_submissions.html" beforeDir="false" afterPath="$PROJECT_DIR$/practice/Templates/practice/previous_submissions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/practice/Templates/practice/showproblem.html" beforeDir="false" afterPath="$PROJECT_DIR$/practice/Templates/practice/showproblem.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/practice/Templates/practice/submission_files.html" beforeDir="false" afterPath="$PROJECT_DIR$/practice/Templates/practice/submission_files.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchuser/Templates/searchuser/all_submissions.html" beforeDir="false" afterPath="$PROJECT_DIR$/searchuser/Templates/searchuser/all_submissions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchuser/Templates/searchuser/allstudents.html" beforeDir="false" afterPath="$PROJECT_DIR$/searchuser/Templates/searchuser/allstudents.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchuser/Templates/searchuser/fullprofile.html" beforeDir="false" afterPath="$PROJECT_DIR$/searchuser/Templates/searchuser/fullprofile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchuser/Templates/searchuser/sortby.html" beforeDir="false" afterPath="$PROJECT_DIR$/searchuser/Templates/searchuser/sortby.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subject/Templates/subject/all_subject.html" beforeDir="false" afterPath="$PROJECT_DIR$/subject/Templates/subject/all_subject.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subject/Templates/subject/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/subject/Templates/subject/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subject/Templates/subject/request_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/subject/Templates/subject/request_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/leaderboard/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/leaderboard/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/online_judge/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/online_judge/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/subject/Templates/subject/request_subject.html" beforeDir="false" afterPath="$PROJECT_DIR$/subject/Templates/subject/request_subject.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subject/Templates/subject/student_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/subject/Templates/subject/student_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/usermodule/Templates/usermodule/add_faculty.html" beforeDir="false" afterPath="$PROJECT_DIR$/usermodule/Templates/usermodule/add_faculty.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/usermodule/Templates/usermodule/add_student.html" beforeDir="false" afterPath="$PROJECT_DIR$/usermodule/Templates/usermodule/add_student.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/usermodule/Templates/usermodule/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/usermodule/Templates/usermodule/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/usermodule/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/usermodule/static/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/usermodule/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/usermodule/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userprofile/Templates/userprofile/admin_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/userprofile/Templates/userprofile/admin_profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userprofile/Templates/userprofile/all_submissions.html" beforeDir="false" afterPath="$PROJECT_DIR$/userprofile/Templates/userprofile/all_submissions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userprofile/Templates/userprofile/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/userprofile/Templates/userprofile/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userprofile/Templates/userprofile/faculty_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/userprofile/Templates/userprofile/faculty_profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userprofile/Templates/userprofile/notifications.html" beforeDir="false" afterPath="$PROJECT_DIR$/userprofile/Templates/userprofile/notifications.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userprofile/Templates/userprofile/student_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/userprofile/Templates/userprofile/student_profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userprofile/Templates/userprofile/update_admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/userprofile/Templates/userprofile/update_admin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/subject/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/subject/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,12 +16,27 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/assignment/Templates/assignment/showAssignment.html">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/leaderboard/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="138" column="38" lean-forward="true" selection-start-line="138" selection-start-column="38" selection-end-line="138" selection-end-column="38" />
+            <state relative-caret-position="885">
+              <caret line="83" column="44" selection-start-line="83" selection-start-column="44" selection-end-line="83" selection-end-column="44" />
+              <folding>
+                <element signature="e#0#35#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/subject/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-3214">
+              <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
+              <folding>
+                <element signature="e#0#35#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -90,7 +77,6 @@
         <option value="$PROJECT_DIR$/searchuser/Templates/searchuser/sortby.html" />
         <option value="$PROJECT_DIR$/searchuser/Templates/searchuser/all_submissions.html" />
         <option value="$PROJECT_DIR$/subject/Templates/subject/student_list.html" />
-        <option value="$PROJECT_DIR$/subject/Templates/subject/request_subject.html" />
         <option value="$PROJECT_DIR$/usermodule/Templates/usermodule/add_faculty.html" />
         <option value="$PROJECT_DIR$/usermodule/Templates/usermodule/add_student.html" />
         <option value="$PROJECT_DIR$/userprofile/Templates/userprofile/update_admin.html" />
@@ -113,9 +99,14 @@
         <option value="$PROJECT_DIR$/subject/Templates/subject/request_list.html" />
         <option value="$PROJECT_DIR$/subject/Templates/subject/base.html" />
         <option value="$PROJECT_DIR$/practice/Templates/practice/base.html" />
-        <option value="$PROJECT_DIR$/leaderboard/Templates/leaderboard/base.html" />
         <option value="$PROJECT_DIR$/assignment/Templates/assignment/showAssignment.html" />
         <option value="$PROJECT_DIR$/usermodule/static/css/style.css" />
+        <option value="$PROJECT_DIR$/leaderboard/views.py" />
+        <option value="$PROJECT_DIR$/online_judge/settings.py" />
+        <option value="$PROJECT_DIR$/leaderboard/urls.py" />
+        <option value="$PROJECT_DIR$/leaderboard/Templates/leaderboard/base.html" />
+        <option value="$PROJECT_DIR$/subject/Templates/subject/request_subject.html" />
+        <option value="$PROJECT_DIR$/subject/views.py" />
       </list>
     </option>
   </component>
@@ -131,6 +122,26 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Scope 'Changed Files'; set:Changed Files; ALL; class com.intellij.packageDependencies.ChangeListScope">
+          <expand>
+            <path>
+              <item name="online_judge" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="online_judge" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -138,16 +149,23 @@
               <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_judge" type="462c0819:PsiDirectoryNode" />
             </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
             <path>
-              <item name="online_judge" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
+              <item name="online_judge" type="462c0819:PsiDirectoryNode" />
+              <item name="subject" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
+              <item name="online_judge" type="462c0819:PsiDirectoryNode" />
+              <item name="subject" type="462c0819:PsiDirectoryNode" />
+              <item name="Templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
+              <item name="online_judge" type="462c0819:PsiDirectoryNode" />
+              <item name="subject" type="462c0819:PsiDirectoryNode" />
+              <item name="Templates" type="462c0819:PsiDirectoryNode" />
+              <item name="subject" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -185,6 +203,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="27" width="1299" height="741" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24960877" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -209,34 +228,6 @@
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-impl.jar!/resources/html5-schema/html5/web-forms.rnc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1501">
-          <caret line="526" column="22" selection-start-line="526" selection-start-column="22" selection-end-line="526" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/subject/Templates/subject/add_subject.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/subject/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1890">
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/searchuser/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/searchuser/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -317,24 +308,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="41" column="14" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/subject/Templates/subject/student_list.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="23" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/subject/Templates/subject/request_subject.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
         </state>
       </provider>
     </entry>
@@ -543,13 +520,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="109" selection-start-line="25" selection-start-column="109" selection-end-line="25" selection-end-column="109" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/assignment/Templates/assignment/base.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -582,6 +552,64 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="57">
           <caret line="138" column="38" lean-forward="true" selection-start-line="138" selection-start-column="38" selection-end-line="138" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/online_judge/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="821">
+          <caret line="128" column="1" lean-forward="true" selection-start-line="128" selection-start-column="1" selection-end-line="128" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leaderboard/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="28" selection-start-line="6" selection-start-column="28" selection-end-line="6" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="86" selection-start-line="21" selection-start-column="86" selection-end-line="21" selection-end-column="86" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="41" column="14" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leaderboard/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="885">
+          <caret line="83" column="44" selection-start-line="83" selection-start-column="44" selection-end-line="83" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/subject/Templates/subject/request_subject.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-510">
+          <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/subject/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3214">
+          <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

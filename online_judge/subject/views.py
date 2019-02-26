@@ -45,7 +45,6 @@ def all_subject(request):
             return render(request, 'subject/all_subject.html', c)
         else:
             return HttpResponseRedirect('/usermodule/')
-        return HttpResponseRedirect('/usermodule/')
 
 
 @login_required()
@@ -85,7 +84,6 @@ def readd_subject(request):
 def removesubject(request):
     if request.user.is_superuser:
         name = request.POST.get('id')
-        #subject_code = request.POST.get("subject_code")
         Subject.objects.filter(id=name).update(status=False)
         return HttpResponseRedirect('/subject/all_subject')
     else:
@@ -95,59 +93,58 @@ def removesubject(request):
 
 @login_required()
 def request_subject(request):
-    #print(request.user.groups.all())
+
     if request.user.is_superuser:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/all_subject')
 
     if request.user.groups.all()[0].name == 'student':
-        subjects=Subject.objects.filter(status=True)
-        #print(subjects)
-        faculty=Faculty.objects.filter(is_active=True)
-        #print(faculty)
-        student=Student.objects.get(user=request.user)
+        subjects = Subject.objects.filter(status=True)
+        faculty = Faculty.objects.filter(is_active=True)
+        student = Student.objects.get(user=request.user)
         try:
-            r_subject=Request.objects.filter(student=student)
+            r_subject = Request.objects.filter(student=student)
         except:
-            r_subject=None
+            r_subject = None
 
-        slist=[]
+        slist = []
 
-        dic={}
-        dic2={}
+        dic = {}
+        dic2 = {}
         for s in subjects:
-            dic[s.name]=1
-            dic2[s.name]=s
-        #print(dic)
+            dic[s.name] = 1
+            dic2[s.name] = s
 
-        pending_list=[]
-        approved_list=[]
-        decline_list=[]
-        block_list=[]
+        pending_list = []
+        approved_list = []
+        decline_list = []
+        block_list = []
 
         for r in r_subject:
-            if r.status=="pending":
+            if r.status == "pending":
                 pending_list.append(r)
-                dic[r.subject.name]=0
-                #print(r.subject.name)
-            elif r.status=="approved":
+                dic[r.subject.name] = 0
+            elif r.status == "approved":
                 approved_list.append(r)
                 dic[r.subject.name] = 0
-                #print(r.subject.name)
-            elif r.status=="decline":
+            elif r.status == "decline":
                 decline_list.append(r)
+                dic[r.subject.name] = 1
             else:
                 block_list.append(r)
                 dic[r.subject.name] = 0
         for key in dic:
-            if dic[key]==1:
+            if dic[key] == 1:
                 slist.append(dic2[key])
-        sub_list = []
-
         c = {}
-        #c['req_subject'] = slist
-
-        return render(request,'subject/request_subject.html',{'req_subject': slist,'faculty_list':faculty,'role':"student",'pending_list':pending_list,'approved_list':approved_list,'decline_list':decline_list,'block_list':block_list})
+        c['req_subject'] = slist
+        c['faculty_list'] = faculty
+        c['role'] = "student"
+        c['pending_list'] = pending_list
+        c['approved_list'] = approved_list
+        c['decline_list'] = decline_list
+        c['block_list'] = block_list
+        return render(request,'subject/request_subject.html',c)
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/all_subject')
@@ -164,40 +161,44 @@ def selectedsubject(request):
 
 @login_required()
 def pending_request(request):
-    f = request.POST.get('faculty')
-    s = request.POST.get('subject')
-    if s is None or f is None:
-        messages.add_message(request, messages.WARNING, "Please select both faculty as well as subject")
+    if request.session.usertype == "student":
+        f = request.POST.get('faculty')
+        s = request.POST.get('subject')
+        if s is None or f is None:
+            messages.add_message(request, messages.WARNING, "Please select both faculty as well as subject")
+            return HttpResponseRedirect('/subject/request_subject')
+        fobj = Faculty.objects.get(id=f)
+        sobj = Subject.objects.get(id=s)
+        stuobj = Student.objects.get(user=request.user)
+        try:
+            checkobj = Request.objects.get(faculty=fobj,student=stuobj,subject=sobj)
+        except:
+            checkobj = None
+        if checkobj is not None:
+            if checkobj.status == "pending" or checkobj.status=="approved":
+                messages.add_message(request, messages.WARNING, "Subject is already requested or approved !!")
+                return HttpResponseRedirect('/subject/request_subject')
+            elif checkobj.status == "decline":
+                Request.objects.filter(faculty=fobj, student=stuobj, subject=sobj).update(status="pending")
+                messages.add_message(request, messages.WARNING, "Subject is again requested!!")
+                return HttpResponseRedirect('/subject/request_subject')
+            else:
+                messages.add_message(request, messages.WARNING, "You can't request this subject!!")
+                return HttpResponseRedirect('/subject/request_subject')
+        r = Request(faculty=fobj, student=stuobj, subject=sobj, status="pending")
+        r.save()
+        messages.add_message(request, messages.INFO, "Subject is requested to faculty "+str(fobj.user))
         return HttpResponseRedirect('/subject/request_subject')
-    fobj = Faculty.objects.get(id=f)
-    sobj = Subject.objects.get(id=s)
-    stuobj = Student.objects.get(user=request.user)
-    try:
-        checkobj=Request.objects.get(faculty=fobj,student=stuobj,subject=sobj)
-    except:
-        checkobj=None
-    if checkobj is not None:
-        if checkobj.status == "pending" or checkobj.status=="approved":
-            messages.add_message(request, messages.WARNING, "Subject is already requested or approved !!")
-            return HttpResponseRedirect('/subject/request_subject')
-        elif checkobj.status == "decline":
-            Request.objects.filter(faculty=fobj, student=stuobj, subject=sobj).update(status="pending")
-            messages.add_message(request, messages.WARNING, "Subject is again requested!!")
-            return HttpResponseRedirect('/subject/request_subject')
-        else:
-            messages.add_message(request, messages.WARNING, "You can't request this subject!!")
-            return HttpResponseRedirect('/subject/request_subject')
-    r = Request(faculty=fobj, student=stuobj, subject=sobj, status="pending")
-    r.save()
-    messages.add_message(request, messages.INFO, "Subject is requested to faculty "+str(fobj.user))
-    return HttpResponseRedirect('/subject/request_subject')
+    else:
+        messages.add_message(request, messages.WARNING, 'You are not authorized!!')
+        return HttpResponseRedirect('/subject/request_subject')
 
 
 @login_required()
 def removerequest(request):
     if request.user.groups.all()[0].name == 'student':
-        id1=request.POST.get('id')
-        Request.objects.filter(id=id1).update(status="decline")
+        requestid = request.POST.get('id')
+        Request.objects.filter(id=requestid).update(status="decline")
         return HttpResponseRedirect('/subject/request_subject')
     else:
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
@@ -236,12 +237,15 @@ def request_list(request):
 
 @login_required()
 def set_subject_for_studentlist(request):
-    subjectid = request.POST.get('subjectid')
-    year = request.POST.get('year')
-    request.session['studentlist_subjectid'] = subjectid
-    request.session['studentlist_year'] = year
-    return HttpResponseRedirect('/subject/student_list')
-
+    if request.session.usertype == 'faculty' :
+        subjectid = request.POST.get('subjectid')
+        year = request.POST.get('year')
+        request.session['studentlist_subjectid'] = subjectid
+        request.session['studentlist_year'] = year
+        return HttpResponseRedirect('/subject/student_list')
+    else:
+        messages.add_message(request, messages.WARNING, 'You are not authorized!!')
+        return HttpResponseRedirect('/subject/request_subject')
 
 @login_required()
 def student_list(request):
@@ -264,18 +268,26 @@ def student_list(request):
         messages.add_message(request, messages.WARNING, 'You are not authorized!!')
         return HttpResponseRedirect('/subject/request_list')
 
+
 @login_required()
 def approved_request(request):
-    id = request.POST.get('id')
-    s = request.POST['status']
-    #print(s)
-    Request.objects.filter(id=id).update(status=s)
-    messages.add_message(request, messages.INFO, "Request is "+s)
-    return HttpResponseRedirect('/subject/request_list')
+    if request.user.groups.all()[0].name == 'faculty':
+        id = request.POST.get('id')
+        s = request.POST['status']
+        Request.objects.filter(id=id).update(status=s)
+        messages.add_message(request, messages.INFO, "Request is "+s)
+        return HttpResponseRedirect('/subject/request_list')
+    else:
+        messages.add_message(request, messages.WARNING, 'You are not authorized!!')
+        return HttpResponseRedirect('/subject/request_list')
 
 
 @login_required()
 def remove_student(request):
-    id = int(request.POST.get('id'))
-    Request.objects.filter(id=id).update(status="decline")
-    return HttpResponseRedirect('/subject/student_list')
+    if request.user.groups.all()[0].name == 'faculty':
+        id = int(request.POST.get('id'))
+        Request.objects.filter(id=id).update(status="decline")
+        return HttpResponseRedirect('/subject/student_list')
+    else:
+        messages.add_message(request, messages.WARNING, 'You are not authorized!!')
+        return HttpResponseRedirect('/subject/request_list')

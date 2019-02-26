@@ -101,6 +101,14 @@ DATABASES = {
     }
 }
 
+HOST = 'localhost'
+PORT = 6379
+REDISDB = 0
+'''REDIS = {
+    'connection':
+        {'host':'localhost', 'port':'6379', 'db':'0'}
+}'''
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
