@@ -16,6 +16,7 @@ class Problem(models.Model):
     accuracy = models.FloatField(null=True, blank=True, default=None)
     difficulty = models.CharField(max_length = 30)
     successful_submission = models.IntegerField(default=0)
+    total_submission = models.IntegerField(default = 0)
     tags = models.CharField(max_length=200,null=True,blank=True)
     isdeleted = models.BooleanField(default=False)
 

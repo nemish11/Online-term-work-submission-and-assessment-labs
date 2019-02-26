@@ -18,7 +18,7 @@
           {% endfor %}
       {% endif%}
   </div>
-    <div class="col">
+    <div class="col s12 m12 l12">
         <h5>sorted students :</h5>
         <table class="highlight centered responsive-table " >
         <thead class="grey lighten-1">
@@ -31,7 +31,7 @@
             <th>year</th>
             <th>-</th>
           </tr>
-    </thead>
+        </thead>
         <tbody>
             {% for student in students %}
                 <tr>
@@ -42,7 +42,7 @@
                   <td>{{student.phone_no}}</td>
                   <td>{{student.year}}</td>
                   <td>
-                    <form action="/searchuser/fullprofile" method="POST" > {% csrf_token %}
+                    <form action="/searchuser/selectedstudent" method="POST" > {% csrf_token %}
                       <input type="hidden" name="studentid" value="{{student.id}}" />
                       <button type="submit" class="btn green lighten-2">see profile</button>
                     </form>

@@ -10,5 +10,7 @@ urlpatterns = [
     url(r'allstudents',allstudents),
     url(r'sortedstudent',sortedstudent),
     url(r'sortby',sortby),
+    url(r'selectedsubmission',selectedsubmission),
+    url(r'submission_files',submission_files),
     url(r'',allstudents),
 ]

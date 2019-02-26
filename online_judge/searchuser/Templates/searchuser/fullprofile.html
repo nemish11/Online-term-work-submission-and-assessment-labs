@@ -88,6 +88,9 @@
             {% ifequal request.session.usertype "faculty" %}
                 <li class="collection-item"><a href = "/searchuser/allsubmissions" > see all submissions </a></li>
             {% endifequal %}
+            {% if request.user.is_superuser %}
+                <li class="collection-item"><a href = "/searchuser/allsubmissions" > see all submissions </a></li>
+            {% endif %}
             <hr >
 
             <li class="collection-header"><h5  > Submissions Graphs </h5></li>
