@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b45b8df2-6994-498f-b0d6-bf980e601448" name="Default Changelist" comment="" />
+    <list default="true" id="b45b8df2-6994-498f-b0d6-bf980e601448" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/leaderboard/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/subject/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/subject/views.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -9,12 +12,24 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/leaderboard/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="59" lean-forward="true" selection-start-line="23" selection-start-column="59" selection-end-line="23" selection-end-column="59" />
+            <state relative-caret-position="536">
+              <caret line="271" column="59" selection-start-line="271" selection-start-column="59" selection-end-line="271" selection-end-column="59" />
+              <folding>
+                <element signature="e#0#35#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/subject/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="536">
+              <caret line="341" column="59" selection-start-line="341" selection-start-column="59" selection-end-line="341" selection-end-column="59" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -82,12 +97,12 @@
         <option value="$PROJECT_DIR$/practice/Templates/practice/base.html" />
         <option value="$PROJECT_DIR$/assignment/Templates/assignment/showAssignment.html" />
         <option value="$PROJECT_DIR$/usermodule/static/css/style.css" />
-        <option value="$PROJECT_DIR$/leaderboard/views.py" />
         <option value="$PROJECT_DIR$/online_judge/settings.py" />
         <option value="$PROJECT_DIR$/leaderboard/urls.py" />
         <option value="$PROJECT_DIR$/leaderboard/Templates/leaderboard/base.html" />
         <option value="$PROJECT_DIR$/subject/Templates/subject/request_subject.html" />
         <option value="$PROJECT_DIR$/subject/views.py" />
+        <option value="$PROJECT_DIR$/leaderboard/views.py" />
       </list>
     </option>
   </component>
@@ -120,6 +135,16 @@
             <path>
               <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
               <item name="online_judge" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
+              <item name="online_judge" type="462c0819:PsiDirectoryNode" />
+              <item name="leaderboard" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="online_judge" type="b2602c69:ProjectViewProjectNode" />
+              <item name="online_judge" type="462c0819:PsiDirectoryNode" />
+              <item name="subject" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -157,6 +182,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="27" width="1299" height="741" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24960877" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -525,16 +551,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/subject/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-604">
-          <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/leaderboard/Templates/leaderboard/leaderboard.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="558">
@@ -556,10 +572,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/subject/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="536">
+          <caret line="341" column="59" selection-start-line="341" selection-start-column="59" selection-end-line="341" selection-end-column="59" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/leaderboard/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="59" lean-forward="true" selection-start-line="23" selection-start-column="59" selection-end-line="23" selection-end-column="59" />
+        <state relative-caret-position="536">
+          <caret line="271" column="59" selection-start-line="271" selection-start-column="59" selection-end-line="271" selection-end-column="59" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>

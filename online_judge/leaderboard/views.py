@@ -44,60 +44,69 @@ def set_leaderboard_subject(request):
     except:
         return HttpResponseRedirect('/subject/')
 
+
 @login_required()
 def flush_RedisDB(request):
-    if request.user.is_superuser:
-        r = connection()
-        r.flushall()
-        return HttpResponseRedirect('/subject/')
-    else:
-        messages.add_message(request, messages.WARNING, 'You are not authorized!!')
+    try:
+        if request.user.is_superuser:
+            r = connection()
+            r.flushall()
+            return HttpResponseRedirect('/subject/')
+        else:
+            messages.add_message(request, messages.WARNING, 'You are not authorized!!')
+            return HttpResponseRedirect('/subject/all_subject')
+    except:
+        messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
 
 def initialize_leaderboard_cache(request):
-    r = connection()
-    subjectid = request.session.get('leaderboard_subjectid')
-    subject = Subject.objects.get(id=subjectid)
-    year = request.session.get('leaderboard_year')
-    leaderboard = Leaderboard.objects.filter(subject=subject, year=year).values('subject', 'week', 'student').annotate(Sum('maxscore'))
+    try:
+        r = connection()
+        subjectid = request.session.get('leaderboard_subjectid')
+        subject = Subject.objects.get(id=subjectid)
+        year = request.session.get('leaderboard_year')
+        leaderboard = Leaderboard.objects.filter(subject=subject, year=year).values('subject', 'week', 'student').annotate(Sum('maxscore'))
 
-    student_list = set()
-    week_list = Week.objects.filter(subject=subject, isdeleted=False)
-    for l in leaderboard:
-        student_list.add(l['student'])
-    subject_rank_name = "rank:"+str(year)+':'+str(subjectid)
-    for s in student_list:
-        subject_hash_key = str(year)+':'+str(subjectid)+':'+str(s)
-        for w in week_list:
-            student_hash_key = str(year)+':'+str(subjectid)+':'+str(s)+':'+str(w.id)
-            r.hset(subject_hash_key, student_hash_key, 0)
-        r.hset(str(year)+':'+str(subjectid), subject_hash_key, subject_hash_key)
+        student_list = set()
+        week_list = Week.objects.filter(subject=subject, isdeleted=False)
+        for l in leaderboard:
+            student_list.add(l['student'])
+        subject_rank_name = "rank:"+str(year)+':'+str(subjectid)
+        for s in student_list:
+            subject_hash_key = str(year)+':'+str(subjectid)+':'+str(s)
+            for w in week_list:
+                student_hash_key = str(year)+':'+str(subjectid)+':'+str(s)+':'+str(w.id)
+                r.hset(subject_hash_key, student_hash_key, 0)
+            r.hset(str(year)+':'+str(subjectid), subject_hash_key, subject_hash_key)
 
-        name = "rank:"+str(year)+':'+str(subjectid)+':'+str(s)
+            name = "rank:"+str(year)+':'+str(subjectid)+':'+str(s)
 
-        r.zadd(subject_rank_name,{name: 0})
-    r.hset("ranklist", subject_rank_name, subject_rank_name)
-    r.hset("leaderboard", str(year)+':'+str(subjectid), str(year)+':'+str(subjectid))
+            r.zadd(subject_rank_name,{name: 0})
+        r.hset("ranklist", subject_rank_name, subject_rank_name)
+        r.hset("leaderboard", str(year)+':'+str(subjectid), str(year)+':'+str(subjectid))
 
-    r.expire(subject_rank_name, 100000)
-    r.expire(str(year)+':'+str(subjectid), 100000)
+        r.expire(subject_rank_name, 100000)
+        r.expire(str(year)+':'+str(subjectid), 100000)
 
-    for l in leaderboard:
-        name = str(year)+':'+str(l['subject'])+':'+str(l['student'])
-        key = str(year)+':'+str(l['subject'])+':'+str(l['student'])+':'+str(l['week'])
-        name = str(name)
-        key = str(key)
-        oldval = int(r.hget(name, key))
-        incre_val = l['maxscore__sum'] - oldval
+        for l in leaderboard:
+            name = str(year)+':'+str(l['subject'])+':'+str(l['student'])
+            key = str(year)+':'+str(l['subject'])+':'+str(l['student'])+':'+str(l['week'])
+            name = str(name)
+            key = str(key)
+            oldval = int(r.hget(name, key))
+            incre_val = l['maxscore__sum'] - oldval
 
-        r.hincrby(name, key, incre_val)
+            r.hincrby(name, key, incre_val)
 
-        name_for_z = "rank:"+str(year)+':'+str(l['subject'])
-        key_for_z = "rank:"+str(year)+':'+str(l['subject'])+":"+str(l['student'])
-        r.zincrby(name_for_z, incre_val, key_for_z)
+            name_for_z = "rank:"+str(year)+':'+str(l['subject'])
+            key_for_z = "rank:"+str(year)+':'+str(l['subject'])+":"+str(l['student'])
+            r.zincrby(name_for_z, incre_val, key_for_z)
 
-    return
+        return
+    except:
+        messages.add_message(request, messages.WARNING, 'Something wrong!!')
+        return HttpResponseRedirect('/subject/all_subject')
 
 
 @login_required()
@@ -178,73 +187,86 @@ def get_leaderboard(request):
         messages.add_message(request, messages.WARNING, 'something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
-def update_cache(leaderboard):
-    r = connection()
-    student_id = leaderboard.student.id
-    subject_id = leaderboard.subject.id
-    week_id = leaderboard.week.id
-    year = leaderboard.year
-    key = str(year)+':'+str(subject_id)+":"+str(student_id)+":"+str(week_id)
-    name = str(year)+':'+str(subject_id)+":"+str(student_id)
-    oldval = int(r.hget(name, key))
-    incre_val = leaderboard.maxscore - oldval
-    r.hincrby(name, key, incre_val)
-    name_for_z = "rank:"+str(year)+':' + str(subject_id)
-    key_for_z = "rank:" + str(year)+':' + str(subject_id) + ":" + str(student_id)
-    r.zincrby(name_for_z, incre_val, key_for_z)
 
-    return
+def update_cache(leaderboard):
+    try:
+        r = connection()
+        student_id = leaderboard.student.id
+        subject_id = leaderboard.subject.id
+        week_id = leaderboard.week.id
+        year = leaderboard.year
+        key = str(year)+':'+str(subject_id)+":"+str(student_id)+":"+str(week_id)
+        name = str(year)+':'+str(subject_id)+":"+str(student_id)
+        oldval = int(r.hget(name, key))
+        incre_val = leaderboard.maxscore - oldval
+        r.hincrby(name, key, incre_val)
+        name_for_z = "rank:"+str(year)+':' + str(subject_id)
+        key_for_z = "rank:" + str(year)+':' + str(subject_id) + ":" + str(student_id)
+        r.zincrby(name_for_z, incre_val, key_for_z)
+
+        return
+    except:
+        messages.add_message(request, messages.WARNING, 'Something wrong!!')
+        return HttpResponseRedirect('/subject/all_subject')
 
 
 def update_cache_week(subjectid):
-    r = connection()
-    ymax = Student.objects.all().aggregate(Max('year'))['year__max']
-    ymin = Student.objects.all().aggregate(Min('year'))['year__min']
-    for year in range(ymin,ymax+1):
-        hash_key = str(year)+':'+str(subjectid)
-        set_key = "rank:"+str(year)+':'+str(subjectid)
+    try:
+        r = connection()
+        ymax = Student.objects.all().aggregate(Max('year'))['year__max']
+        ymin = Student.objects.all().aggregate(Min('year'))['year__min']
+        for year in range(ymin,ymax+1):
+            hash_key = str(year)+':'+str(subjectid)
+            set_key = "rank:"+str(year)+':'+str(subjectid)
 
-        if r.exists(hash_key):
-            r.expire(hash_key, 10)
-        if r.exists(set_key):
-            r.expire(set_key,10)
+            if r.exists(hash_key):
+                r.expire(hash_key, 10)
+            if r.exists(set_key):
+                r.expire(set_key,10)
 
-    return
+        return
+    except:
+        messages.add_message(request, messages.WARNING, 'Something wrong!!')
+        return HttpResponseRedirect('/subject/all_subject')
 
 
 @login_required()
 def show_leaderboard(request):
-    subjectid = request.session.get('leaderboard_subjectid')
-    subject = Subject.objects.get(id=subjectid)
-    year = 2016
-    weeks = Week.objects.filter(subject=subject)
-    week_dic = {}
-    for week in weeks:
-        week_dic[week.id] = week.name
-    c = {}
-    leaderboard = Leaderboard.objects.filter(subject=subject,year=year).values('subject', 'student','week').annotate(Sum('maxscore'))
-    students = Leaderboard.objects.filter(subject=subject, year=year)
-    # print(leaderboard)
-    leaderboard_data = {}
-
-    for student1 in students:
-        t={}
-
-        t['name'] = student1.student.user
-        t['total'] = 0
+    try:
+        subjectid = request.session.get('leaderboard_subjectid')
+        subject = Subject.objects.get(id=subjectid)
+        year = 2016
+        weeks = Week.objects.filter(subject=subject)
+        week_dic = {}
         for week in weeks:
-            t[week.id] = 0
-        leaderboard_data[student1.student.id] = t
-    for l in leaderboard:
-        if int(l['subject']) == int(subjectid):
-            leaderboard_data[l['student']][l['week']] = l['maxscore__sum']
-            leaderboard_data[l['student']]['total'] += l['maxscore__sum']
-    data = dict(sorted(leaderboard_data.items(), key=lambda x: x[1]['total'], reverse=True))
-    c={}
-    c['leaderboard_data'] = data
-    c['subject'] = subject
-    c['weeks'] = week_dic
-    #d = datetime.now()
-    #print(d.microsecond)
+            week_dic[week.id] = week.name
+        c = {}
+        leaderboard = Leaderboard.objects.filter(subject=subject,year=year).values('subject', 'student','week').annotate(Sum('maxscore'))
+        students = Leaderboard.objects.filter(subject=subject, year=year)
+        # print(leaderboard)
+        leaderboard_data = {}
 
-    return render(request, 'leaderboard/show_leaderboard.html', c)
+        for student1 in students:
+            t={}
+
+            t['name'] = student1.student.user
+            t['total'] = 0
+            for week in weeks:
+                t[week.id] = 0
+            leaderboard_data[student1.student.id] = t
+        for l in leaderboard:
+            if int(l['subject']) == int(subjectid):
+                leaderboard_data[l['student']][l['week']] = l['maxscore__sum']
+                leaderboard_data[l['student']]['total'] += l['maxscore__sum']
+        data = dict(sorted(leaderboard_data.items(), key=lambda x: x[1]['total'], reverse=True))
+        c={}
+        c['leaderboard_data'] = data
+        c['subject'] = subject
+        c['weeks'] = week_dic
+        #d = datetime.now()
+        #print(d.microsecond)
+
+        return render(request, 'leaderboard/show_leaderboard.html', c)
+    except:
+        messages.add_message(request, messages.WARNING, 'Something wrong!!')
+        return HttpResponseRedirect('/subject/all_subject')
