@@ -41,68 +41,94 @@ def filter_problems(request):
 
 @login_required()
 def add_problem(request):
-    c = {}
-    tags = Tag.objects.all()
-    c['tags'] = tags
-    return render(request,'practice/add_problem.html',c)
+    try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        c = {}
+        tags = Tag.objects.all()
+        c['tags'] = tags
+        return render(request,'practice/add_problem.html',c)
+    except:
+        return HttpResponseRedirect('/practice/')
 
 
 @login_required()
 def add_tag(request):
-    return render(request,'practice/addtag.html')
+    try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        return render(request,'practice/addtag.html')
+    except:
+        return HttpResponseRedirect('/practice/')
 
 
 @login_required()
 def addtag(request):
-    tagname = request.POST.get('tagname','')
-    tag = Tag(name = tagname)
-    tag.save()
-    return HttpResponseRedirect('/practice/add_problem')
+    try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        tagname = request.POST.get('tagname','')
+        tag = Tag(name = tagname)
+        tag.save()
+        return HttpResponseRedirect('/practice/add_problem')
+    except:
+        return HttpResponseRedirect('/practice/')
 
 
 @login_required()
 def removeproblem(request):
-    problemid = request.POST.get('problemid')
-    Problem.objects.get(pk = int(problemid)).delete()
-    return HttpResponseRedirect('/practice/')
+    try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        problemid = request.POST.get('problemid')
+        Problem.objects.get(pk = int(problemid)).delete()
+        return HttpResponseRedirect('/practice/')
+    except:
+        return HttpResponseRedirect('/practice/')
 
 
 @login_required()
 def showproblem(request):
-    problemid = request.GET.get('id')
-    problem = Problem.objects.get(pk = int(problemid))
-    request.session['problemid'] = problemid
-    submission = Submission.objects.filter(user = request.user,problem = problem).last()
-    submission_files = Submission_files.objects.filter(submission = submission,type = 'codefile')
+    try:
+        problemid = request.GET.get('id')
+        problem = Problem.objects.get(pk = int(problemid))
+        request.session['problemid'] = problemid
+        submission = Submission.objects.filter(user = request.user,problem = problem).last()
+        submission_files = Submission_files.objects.filter(submission = submission,type = 'codefile')
 
-    previous_code = ''
-    if submission_files:
-        submission_files = submission_files[0]
-        fhandler = open(BASE_DIR+"/usermodule"+submission_files.filepath,'r')
-        previous_code = fhandler.read()
-        fhandler.close()
+        previous_code = ''
+        if submission_files:
+            submission_files = submission_files[0]
+            fhandler = open(BASE_DIR+"/usermodule"+submission_files.filepath,'r')
+            previous_code = fhandler.read()
+            fhandler.close()
 
-    c = {}
-    c['previous_code'] = previous_code
-    c['problem'] = problem
-    return render(request,'practice/showproblem.html',c)
+        c = {}
+        c['previous_code'] = previous_code
+        c['problem'] = problem
+        return render(request,'practice/showproblem.html',c)
+    except:
+        return HttpResponseRedirect('/practice/')
 
 
 @login_required()
 def previous_submissions(request):
-    problemid = request.GET.get('id')
-    problem = Problem.objects.get(pk=int(problemid))
-    submissions = Submission.objects.filter(user = request.user,problem=problem)
-    accepted_submissions = submissions.filter(verdict = 'accepted')
-    wrong_submissions = submissions.filter(verdict = 'wrong')
-    c = {}
-    c['submissions'] = submissions
-    c['problem'] = problem
-    c['accepted'] = len(accepted_submissions)
-    c['wrong'] = len(wrong_submissions)
-    c['partially_accepted'] = max(0,len(submissions) - len(accepted_submissions) - len(wrong_submissions))
-    c['total_submissions'] = len(submissions)
-    return render(request,'practice/previous_submissions.html',c)
+    try:
+        problemid = request.GET.get('id')
+        problem = Problem.objects.get(pk=int(problemid))
+        submissions = Submission.objects.filter(user = request.user,problem=problem)
+        accepted_submissions = submissions.filter(verdict = 'accepted')
+        wrong_submissions = submissions.filter(verdict = 'wrong')
+        c = {}
+        c['submissions'] = submissions
+        c['problem'] = problem
+        c['accepted'] = len(accepted_submissions)
+        c['wrong'] = len(wrong_submissions)
+        c['partially_accepted'] = max(0,len(submissions) - len(accepted_submissions) - len(wrong_submissions))
+        c['total_submissions'] = len(submissions)
+        return render(request,'practice/previous_submissions.html',c)
+    except:
+        return HttpResponseRedirect('/practice/')
 
 
 def selectedsubmission(request):
@@ -169,102 +195,116 @@ def submission_files(request):
 
 @login_required()
 def filter_problems(request):
-    c = {}
-    tags = Tag.objects.all()
-    c['tags'] = tags
-    return render(request,'practice/filterproblems.html',c)
+    try:
+        c = {}
+        tags = Tag.objects.all()
+        c['tags'] = tags
+        return render(request,'practice/filterproblems.html',c)
+    except:
+        return HttpResponseRedirect('/practice/')
 
 
 @login_required()
 def filterproblems(request):
-    difficulty = request.POST.getlist('difficulty[]')
-    problemtags = request.POST.getlist('problemtags[]')
-    request.session['selected_difficulty'] = difficulty
-    request.session['selected_problemtags'] = problemtags
-    return HttpResponseRedirect('/practice/selectedproblems')
+    try:
+        difficulty = request.POST.getlist('difficulty[]')
+        problemtags = request.POST.getlist('problemtags[]')
+        request.session['selected_difficulty'] = difficulty
+        request.session['selected_problemtags'] = problemtags
+        return HttpResponseRedirect('/practice/selectedproblems')
+    except:
+        return HttpResponseRedirect('/practice/')
 
 
 @login_required()
 def selectedproblems(request):
-    difficulty = request.session.get('selected_difficulty')
-    problemtags = request.session.get('selected_problemtags')
-    problems = Problem.objects.filter(difficulty__in = difficulty)
-    for tag in problemtags:
-        problems = problems | Problem.objects.filter(tags__contains = tag)
-    c = {}
-    c['problems'] = problems
-    return render(request,'practice/all_problems.html',c)
+    try:
+        difficulty = request.session.get('selected_difficulty')
+        problemtags = request.session.get('selected_problemtags')
+        problems = Problem.objects.filter(difficulty__in = difficulty)
+        for tag in problemtags:
+            problems = problems | Problem.objects.filter(tags__contains = tag)
+        c = {}
+        c['problems'] = problems
+        return render(request,'practice/all_problems.html',c)
+    except:
+        return HttpResponseRedirect('/practice/')
 
 
 @login_required()
 def addproblem(request):
-    title = request.POST.get('title')
-    question = request.POST.get('question')
-    constraint = request.POST.get('constraint')
-    inputformat = request.POST.get('inputformat')
-    outputformat = request.POST.get('outputformat')
-    sampleinput = request.POST.get('sampleinput')
-    sampleoutput = request.POST.get('outputformat')
-    explanation = request.POST.get('explanation')
-    difficulty = request.POST.get('difficulty')
-    problemtags = request.POST.getlist('problemtags[]')
-    codefile = request.FILES['codefile']
-    total_inputfiles = request.POST.get('total_inputfiles')
+    try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        title = request.POST.get('title')
+        question = request.POST.get('question')
+        constraint = request.POST.get('constraint')
+        inputformat = request.POST.get('inputformat')
+        outputformat = request.POST.get('outputformat')
+        sampleinput = request.POST.get('sampleinput')
+        sampleoutput = request.POST.get('outputformat')
+        explanation = request.POST.get('explanation')
+        difficulty = request.POST.get('difficulty')
+        problemtags = request.POST.getlist('problemtags[]')
+        codefile = request.FILES['codefile']
+        total_inputfiles = request.POST.get('total_inputfiles')
 
-    problem = Problem(title=title,question=question,constraint=constraint,inputformat=inputformat,outputformat=outputformat,
-            sampleinput=sampleinput,sampleoutput=sampleoutput,explanation=explanation,difficulty=difficulty,
-            total_inputfiles=total_inputfiles,accuracy='0.0')
-    problem.save()
+        problem = Problem(title=title,question=question,constraint=constraint,inputformat=inputformat,outputformat=outputformat,
+                sampleinput=sampleinput,sampleoutput=sampleoutput,explanation=explanation,difficulty=difficulty,
+                total_inputfiles=total_inputfiles,accuracy='0.0')
+        problem.save()
 
-    for problemtag in problemtags:
-        tag = Tag.objects.filter(name = problemtag)[0]
-        tag.problems.add(problem)
-        tag.save()
-    tags = problem.tag_set.all()
-    ctags = ''
-    for tag in tags:
-        ctags = ctags + tag.name + ','
-    problem.tags = ctags[0:len(ctags)-1]
-    problem.save()
-    fs = FileSystemStorage()
-    dirname = BASE_DIR + "/usermodule/static/problems/problem_"+str(problem.id)
-
-    if os.path.exists(dirname):
-        shutil.rmtree(dirname)
-    os.makedirs(dirname)
-
-    codefilename = dirname + "/codefile.txt"
-    inp = fs.save(codefilename,codefile)
-
-    problem_files = Problem_files(problem=problem, type='codefile',filepath=codefilename,score = 0)
-    problem_files.save()
-
-    totalscore = 0
-
-    for i in range(1,int(total_inputfiles)+1):
-        inputfile = request.FILES["inputfile_"+str(i)]
-        outputfile = request.FILES["outputfile_"+str(i)]
-        score = request.POST.get("score_"+str(i))
-        totalscore = totalscore + int(score)
-
+        for problemtag in problemtags:
+            tag = Tag.objects.filter(name = problemtag)[0]
+            tag.problems.add(problem)
+            tag.save()
+        tags = problem.tag_set.all()
+        ctags = ''
+        for tag in tags:
+            ctags = ctags + tag.name + ','
+        problem.tags = ctags[0:len(ctags)-1]
+        problem.save()
         fs = FileSystemStorage()
+        dirname = BASE_DIR + "/usermodule/static/problems/problem_"+str(problem.id)
 
-        inputfilename = dirname+"/inputfile_"+str(i)+".txt"
-        outputfilename = dirname+"/outputfile_"+str(i)+".txt"
+        if os.path.exists(dirname):
+            shutil.rmtree(dirname)
+        os.makedirs(dirname)
 
-        inp = fs.save(inputfilename,inputfile)
-        inp = fs.save(outputfilename,outputfile)
+        codefilename = dirname + "/codefile.txt"
+        inp = fs.save(codefilename,codefile)
 
-        problem_files = Problem_files(problem=problem, type='inputfile',filepath=inputfilename,score=int(score))
+        problem_files = Problem_files(problem=problem, type='codefile',filepath=codefilename,score = 0)
         problem_files.save()
 
-        problem_files = Problem_files(problem=problem, type='outputfile', filepath=outputfilename, errortype='', runtime='',memoryused='')
-        problem_files.save()
+        totalscore = 0
 
-    problem.totalscore = totalscore
-    problem.save()
+        for i in range(1,int(total_inputfiles)+1):
+            inputfile = request.FILES["inputfile_"+str(i)]
+            outputfile = request.FILES["outputfile_"+str(i)]
+            score = request.POST.get("score_"+str(i))
+            totalscore = totalscore + int(score)
 
-    return HttpResponseRedirect('/practice/')
+            fs = FileSystemStorage()
+
+            inputfilename = dirname+"/inputfile_"+str(i)+".txt"
+            outputfilename = dirname+"/outputfile_"+str(i)+".txt"
+
+            inp = fs.save(inputfilename,inputfile)
+            inp = fs.save(outputfilename,outputfile)
+
+            problem_files = Problem_files(problem=problem, type='inputfile',filepath=inputfilename,score=int(score))
+            problem_files.save()
+
+            problem_files = Problem_files(problem=problem, type='outputfile', filepath=outputfilename, errortype='', runtime='',memoryused='')
+            problem_files.save()
+
+        problem.totalscore = totalscore
+        problem.save()
+
+        return HttpResponseRedirect('/practice/')
+    except:
+        return HttpResponseRedirect('/practice/')
 
 
 @login_required()
@@ -355,6 +395,14 @@ def submitcode(request):
             submission.verdict = "partially accepted"
         submission.save()
 
+        problem.total_submission = (int(problem.total_submission) + 1)
+        problem.save()
+        if submission.verdict == "accepted":
+            submission_x = Submission.objects.filter(problem = problem,user = request.user,verdict="accepted")
+            if (not submission_x) or (submission_x[0] == submission):
+                problem.successful_submission = (int(problem.successful_submission) + 1)
+        problem.accuracy = round((problem.successful_submission/problem.total_submission)*100,2)
+        problem.save()
         c['previous_code'] = code
         c['totalscore'] = totalscore
         c['verdict'] = submission.verdict

@@ -1,0 +1,156 @@
+{% extends "assignment/base.html" %}
+{% block body%}
+<style>
+
+    #divLoading
+    {
+        display : none;
+    }
+    #divLoading.show
+    {
+        display : block;
+        position : fixed;
+        z-index: 100;
+        background-image : url('http://loadinggif.com/images/image-selection/3.gif');
+        background-color:#666;
+        opacity : 0.4;
+        background-repeat : no-repeat;
+        background-position : center;
+        left : 0;
+        bottom : 0;
+        right : 0;
+        top : 0;
+    }
+    #loadinggif.show
+    {
+        left : 50%;
+        top : 50%;
+        position : absolute;
+        z-index : 101;
+        width : 32px;
+        height : 32px;
+        margin-left : -16px;
+        margin-top : -16px;
+    }
+    div.content {
+       width : 1000px;
+       height : 1000px;
+    }
+</style>
+<script>
+  $(document).ready(function(){
+    $("button.content").click(function(){
+        $("div#divLoading").addClass('show');
+    });
+  });
+  $(document).ready(function(){
+	//code here...
+  var lang = "{{assignment.subject.name}}"
+  lang = lang.toLowerCase()
+  var mode = "python"
+  if( lang== 'c++' || lang=='cpp')
+     mode = "text/x-c++src"
+  if(lang=='c')
+     mode = "text/x-csrc"
+  if(lang == 'python')
+    mode = "python"
+  if(lang == 'java')
+    mode = "text/x-java"
+  if(lang == 'c#')
+    mode = "text/x-csharp"
+
+	var code = $(".codemirror-textarea")[0];
+	var editor = CodeMirror.fromTextArea(code, {
+    mode:mode,
+		lineNumbers : true,
+    spellcheck : true,
+    autocorrect : true,
+    readOnly : true,
+    matchBrackets : true,
+    lineWrapping: true,
+	});
+});
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
+
+<div class="row container z-depth-3">
+
+    <div class="col s8 m8 l8 ">
+      {% if messages %}
+          {% for m in messages %}
+                  <script>
+          Materialize.toast('{{ m }}', 3000);
+        </script>
+          {% endfor %}
+      {% endif%}
+    </div>
+
+    <div class="col s12">
+        <a href="/searchuser/allsubmissions" >back to all submission</a>
+
+        <p style='color:red;'>{{message}}</p>
+        <h5>Title :</h5><p>{{assignment.title}}</p>
+        <h5>Question</h5> <p>{{assignment.question}}</p>
+
+
+            <h5>Your Code</h5>
+
+        <textarea class="codemirror-textarea" name = "code" value="{{previous_code}}" onload="adjustHeight(this)">{{previous_code}}</textarea><br/>
+
+            <div id="divLoading"></div>
+
+            <h4>Results :</h4>
+        <h5>Total score is : {{totalscore}} out of {{assignment.totalscore}}</h5>
+      <table class="highlight centered responsive-table " >
+          <thead class="grey lighten-1">
+            <tr>
+                <th>inputfiles</th>
+                <th>outputfiles</th>
+                <th>runtimes</th>
+                <th>memoryused</th>
+                <th>errortypes</th>
+                <th>detailfiles</th>
+                <th>score</th>
+            </tr>
+          </thead>
+          <tbody>
+
+              {% for inputfile,outputfile,errorfile in combinedlist %}
+
+                  <tr>
+
+                      <td><a href="{{inputfile.filepath}}" download>inputfile</a></td>
+
+                      <td><a href = "{{outputfile.filepath}}" download>outputfile</td>
+                      <td>{{inputfile.runtime}}</td>
+                      <td>{{inputfile.memoryused}}</td>
+                      <td>{{inputfile.errortype}}</td>
+                      <td><a href="{{errorfile.filepath}}" download>detailfile</a></td>
+                      <td>{{inputfile.score}}</td>
+
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+      <br/>
+      {% ifequal request.session.usertype "faculty" %}
+        <form action="/assignment/savecomment" method="POST" > {% csrf_token %}
+          Enter a comments :<br/>
+         <input type="textarea" style = "width:500px;height:100px;" placeholder="Enter a comments..." name="commenttext" /><br/>
+         <button class="btn green lighten-2" type="submit">submit</button>
+        </form>
+      {% endifequal %}
+      {% ifequal request.session.usertype "student" %}
+         Comment added by faculty :<br/><div> {{submission.comment}}</div>
+         {% ifequal submission.commentunread true %}
+            <a href="/assignment/markcomment" > mark as read </a>
+         {% endifequal %}
+      {% endifequal %}
+    </div>
+</div>
+ {% endblock %}

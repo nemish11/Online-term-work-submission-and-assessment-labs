@@ -1,15 +1,15 @@
 {% extends "userprofile/base.html" %}
 {% block body%}
 <div class="row container z-depth-3">
-    <div class="col">
+    <div class="col s12 m12 l12">
     <h5>all submissions :</h5>
-    <table class="highlight centered responsive-table col s8 m8 l8" >
+    <table class="highlight centered responsive-table col s12 m12 l12" >
         <thead class="grey lighten-1">
           <tr>
               <th>submissionID</th>
               <th>subject</th>
               <th>totalscore</th>
-              <th>yourscore</th>
+              <th>userscore</th>
               <th>date and time</th>
               <th>verdict</th>
               <th>isrunning</th>
@@ -19,7 +19,7 @@
         <tbody>
           {% for submission in submissions %}
             <tr>
-              <form action="/assignment/selectedsubmission" method="POST" > {% csrf_token %}
+              <form action="/searchuser/selectedsubmission" method="POST" > {% csrf_token %}
                   <input type="hidden" name="submissionid" value="{{submission.id}}" />
                   <td>{{submission.id}}</td>
                   <td>{{submission.assignment.subject.name}}</td>

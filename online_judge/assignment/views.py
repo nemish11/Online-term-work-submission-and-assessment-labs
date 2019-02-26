@@ -19,6 +19,7 @@ from online_judge.settings import *
 from compilerApiApp.views import submit_code
 import filecmp
 from leaderboard.models import Leaderboard
+from leaderboard.views import update_cache_week
 
 @login_required()
 def showWeek(request):
@@ -44,6 +45,8 @@ def showWeek(request):
 @login_required()
 def addweek(request):
     try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
         c = {}
         subjectid = request.session.get('subjectid')
         weekname = request.POST.get('weekname')
@@ -58,6 +61,8 @@ def addweek(request):
 @login_required()
 def deleteweek(request):
     try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
         weekid = request.POST.get('weekid')
         subjectid = request.session.get('subjectid')
         week = Week.objects.get(pk = int(weekid))
@@ -71,6 +76,8 @@ def deleteweek(request):
 @login_required()
 def deleteAssignment(request):
     try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
         assignmentid = request.POST.get('assignmentid')
         assignment = Assignment.objects.get(pk = int(assignmentid))
         assignment.delete()
@@ -82,6 +89,8 @@ def deleteAssignment(request):
 @login_required()
 def new_assignment(request):
     try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
         weekid = request.POST.get('weekid')
         week = Week.objects.get(pk = int(weekid))
         subject  = week.subject
@@ -95,6 +104,8 @@ def new_assignment(request):
 @login_required()
 def newassignment(request):
     try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
         weekid = request.POST.get('weekid')
         title = request.POST.get('title')
         question = request.POST.get('question')
@@ -334,6 +345,8 @@ def submission_files(request):
 @login_required()
 def savecomment(request):
     try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
         commenttext = request.POST.get('commenttext')
         submissionid = request.session.get('submissionid')
         submission = Submission.objects.get(pk=int(submissionid))
@@ -348,12 +361,17 @@ def savecomment(request):
 
 @login_required()
 def markcomment(request):
-    submissionid = request.session.get('submissionid')
-    submission = Submission.objects.get(pk=int(submissionid))
-    submission.commentunread = False
-    submission.save()
-    messages.add_message(request, messages.INFO, 'Comment mark as read sucessfully...')
-    return HttpResponseRedirect('/assignment/submission_files')
+    try:
+        if not request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/subject/')
+        submissionid = request.session.get('submissionid')
+        submission = Submission.objects.get(pk=int(submissionid))
+        submission.commentunread = False
+        submission.save()
+        messages.add_message(request, messages.INFO, 'Comment mark as read sucessfully...')
+        return HttpResponseRedirect('/assignment/submission_files')
+    except:
+        return HttpResponseRedirect('/subject/')
 
 @login_required()
 def runcode(request):

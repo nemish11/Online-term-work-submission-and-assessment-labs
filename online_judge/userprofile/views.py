@@ -141,8 +141,11 @@ def allsubmissions(request):
 
 @login_required()
 def shownotifications(request):
-    user = request.user
-    submissions = Submission.objects.filter(user = user, commentunread = True)
-    c = {}
-    c['submissions'] = submissions
-    return render(request,'userprofile/notifications.html',c)
+    try:
+        user = request.user
+        submissions = Submission.objects.filter(user = user, commentunread = True)
+        c = {}
+        c['submissions'] = submissions
+        return render(request,'userprofile/notifications.html',c)
+    except:
+        return HttpResponseRedirect('/userprofile/')

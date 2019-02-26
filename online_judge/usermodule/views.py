@@ -69,10 +69,16 @@ def logout(request):
 @login_required()
 def add_faculty(request):
     try:
-        c = {}
-        c['current_faculty'] = Faculty.objects.filter(is_active= True)
-        c['past_faculty'] = Faculty.objects.filter(is_active=False)
-        return render(request,'usermodule/add_faculty.html',c)
+        if not request.user.is_superuser:
+            return HttpResponseRedirect('/admin/')
+        if request.session['usertype'] == 'admin':
+            c = {}
+            c['current_faculty'] = Faculty.objects.filter(is_active= True)
+            c['past_faculty'] = Faculty.objects.filter(is_active=False)
+            return render(request,'usermodule/add_faculty.html',c)
+        else:
+            messages.add_message(request, messages.WARNING, 'You are not authorized')
+            return HttpResponseRedirect('/subject/')
     except:
         return HttpResponseRedirect('/subject/')
 
@@ -80,10 +86,16 @@ def add_faculty(request):
 @login_required()
 def add_student(request):
     try:
-        c = {}
-        c['current_student'] = Student.objects.filter(is_active= True)
-        c['past_student'] = Student.objects.filter(is_active=False)
-        return render(request,'usermodule/add_student.html',c)
+        if not request.user.is_superuser:
+            return HttpResponseRedirect('/admin/')
+        if request.session['usertype'] == 'admin':
+            c = {}
+            c['current_student'] = Student.objects.filter(is_active= True)
+            c['past_student'] = Student.objects.filter(is_active=False)
+            return render(request,'usermodule/add_student.html',c)
+        else:
+            messages.add_message(request, messages.WARNING, 'You are not authorized')
+            return HttpResponseRedirect('/subject/')
     except:
         return HttpResponseRedirect('/subject/')
 
@@ -174,6 +186,8 @@ def addstudent(request):
 @login_required()
 def removefaculty(request):
     try:
+        if not request.user.is_superuser:
+            return HttpResponseRedirect('/admin/')
         facultyid = request.POST.get('facultyid')
         faculty = Faculty.objects.get(pk=int(facultyid))
         faculty.delete()
@@ -187,6 +201,8 @@ def removefaculty(request):
 @login_required()
 def addtopastfaculty(request):
     try:
+        if not request.user.is_superuser:
+            return HttpResponseRedirect('/admin/')
         facultyid = request.POST.get('facultyid')
         faculty = Faculty.objects.get(pk=int(facultyid))
         faculty.is_active = False
@@ -201,6 +217,8 @@ def addtopastfaculty(request):
 @login_required()
 def addtoactivefaculty(request):
     try:
+        if not request.user.is_superuser:
+            return HttpResponseRedirect('/admin/')
         facultyid = request.POST.get('facultyid')
         faculty = Faculty.objects.get(pk=int(facultyid))
         faculty.is_active = True
@@ -215,6 +233,8 @@ def addtoactivefaculty(request):
 @login_required()
 def removestudent(request):
     try:
+        if not request.user.is_superuser:
+            return HttpResponseRedirect('/admin/')
         studentid = request.POST.get('studentid')
         student = Student.objects.get(pk=int(studentid))
         student.delete()
@@ -228,6 +248,8 @@ def removestudent(request):
 @login_required()
 def addtopaststudent(request):
     try:
+        if not request.user.is_superuser:
+            return HttpResponseRedirect('/admin/')
         studentid = request.POST.get('studentid')
         student = Student.objects.get(pk=int(studentid))
         student.is_active = False
@@ -242,6 +264,8 @@ def addtopaststudent(request):
 @login_required()
 def addtoactivestudent(request):
     try:
+        if not request.user.is_superuser:
+            return HttpResponseRedirect('/admin/')
         studentid = request.POST.get('studentid')
         student = Student.objects.get(pk=int(studentid))
         student.is_active = True
