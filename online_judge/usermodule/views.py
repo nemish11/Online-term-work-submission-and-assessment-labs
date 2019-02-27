@@ -41,6 +41,7 @@ def auth_view(request):
         if user is not None:
             auth.login(request, user)
             if user.is_superuser:
+                request.session['usertype'] = 'admin'
                 return HttpResponseRedirect('/subject/')
             usertype = request.user.groups.all()[0].name
             request.session['usertype'] = usertype
