@@ -174,6 +174,8 @@ def request_subject(request):
 def selectedsubject(request):
     try:
         subjectid = request.POST.get('subjectid')
+        subjectyear = request.POST.get('subjectyear')
+        request.session['subjectyear'] = subjectyear
         request.session['subjectid'] = subjectid
         return HttpResponseRedirect('/assignment/showWeek')
     except:

@@ -24,6 +24,28 @@
     </div>
     {% if not subject_list|length %}
         <div ><h4>There is No subjects.</h4></div>
+
+        {% if request.user.is_superuser %}
+        <hr class="style13">
+        <ul class="collapsible">
+            <li>
+                <div class="collapsible-header">Add Subject</div>
+                <div class="collapsible-body">
+                    <form action="/subject/addsubject" method="POST" > {% csrf_token %}
+                        <div >
+                            <label for="name">Subject Name</label>
+                            <input type="text" name="name" class="validate" id="name" required>
+                        </div>
+                        <div >
+                            <label for="subject_code">Subject_code</label>
+                            <input type="text" name="subject_code" class="validate" id="subject_code" required>
+                        </div>
+                        <button type="submit" class="btn green lighten-2">Add subject</button>
+                    </form>
+                </div>
+            </li>
+          </ul>
+        {% endif %}
     {% else %}
     <div ><h5>Subjects</h5></div>
     <div >
@@ -33,7 +55,7 @@
                       <tr>
                           <th>Subject Code</th>
                           <th>Subject Name</th>
-
+                          <th>Select Year </th>
                           <th>Show Week</th>
                           <th>Select Year</th>
                           <th>Leaderboard</th>
@@ -47,12 +69,14 @@
                                 <td>{{ s.subject_code }}</td>
                                 <td>{{ s.name }}</td>
 
-                                <td>
+
                                     <form action="/subject/selectedsubject" method="POST" > {% csrf_token %}
-                                      <input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
-                                      <button type="submit" class="btn green lighten-2" name="send">Show week</button>
+                                      <td><input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
+                                        <input type="number" name="subjectyear" min={{min_year}} max={{max_year}} value={{max_year}} required/>
+                                      </td>
+                                      <td><button type="submit" class="btn green lighten-2" name="send">Show week</button>  </td>
                                     </form>
-                                </td>
+
 
                                     <form action="/leaderboard/set_leaderboard_subject" method="POST" > {% csrf_token %}
                                         <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
@@ -98,6 +122,7 @@
                       <tr>
                           <th>Subject Code</th>
                           <th>Subject Name</th>
+                          <th>Select Year</th>
                           <th>Show Week</th>
                           <th>Select Year</th>
                           <th>Leaderboard</th>
@@ -108,12 +133,12 @@
                             <tr>
                                 <td>{{ s.subject.subject_code }}</td>
                                 <td>{{ s.subject.name }}</td>
-                                <td>
-                                    <form action="/subject/selectedsubject" method="POST" > {% csrf_token %}
-                                      <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
-                                      <button type="submit" class="btn green lighten-2" name="send">Show week</button>
-                                    </form>
-                                </td>
+                                <form action="/subject/selectedsubject" method="POST" > {% csrf_token %}
+                                  <td><input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
+                                    <input type="number" name="subjectyear" min={{min_year}} max={{max_year}} value={{max_year}} required/>
+                                  </td>
+                                  <td><button type="submit" class="btn green lighten-2" name="send">Show week</button>  </td>
+                                </form>
 
                                     <form action="/leaderboard/set_leaderboard_subject" method="POST" > {% csrf_token %}
                                      <td> <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
@@ -134,6 +159,7 @@
                       <tr>
                           <th>Subject Code</th>
                           <th>Subject Name</th>
+                          <th>Select Year</th>
                           <th>Show Week</th>
                           <th>Select Year</th>
                           <th>Leaderboard</th>
@@ -144,12 +170,12 @@
                             <tr>
                                 <td>{{ s.subject_code }}</td>
                                 <td>{{ s.name }}</td>
-                                <td>
-                                    <form action="/subject/selectedsubject" method="POST" > {% csrf_token %}
-                                      <input type="hidden" name="subjectid" value="{{ s.id }}" />
-                                      <button type="submit" class="btn green lighten-2" name="send">Show week</button>
-                                    </form>
-                                </td>
+                                <form action="/subject/selectedsubject" method="POST" > {% csrf_token %}
+                                  <td><input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
+                                    <input type="number" name="subjectyear" min={{min_year}} max={{max_year}} value={{max_year}} required/>
+                                  </td>
+                                  <td><button type="submit" class="btn green lighten-2" name="send">Show week</button>  </td>
+                                </form>
 
                                     <form action="/leaderboard/set_leaderboard_subject" method="POST" > {% csrf_token %}
                                         <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
