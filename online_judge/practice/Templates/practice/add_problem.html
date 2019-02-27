@@ -11,9 +11,9 @@
 
     <form action="/practice/addproblem" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
         <div class="col ">
-            Enter a title :  <input type="text" name="title" id="title" required/>
+            Enter a title :  <input type="text" name="title" id="title"/>
             Enter a question :
-            <textarea class="codemirror-textarea" name="question" id="question" required></textarea>
+            <textarea class="codemirror-textarea" name="question" id="question"></textarea>
             Enter a constraint :
             <textarea class="codemirror-textarea" name="constraint" id="constraint" ></textarea>
 
@@ -33,7 +33,7 @@
             <textarea class="codemirror-textarea" name="explanation" id="explanation"></textarea>
 
             <h5>select difficulty level :</h5>
-            <input type="radio" id="basic" name="difficulty" value="basic" required/>
+            <input type="radio" id="basic" name="difficulty" value="basic"/>
             <label for="basic">basic</label>
 
             <input type="radio" id="easy" name="difficulty" value="easy" checked/>
@@ -56,7 +56,7 @@
           <h5>select tags :</h5>
           {% for tag in tags %}
                 <div>
-                  <input type="checkbox" name="problemtags[]" id="{{tag.name}}" value="{{tag.name}}" required/>
+                  <input type="checkbox" name="problemtags[]" id="{{tag.name}}" value="{{tag.name}}" />
                   <label for="{{tag.name}}">{{tag.name}}</label>
                 </div>
           {% endfor %}

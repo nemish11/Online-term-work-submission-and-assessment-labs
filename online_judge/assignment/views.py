@@ -254,7 +254,7 @@ def newassignment(request):
         week = Week.objects.get(pk = int(weekid))
         subject = week.subject
 
-        assignment = Assignment(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question,constraint = constraint,inputformat=inputformat,outputformat=outputformat,sampleinput=sampleinput,sampleoutput=sampleoutput,explanation=explanation,deadline=datetime.now())
+        assignment = Assignment(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question,constraint = constraint,inputformat=inputformat,outputformat=outputformat,sampleinput=sampleinput,sampleoutput=sampleoutput,explanation=explanation)
         assignment.save()
 
         fs = FileSystemStorage()
@@ -393,8 +393,6 @@ def submission_files(request):
             previous_code = codefile_handler.read()
             c['previous_code'] = previous_code
             codefile_handler.close()
-        else:
-            c['message'] = 'file properly not uploaded..please contact to faculty.'
 
         for i in range(0,int(total_inputfiles)):
             inputfiles[i] = submission_files.filter(filepath__contains = "/input_"+str(i+1))
@@ -402,6 +400,7 @@ def submission_files(request):
                 inputfiles[i] = inputfiles[i][0]
             else:
                 c['message'] = 'file properly not uploaded..please contact to faculty.'
+
             outputfiles[i] = submission_files.filter(filepath__contains = "/output_"+str(i+1))
             if outputfiles[i]:
                 outputfiles[i] = outputfiles[i][0]

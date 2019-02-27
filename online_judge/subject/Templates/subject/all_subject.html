@@ -24,6 +24,28 @@
     </div>
     {% if not subject_list|length %}
         <div ><h4>There is No subjects.</h4></div>
+
+        {% if request.user.is_superuser %}
+        <hr class="style13">
+        <ul class="collapsible">
+            <li>
+                <div class="collapsible-header">Add Subject</div>
+                <div class="collapsible-body">
+                    <form action="/subject/addsubject" method="POST" > {% csrf_token %}
+                        <div >
+                            <label for="name">Subject Name</label>
+                            <input type="text" name="name" class="validate" id="name" required>
+                        </div>
+                        <div >
+                            <label for="subject_code">Subject_code</label>
+                            <input type="text" name="subject_code" class="validate" id="subject_code" required>
+                        </div>
+                        <button type="submit" class="btn green lighten-2">Add subject</button>
+                    </form>
+                </div>
+            </li>
+          </ul>
+        {% endif %}
     {% else %}
     <div ><h5>Subjects</h5></div>
     <div >
