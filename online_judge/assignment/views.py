@@ -12,6 +12,7 @@ import pandas as pd
 from userprofile.models import Faculty,Student
 from subject.models import Subject
 from assignment.models import Week,Submission,Assignment,Assignment_files,Submission_files
+from practice.models import Problem,Problem_files,Tag
 from datetime import datetime
 import subprocess,threading,os,shutil
 from multiprocessing import Pool
@@ -26,8 +27,9 @@ def showWeek(request):
     try:
         c={}
         subjectid = request.session.get('subjectid')
+        subjectyear = request.session.get('subjectyear')
         subject = Subject.objects.get(pk=int(subjectid))
-        all_week = Week.objects.filter(subject=subject,isdeleted=False)
+        all_week = Week.objects.filter(subject=subject,isdeleted=False,year=int(subjectyear))
         c['subject'] = subject
         c['all_week'] = all_week
         all_assignment = Assignment.objects.filter(subject=subject)
@@ -50,8 +52,10 @@ def addweek(request):
         c = {}
         subjectid = request.session.get('subjectid')
         weekname = request.POST.get('weekname')
+        lastdate = request.POST.get('lastdate')
+        subjectyear = request.session.get('subjectyear')
         subject = Subject.objects.get(pk=int(subjectid))
-        week = Week(name=weekname,subject=subject)
+        week = Week(name=weekname,subject=subject,lastdate=lastdate,year=int(subjectyear))
         week.save()
         update_cache_week(subjectid)
         return HttpResponseRedirect('/assignment/showWeek')
@@ -87,11 +91,33 @@ def deleteAssignment(request):
         return HttpResponseRedirect('/assignment/showWeek')
 
 @login_required()
-def new_assignment(request):
+def new_assignment1(request):
     try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
         weekid = request.POST.get('weekid')
+        request.session['newweekid'] = weekid
+        return HttpResponseRedirect('/assignment/new_assignment')
+    except:
+        return HttpResponseRedirect('/assignment/showWeek')
+
+@login_required()
+def import_assignment1(request):
+    try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        weekid = request.POST.get('weekid')
+        request.session['newweekid'] = weekid
+        return HttpResponseRedirect('/assignment/import_assignment')
+    except:
+        return HttpResponseRedirect('/assignment/showWeek')
+
+@login_required()
+def new_assignment(request):
+    try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        weekid = request.session.get('newweekid')
         week = Week.objects.get(pk = int(weekid))
         subject  = week.subject
         c = {}
@@ -100,6 +126,112 @@ def new_assignment(request):
         return render(request,'assignment/new_assignment.html',c)
     except:
         return HttpResponseRedirect('/assignment/showWeek')
+
+@login_required()
+def import_assignment(request):
+    try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        weekid = request.session.get('newweekid')
+        week = Week.objects.get(pk = int(weekid))
+        subject  = week.subject
+        problems = Problem.objects.all()
+        c = {}
+        c['week'] = week
+        c['subject'] = subject
+        c['problems'] = problems
+        return render(request,'assignment/import_assignment.html',c)
+    except:
+        return HttpResponseRedirect('/assignment/showWeek')
+
+@login_required()
+def importassignment(request):
+    try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        weekid = request.session.get('newweekid')
+        week = Week.objects.get(pk = int(weekid))
+        subject  = week.subject
+        problemid = request.POST.get('problemid')
+        problem = Problem.objects.get(pk = int(problemid))
+
+        title = problem.title
+        question = problem.question
+        constraint = problem.constraint
+        inputformat = problem.inputformat
+        outputformat = problem.outputformat
+        sampleinput = problem.sampleinput
+        sampleoutput = problem.sampleoutput
+        explanation = problem.explanation
+        total_inputfiles = problem.total_inputfiles
+
+        assignment = Assignment(week=week,subject=subject,total_inputfiles = int(total_inputfiles), title=title,question=question,constraint = constraint,inputformat=inputformat,outputformat=outputformat,sampleinput=sampleinput,sampleoutput=sampleoutput,explanation=explanation)
+        assignment.save()
+
+        fs = FileSystemStorage()
+        dirname = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(assignment.id)
+
+        if os.path.exists(dirname):
+            shutil.rmtree(dirname)
+        os.makedirs(dirname)
+
+        problemcodefile = BASE_DIR + "/usermodule/static/problems/problem_"+str(problem.id)+"/codefile.txt"
+        codefilename = dirname + "/codefile.txt"
+
+        f = open(problemcodefile,'r')
+        code = f.read()
+        f.close()
+
+        codefile_handler=open(codefilename,'w+')
+        codefile_handler.write(code)
+        codefile_handler.close()
+
+        assignment_files = Assignment_files(assignment = assignment, type='codefile',filepath=codefilename,score = 0)
+        assignment_files.save()
+
+        totalscore = 0
+
+        for i in range(1,int(total_inputfiles)+1):
+
+            probleminputfile = BASE_DIR + "/usermodule/static/problems/problem_"+str(problem.id)+"/inputfile_"+str(i)+".txt"
+            problemoutputfile = BASE_DIR + "/usermodule/static/problems/problem_"+str(problem.id)+"/outputfile_"+str(i)+".txt"
+
+            dirname = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(assignment.id)
+            inputfilename = dirname+"/inputfile_"+str(i)+".txt"
+            outputfilename = dirname+"/outputfile_"+str(i)+".txt"
+
+            f = open(probleminputfile,'r')
+            inputtext = f.read()
+            f.close()
+
+            inputfile_handler=open(inputfilename,'w+')
+            inputfile_handler.write(inputtext)
+            inputfile_handler.close()
+
+            f = open(problemoutputfile,'r')
+            outputtext = f.read()
+            f.close()
+
+            outputfile_handler=open(outputfilename,'w+')
+            outputfile_handler.write(outputtext)
+            outputfile_handler.close()
+
+            problem_files = Problem_files.objects.filter(problem = problem, type="inputfile", filepath=probleminputfile)[0]
+            score = problem_files.score
+            totalscore = totalscore + int(score)
+
+            assignment_files = Assignment_files(assignment = assignment, type='inputfile',filepath=inputfilename,score=int(score))
+            assignment_files.save()
+
+            assignment_files = Assignment_files(assignment = assignment, type='outputfile', filepath=outputfilename, errortype='', runtime='',memoryused='')
+            assignment_files.save()
+
+        assignment.totalscore = totalscore
+        assignment.save()
+
+        return HttpResponseRedirect('/assignment/showWeek')
+    except:
+        return HttpResponseRedirect('/subject/')
 
 @login_required()
 def newassignment(request):
@@ -169,60 +301,6 @@ def newassignment(request):
         return HttpResponseRedirect('/assignment/showWeek')
     except:
         return HttpResponseRedirect('/subject/')
-
-'''
-@login_required()
-def addinputfiles(request):
-    c = {}
-    assignmentid = request.session.get('addassignmentid')
-    subjectid = request.session.get('subjectid')
-    assignment = Assignment.objects.get(pk = int(assignmentid))
-    subject = Subject.objects.get(pk = int(subjectid))
-    c['assignment'] = assignment
-    c['subject'] = subject
-    total_inputfiles = assignment.total_inputfiles
-    total_inputfile = []
-
-    for i in range(1,int(total_inputfiles)+1):
-        total_inputfile.append(str(i))
-
-    c['total_inputfiles'] = total_inputfile
-    return render(request,'assignment/add_inputfiles.html',c)
-
-@login_required()
-def uploadfiles(request):
-        assignmentid = request.session.get('addassignmentid')
-        assignment = Assignment.objects.get(pk = int(assignmentid))
-        subject = assignment.subject
-        total_inputfiles = assignment.total_inputfiles
-        totalscore = 0
-
-        for i in range(1,int(total_inputfiles)+1):
-            inputfile = request.FILES["inputfile_"+str(i)]
-            outputfile = request.FILES["outputfile_"+str(i)]
-            score = request.POST.get("score_"+str(i))
-            totalscore = totalscore + int(score)
-
-            fs = FileSystemStorage()
-            dirname = BASE_DIR + "/usermodule/static/all_assignment/assignment_"+str(assignment.id)
-
-            inputfilename = dirname+"/inputfile_"+str(i)+".txt"
-            outputfilename = dirname+"/outputfile_"+str(i)+".txt"
-
-            inp = fs.save(inputfilename,inputfile)
-            inp = fs.save(outputfilename,outputfile)
-
-            assignment_files = Assignment_files(assignment = assignment, type='inputfile',filepath=inputfilename,score=int(score))
-            assignment_files.save()
-
-            assignment_files = Assignment_files(assignment = assignment, type='outputfile', filepath=outputfilename, errortype='', runtime='',memoryused='')
-            assignment_files.save()
-
-        assignment.totalscore = totalscore
-        assignment.save()
-
-        return HttpResponseRedirect('/assignment/showWeek')
-        return HttpResponseRedirect('/subject/')'''
 
 @login_required()
 def selectedAssignment(request):

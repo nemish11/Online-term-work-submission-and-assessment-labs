@@ -5,9 +5,10 @@ from subject.models import Subject
 
 class Week(models.Model):
     subject = models.ForeignKey(Subject,on_delete = models.CASCADE,related_name = 'week_subject')
+    year = models.IntegerField(null=True,blank=True)
     name = models.CharField(max_length = 50)
     isdeleted = models.BooleanField(default=False)
-    is_locked = models.BooleanField(default = False)
+    lastdate = models.DateField(null=True,blank=True)
 
 class Assignment(models.Model):
     week = models.ForeignKey(Week,on_delete = models.CASCADE,related_name = 'assignment_week')
@@ -23,7 +24,6 @@ class Assignment(models.Model):
     sampleoutput = models.TextField(null=True,blank=True)
     explanation = models.TextField(null=True,blank=True)
     total_inputfiles = models.IntegerField(null=True)
-    deadline = models.DateField()
 
 class Assignment_files(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='assignmentfiles_assignment')

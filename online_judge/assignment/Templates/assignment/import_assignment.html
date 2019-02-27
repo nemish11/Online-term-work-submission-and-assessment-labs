@@ -1,0 +1,44 @@
+{% extends "practice/base.html" %}
+  {% block body%}
+<div class="row container z-depth-3">
+    <div class="col">
+    {% if not problems|length %}
+        <h5>Problems is not available.</h5>
+    {% else %}
+      <table class="highlight centered responsive-table" >
+          <thead class="grey lighten-1">
+            <tr>
+                <th>id</th>
+                <th>Title</th>
+                <th>Difficulty</th>
+                <th>Accuracy</th>
+                <th>Score</th>
+                <th>Successful submission</th>
+                <th>Tags</th>
+                <th>select problem</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for problem in problems %}
+              <tr>
+                    <td>{{problem.id}}</td>
+                    <td>{{problem.title}}</td>
+                    <td>{{problem.difficulty}}</td>
+                    <td>{{problem.accuracy}}%</td>
+                    <td>{{problem.totalscore}}</td>
+                    <td>{{problem.successful_submission}}</td>
+                    <td>{{problem.tags}}</td>
+                    <td>
+                      <form action="/assignment/importassignment" method="POST" > {% csrf_token %}
+                        <input type="hidden" name="problemid" value="{{problem.id}}" />
+                        <button type="submit"> select </button>
+                      </form>
+                    <!--<td><a href = "/assignment/importassignment/?id={{problem.id}}">select</a></td>-->
+                </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+    {% endif %}
+    </div>
+</div>
+  {% endblock %}
