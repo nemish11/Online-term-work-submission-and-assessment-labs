@@ -26,36 +26,58 @@
             <li>
                 <div class="collapsible-header"><i class="material-icons"> {{week.name}} </i> <p style="padding-left:30em" >last date of submission : {{week.lastdate}} </p></div>
                 <div class="collapsible-body">
-                  {% for assignment in all_assignment %}
-                    {% ifequal assignment.week.id week.id %}
-                    <div class="row">
-                        <form action = "/assignment/selectedAssignment" method="POST" > {% csrf_token %}
-                            <div class="col s6">
-                                <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
-                                <button type="submit" class="btn green lighten-2" name="button">{{assignment.title}}</button>
-                            </div>
-                        </form>
-                      {% ifequal usertype faculty %}
-                      <form action = "/assignment/deleteAssignment" method="POST" > {% csrf_token %}
-                          <div class="col s6">
-                              <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
-                              <button type="submit" class="btn  red lighten-1" name="button">Delete {{assignment.title}}</button>
-                          </div>
-                       </form>
+                   <table class="highlight centered responsive-table col s12" >
+                    <thead class="grey lighten-1">
+                      <tr>
+                          <th>Show Assignment</th>
+                          <th>Select Year</th>
+                          <th>Show All Students</th>
+                          {% if usertype == "faculty" %}
+                            <th>Delete Assignment</th>
+                          {% endif %}
+                          {% if usertype == "admin" %}
+                            <th>Delete Assignment</th>
+                          {% endif %}
+                      </tr>
+                    </thead>
+                    <tbody>
 
-                      {% endifequal %}
-                      {% ifequal usertype "admin" %}
-                        <form action = "/assignment/deleteAssignment" method="POST" > {% csrf_token %}
-                         <div class="s6">
-                           <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
-                           <button type="submit" class="btn  red lighten-1" name="button">Delete {{assignment.title}}</button>
-                         </div>
-                         </form>
+                        {% for assignment in all_assignment %}
+                            {% ifequal assignment.week.id week.id %}
 
-                      {% endifequal %}
-                    </div>
-                    {% endifequal %}
-                  {% endfor %}
+                            <tr>
+                                <td>
+                                    <form action = "/assignment/selectedAssignment" method="POST" > {% csrf_token %}
+                                        <div>
+                                            <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
+                                            <button type="submit" class="btn green lighten-2" name="button">{{assignment.title}}</button>
+                                        </div>
+                                    </form>
+                                </td>
+                                <form action="/assignment/studentlist_for_assignment" method="POST" > {% csrf_token %}
+                                    <td>
+                                        <input type="hidden" name="assignment_id" value="{{ assignment.id }}" />
+                                        <input type="hidden" name="week_id" value="{{ week.id}}"/>
+                                        <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
+                                    </td>
+                                    <td><button class="btn green lighten-2" type="submit"  name="send">All Student</button></td>
+                                </form>
+                                {% if usertype == "faculty" or  usertype == "admin" %}
+                                <td>
+                                    <form action = "/assignment/deleteAssignment" method="POST" > {% csrf_token %}
+                                          <div>
+                                              <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
+                                              <button type="submit" class="btn  red lighten-1" name="button">Delete</button>
+                                          </div>
+                                    </form>
+                                </td>
+                                {% endif %}
+
+                            </tr>
+                            {% endifequal %}
+                        {% endfor %}
+                    </tbody>
+                    </table>
 
               {% ifequal usertype faculty %}
                  <div class="row">
