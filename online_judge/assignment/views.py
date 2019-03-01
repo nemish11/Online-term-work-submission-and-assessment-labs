@@ -590,26 +590,52 @@ def submitcode(request):
 
 @login_required()
 def studentlist_for_assignment(request):
-    year = request.POST.get('year')
-    week_id = request.POST.get('week_id')
-    assignment_id = request.POST.get('assignment_id')
-    week = Week.objects.get(id=week_id)
-    assignment = Assignment.objects.filter(id=assignment_id)[0]
-    submission_list = Submission.objects.filter(assignment=assignment)
-    student_list = []
-    userids = []
-    for submission in submission_list:
-        if submission.assignment.week.year == year and submission.user.groups.all()[0].name == 'student' and submission.assignment.week == week_id:
-            student_list.append(submission)
-            userids.append(submission.user.id)
-    students = Student.objects.filter(id__in=userids)
-    student_info = {}
-    i=1
-    for student in students:
-        student_info[student.user] = student
-    c={}
-    c['student_list'] = student_list
-    c['assignment'] = assignment.title
-    c['week'] = week
-    c['student_info'] = student_info
-    return render(request,'assignment/student_submission.html',c)
+    try:
+        year = request.POST.get('year')
+        week_id = request.POST.get('week_id')
+        assignment_id = request.POST.get('assignment_id')
+        week = Week.objects.get(id=week_id)
+        assignment = Assignment.objects.filter(id=assignment_id)[0]
+        submission_list = Submission.objects.filter(assignment=assignment).order_by('user','-datetime')
+        student_list = []
+        userids = []
+        for submission in submission_list:
+            if submission.assignment.week.year == year and submission.user.groups.all()[0].name == 'student' and submission.assignment.week == week_id:
+                student_list.append(submission)
+                userids.append(submission.user.id)
+
+        c={}
+        print(student_list)
+        c['student_list'] = student_list
+        c['assignment'] = assignment
+        c['week'] = week
+        return render(request,'assignment/student_submission.html',c)
+    except:
+        return HttpResponseRedirect('/assignment/showWeek')
+
+
+@login_required()
+def student_all_submission(request):
+    try:
+        weekid = request.POST.get('weekid')
+        week = Week.objects.get(id=weekid)
+        userid = request.POST.get('userid')
+        user = User.objects.get(id=userid)
+        assignment_id= request.POST.get('assignmentid')
+        assignment = Assignment.objects.get(id=assignment_id)
+        submissions = Submission.objects.filter(assignment=assignment,user=user).order_by('-datetime')
+        submission_list = []
+        for submission in submissions:
+            if submission.assignment.week.year == week.year:
+                submission_list.append(submission)
+        print(submission_list)
+        c={}
+        c['submission_list'] = submission_list
+        c['week'] = week
+        c['assignment'] = assignment
+        c['username'] = user
+        return render(request,'assignment/student_all_submission.html',c)
+    except:
+        return HttpResponseRedirect('/assignment/showWeek')
+
+
