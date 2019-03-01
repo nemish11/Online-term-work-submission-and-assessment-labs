@@ -1,0 +1,54 @@
+{% extends "assignment/base.html" %}
+{% block body%}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, options);
+  });
+</script>
+
+<div class="row container z-depth-3">
+    <script>
+		Materialize.toast('{{message}}', 3000);
+	</script>
+
+    <div class="col s12">
+        <h5>Student : {{ user.username}} </h5>
+        <h5>Week : {{ week.name}}</h5>
+        <h5>Assignment : {{ assignment.title }}</h5>
+
+        <table class="highlight centered responsive-table col s12" >
+            <thead class="grey lighten-1">
+                <tr>
+                    <th>Index</th>
+                    <th>Total score</th>
+                    <th>Date Time</th>
+                    <th>Verdict</th>
+                    <th>See Submission</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for submission in submission_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ submission.totalscore }}</td>
+                        <td>{{ submission.datetime }}</td>
+                        <td>{{ submission.verdict }}</td>
+                        <td>
+                            <form action = "/assignment/selectedsubmission" method="POST" > {% csrf_token %}
+                                <div>
+                                    <input type="hidden" name="submissionid" value="{{submission.id}}"/>
+
+                                    <button type="submit" class="btn  red lighten-1" name="button">All Submissions</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}
