@@ -185,7 +185,7 @@ def selectedsubject(request):
 @login_required()
 def pending_request(request):
     try:
-        if request.session.usertype == "student":
+        if request.session['usertype'] == "student":
             f = request.POST.get('faculty')
             s = request.POST.get('subject')
             if s is None or f is None:
@@ -195,7 +195,7 @@ def pending_request(request):
             sobj = Subject.objects.get(id=s)
             stuobj = Student.objects.get(user=request.user)
             try:
-                checkobj = Request.objects.get(faculty=fobj,student=stuobj,subject=sobj)
+                checkobj = Request.objects.filter(faculty=fobj,student=stuobj,subject=sobj)[0]
             except:
                 checkobj = None
             if checkobj is not None:
@@ -272,7 +272,7 @@ def request_list(request):
 @login_required()
 def set_subject_for_studentlist(request):
     try:
-        if request.session.usertype == 'faculty' :
+        if request.session['usertype'] == 'faculty' :
             subjectid = request.POST.get('subjectid')
             year = request.POST.get('year')
             request.session['studentlist_subjectid'] = subjectid

@@ -41,10 +41,12 @@ def auth_view(request):
         if user is not None:
             auth.login(request, user)
             if user.is_superuser:
-                request.session['usertype'] = 'admin'
                 return HttpResponseRedirect('/subject/')
             usertype = request.user.groups.all()[0].name
             request.session['usertype'] = usertype
+            if usertype == "student":
+                student = Student.objects.get(user = request.user)
+                request.session['student_year'] = student.year
             return HttpResponseRedirect('/subject/')
         else:
             messages.add_message(request, messages.WARNING, 'Incorect Username or Password')
@@ -63,7 +65,7 @@ def logout(request):
         #request.session.clear()
         return HttpResponseRedirect('/usermodule/login/')
     except:
-        messages.add_message(request, messages.WARNING, 'Exception Occured..please try again.')
+        messages.add_message(request, messages.WARNING, 'exception Occured..please try again.')
         return render(request,'usermodule/login.html')
 
 

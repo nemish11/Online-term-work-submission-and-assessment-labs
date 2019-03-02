@@ -122,9 +122,7 @@
                       <tr>
                           <th>Subject Code</th>
                           <th>Subject Name</th>
-                          <th>Select Year</th>
                           <th>Show Week</th>
-                          <th>Select Year</th>
                           <th>Leaderboard</th>
                       </tr>
                     </thead>
@@ -134,20 +132,17 @@
                                 <td>{{ s.subject.subject_code }}</td>
                                 <td>{{ s.subject.name }}</td>
                                 <form action="/subject/selectedsubject" method="POST" > {% csrf_token %}
-                                  <td><input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
-                                    <input type="number" name="subjectyear" min={{min_year}} max={{max_year}} value={{max_year}} required/>
-                                  </td>
+                                  <input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
+                                    <input type="hidden" name="subjectyear" value="{{request.session.student_year}}" required/>
+
                                   <td><button type="submit" class="btn green lighten-2" name="send">Show week</button>  </td>
                                 </form>
 
                                     <form action="/leaderboard/set_leaderboard_subject" method="POST" > {% csrf_token %}
-                                     <td> <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
-                                        <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
-                                    </td>
+                                     <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
+                                        <input type="hidden" name="year" value="{{request.session.student_year}}" required/>
                                         <td><button type="submit" class="btn green lighten-2" name="send">Show Leaderboard</button></td>
                                     </form>
-
-
                             </tr>
                         {% endfor %}
                     </tbody>

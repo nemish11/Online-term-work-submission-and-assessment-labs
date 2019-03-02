@@ -602,7 +602,6 @@ def studentlist_for_assignment(request):
         for submission in submission_list:
             if submission.assignment.week.year == year and submission.user.groups.all()[0].name == 'student' and submission.assignment.week == week_id:
                 student_list.append(submission)
-                userids.append(submission.user.id)
 
         c={}
         print(student_list)
@@ -637,5 +636,3 @@ def student_all_submission(request):
         return render(request,'assignment/student_all_submission.html',c)
     except:
         return HttpResponseRedirect('/assignment/showWeek')
-
-
