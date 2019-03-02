@@ -98,6 +98,18 @@ DATABASES = {
     }
 }
 
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'online_judge',
+        'USER': 'root',
+        'PASSWORD':'',
+        'HOST' : '127.0.0.1',
+        'PORT' : '3306'
+    }
+}
+'''
 HOST = 'localhost'
 PORT = 6379
 REDISDB = 0
