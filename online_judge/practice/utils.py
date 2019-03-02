@@ -49,12 +49,13 @@ def run_input_files(request,counter,dirname,submission,inputfiles,language,code,
         codefile_handler.write(code)
         codefile_handler.close()
 
+        scriptpath = BASE_DIR + "/usermodule/static/scripts/"
         if language == 'c' or language == 'C':
-            tmp = subprocess.call([filename+"./c_run.sh", codefile, dirname+"/codefile_"+str(counter)+".out", dirname+"/./codefile_"+str(counter)+".out", inputfilename,outputfilename, errorfilename])
+            tmp = subprocess.call([scriptpath+"./c_run.sh", codefile, dirname+"/codefile_"+str(counter)+".out", dirname+"/./codefile_"+str(counter)+".out", inputfilename,outputfilename, errorfilename])
         elif language == 'C++' or language == 'c++':
-            tmp = subprocess.call([filename+"./cpp_run.sh", codefile, dirname+"/codefile_"+str(counter)+".out", dirname+"/./codefile_"+str(counter)+".out", inputfilename,outputfilename, errorfilename])
+            tmp = subprocess.call([scriptpath+"./cpp_run.sh", codefile, dirname+"/codefile_"+str(counter)+".out", dirname+"/./codefile_"+str(counter)+".out", inputfilename,outputfilename, errorfilename])
         elif language == 'python' or language == 'Python':
-            tmp = subprocess.call([filename+"./py_run.sh", codefile, inputfilename,outputfilename, errorfilename])
+            tmp = subprocess.call([scriptpath+"./py_run.sh", codefile, inputfilename,outputfilename, errorfilename])
         else:
             return "No language supported"
 
