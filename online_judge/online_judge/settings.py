@@ -91,9 +91,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'online_judge',
-        'USER':'root',
-        'PASSWORD':'',
-        'HOST' : '127.0.0.1',
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD':os.environ.get('DB_PASS'),
+        'HOST' : os.environ.get('DB_CON_STRING'),
         'PORT' : '3306'
     }
 }
