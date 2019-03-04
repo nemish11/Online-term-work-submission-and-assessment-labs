@@ -14,7 +14,7 @@
         ]);
 
         var options = {
-          title: 'your submissions'
+          title: ''
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -26,10 +26,12 @@
 
 
     <ul class="collection with-header">
-        <li class="collection-item"><a href="/assignment/showAssignment">back to assignment</a></li>
+        <li class="collection-item"><a href="/assignment/showAssignment">back to assignment</a> | <a href="/assignment/showWeek">back to week</a></li>
         <li class="collection-header"><h5>{{assignment.subject.name}}</h5></li>
-        <li class="collection-item"> Total submission : <span class="secondary-content black-text">{{total_submissions}}</span></li>
-
+        <li class="collection-item"> Total submissions : <span class="secondary-content black-text">{{total_submissions}}</span></li>
+        <li class="collection-item"> Total Accepted submissions : <span class="secondary-content black-text">{{accepted}}</span></li>
+        <li class="collection-item"> Total Partially Accepted submissions : <span class="secondary-content black-text">{{partially_accepted}}</span></li>
+        <li class="collection-item"> Wrong submissions : <span class="secondary-content black-text">{{wrong}}</span></li>
         <li class="collection-item">
             <h5  > Submissions Graphs </h5>
             <div id="piechart" style="width: 600px; height: 500px;"></div>
@@ -45,7 +47,6 @@
                     <th>Yourscore</th>
                     <th>Date and time</th>
                     <th>Verdict</th>
-                    <th>Isrunning</th>
                     <th>Submission's details</th>
                 </tr>
               </thead>
@@ -60,8 +61,7 @@
                         <td>{{submission.totalscore}}</td>
                         <td>{{submission.datetime}}</td>
                         <td>{{submission.verdict}}</td>
-                        <td>{{submission.isrunning}}</td>
-                        <td><button class="btn green lighten-2" type="submit">See details</button></td>
+                        <td><button class="buttonaslink" type="submit">See details</button></td>
                     </form>
                     </tr>
                {% endfor %}
@@ -104,4 +104,3 @@
       </tbody>
   </table>'''
 --->
-

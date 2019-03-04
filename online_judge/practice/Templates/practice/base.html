@@ -20,10 +20,10 @@
 						<ul id="nav-mobile" class="right">
 						<li><a href="/subject/all_subject" class="waves-effect waves-light">Home</a> </li>
 							<li><a href="/practice/allproblems" class="waves-effect waves-light">All Problems</a> </li>
-               				<li><a href="/practice/filter_problems" class="waves-effect waves-light">Filter Problems</a> </li>
-							 {% if request.user.is_superuser %}
-									 <li><a href="/practice/add_problem" class="waves-effect waves-light">Add Problem</a> </li>
-							 {% endif %}
+							{% if request.user.is_superuser or request.session.usertype == "faculty"%}
+									<li><a href="/practice/add_problem" class="waves-effect waves-light">Add Problem</a> </li>
+							{% endif %}
+               <li><a href="/practice/filter_problems" class="waves-effect waves-light">Filter Problems</a> </li>
 								<li><a href="/userprofile/profile" class="waves-effect waves-light ">Profile</a></li>
 								<li><a href="/usermodule/logout" class="waves-effect waves-light">Logout</a> </li>
 						</ul>

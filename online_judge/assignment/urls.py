@@ -4,6 +4,7 @@ from .views import *
 
 urlpatterns = [
     url(r'studentlist_for_assignment',studentlist_for_assignment),
+    url(r'student_all_submission',student_all_submission),
     url(r'new_assignment1',new_assignment1),
     url(r'import_assignment1',import_assignment1),
     url(r'new_assignment',new_assignment),

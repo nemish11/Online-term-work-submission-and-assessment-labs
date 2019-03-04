@@ -30,19 +30,19 @@
                 </tr>
             </thead>
             <tbody>
-                {% for student in student_list %}
+                {% for submission in submission_list %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ student.user.username }}</td>
-                        <td>{{ student.totalscore }}</td>
-                        <td>{{ student.datetime }}</td>
-                        <td>{{ student.verdict }}</td>
+                        <td>{{ submission.user.username }}</td>
+                        <td>{{ submission.totalscore }}</td>
+                        <td>{{ submission.datetime }}</td>
+                        <td>{{ submission.verdict }}</td>
                         <td>
                             <form action = "/assignment/student_all_submission" method="POST" > {% csrf_token %}
                                 <div>
                                     <input type="hidden" name="weekid" value="{{week.id}}"/>
                                     <input type="hidden" name="assignmentid" value="{{assignment.id}}"/>
-                                    <input type = "hidden" name="userid" value = "{{assignment.user.id}}" />
+                                    <input type = "hidden" name="userid" value = "{{submission.user.id}}" />
 
                                     <button type="submit" class="btn  red lighten-1" name="button">All Submissions</button>
                                 </div>

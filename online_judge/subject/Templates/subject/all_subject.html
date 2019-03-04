@@ -132,7 +132,7 @@
                                 <td>{{ s.subject.subject_code }}</td>
                                 <td>{{ s.subject.name }}</td>
                                 <form action="/subject/selectedsubject" method="POST" > {% csrf_token %}
-                                  <input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
+                                  <input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.subject.id }}" />
                                     <input type="hidden" name="subjectyear" value="{{request.session.student_year}}" required/>
 
                                   <td><button type="submit" class="btn green lighten-2" name="send">Show week</button>  </td>
@@ -177,8 +177,6 @@
                                         <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/></td>
                                         <td><button type="submit" class="btn green lighten-2" name="send">Show leaderboard</button></td>
                                     </form>
-
-
                             </tr>
                         {% endfor %}
                     </tbody>

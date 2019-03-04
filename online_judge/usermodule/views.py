@@ -17,8 +17,8 @@ import datetime
 def login(request):
     try:
         if request.user.is_authenticated:
-            if request.user.is_superuser:
-                return render(request,'usermodule/index.html')
+            '''if request.user.is_superuser:
+                return render(request,'usermodule/index.html')'''
             return HttpResponseRedirect('/subject/')
         else:
             c = {}
@@ -31,8 +31,8 @@ def login(request):
 def auth_view(request):
     try:
         if request.user.is_authenticated:
-            if request.user.is_superuser:
-                return render(request,'usermodule/index.html')
+            '''if request.user.is_superuser:
+                return render(request,'usermodule/index.html')'''
             return HttpResponseRedirect('/subject/')
 
         username = request.POST.get('username', '')
@@ -41,6 +41,7 @@ def auth_view(request):
         if user is not None:
             auth.login(request, user)
             if user.is_superuser:
+                request.session['usertype'] = 'admin'
                 return HttpResponseRedirect('/subject/')
             usertype = request.user.groups.all()[0].name
             request.session['usertype'] = usertype
