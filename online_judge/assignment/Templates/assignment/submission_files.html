@@ -91,18 +91,32 @@
     </div>
 
     <div class="col s12">
-        <a href="/assignment/previous_submissions" >back to previous submission</a>
+      <a href="/assignment/showWeek"> back to week </a> |
+      <a href="/assignment/previous_submissions" >see previous submissions</a>
+          <h4 class="title">{{assignment.title}}</h4>
+      <hr>
+          <h5 class="heading">question </h5>
+          <p class="simple">{{assignment.question}}</p>
+      <hr>
 
-        <h5>Title :</h5><p>{{assignment.title}}</p>
-        <hr>
-        <h5>Question</h5> <p>{{assignment.question}}</p>
-        <hr>
+      <h5>constraint </h5> <p>{{assignment.constraint}}</p>
+      <hr>
+      <h5>input format</h5><p> {{assignment.inputformat}}</p>
+      <hr>
+      <h5>output format</h5><p>{{assignment.outputformat}}</p>
+      <hr>
+          <h5>sample input</h5><p>{{assignment.sampleinput}}</p>
+      <hr>
+      <h5>sample output</h5><p>{{assignment.sampleoutput}}</p>
+      <hr>
+      <h5>explanation</h5><p>{{assignment.explanation}}</p>
+      <hr>
         <form action = "/assignment/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
 
             <h5>Your Code</h5>
 
         <textarea class="codemirror-textarea" name = "code" value="{{previous_code}}" onload="adjustHeight(this)">{{previous_code}}</textarea><br/>
-       <button class="content" type="submit">Submit</button>
+       <button class="content btn blue darken-2" type="submit">Submit</button>
 
         </form>
 
@@ -146,7 +160,7 @@
         <form action="/assignment/savecomment" method="POST" > {% csrf_token %}
           Enter a comments :<br/>
          <input type="textarea" style = "width:500px;height:100px;" placeholder="Enter a comments..." name="commenttext" /><br/>
-         <button class="btn green lighten-2" type="submit">submit</button>
+         <button class="content btn blue darken-2" type="submit">Add Comment</button>
         </form>
       {% endifequal %}
       {% ifequal request.session.usertype "student" %}

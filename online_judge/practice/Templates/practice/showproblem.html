@@ -44,9 +44,23 @@
 
 </style>
 <script>
+  var editor;
+  function my_fun(lang){
+    // var lang = "c++"; //select problem language
+    lang = lang.toLowerCase()
+    var mode = "python"
+    if( lang== 'c++' || lang=='cpp')
+       mode = "text/x-c++src"
+    if(lang=='c')
+       mode = "text/x-csrc"
+    if(lang == 'python')
+      mode = "python"
+    if(lang == 'java')
+      mode = "text/x-java"
+    if(lang == 'c#')
+      mode = "text/x-csharp"
 
-  function my_fun(val){
-
+  	editor.setOption('mode', mode);
   }
 
   $(document).ready(function(){
@@ -56,23 +70,9 @@
 });
 
   $(document).ready(function(){
-  var lang = "c++"; //select problem language
-  lang = lang.toLowerCase()
-  var mode = "python"
-  if( lang== 'c++' || lang=='cpp')
-     mode = "text/x-c++src"
-  if(lang=='c')
-     mode = "text/x-csrc"
-  if(lang == 'python')
-    mode = "python"
-  if(lang == 'java')
-    mode = "text/x-java"
-  if(lang == 'c#')
-    mode = "text/x-csharp"
-
 	var code = $(".codemirror-textarea")[0];
-	var editor = CodeMirror.fromTextArea(code, {
-    mode:mode,
+	editor = CodeMirror.fromTextArea(code, {
+    mode:"text/x-c++src",
 		lineNumbers : true,
     spellcheck : true,
     autocorrect : true,
@@ -91,46 +91,34 @@
   });
 </script>
 
+<div class="col">
+    <script>
+        Materialize.toast('{{ message}}', 3000);
+    </script>
+<div>
+
 <div class="row container z-depth-3">
-    <div class="col">
-    <div class="col">
-        <script>
-            Materialize.toast('{{ message}}', 3000);
-        </script>
-    <div>
+    <div class="col s12">
         <a href="/practice/previous_submissions/?id={{problem.id}}" >see previous submissions</a>
-    </div>
 
-    <div><h5>Title :</h5>
-        {{problem.title}}
-    </div>
+        <h4 class="title">{{problem.title}}</h4>
+        <hr>
+            <h5 class="heading">question </h5>
+            <p class="simple">{{problem.question}}</p>
+        <hr>
 
-    <div><h5>Question</h5>
-        {{problem.question}}
-    </div>
-
-    <div>   <h5> Constraint : </h5>
-        {{problem.constraint}}
-    </div>
-
-    <div><h5> Input format : </h5>
-        {{problem.inputformat}}
-    </div>
-
-    <div>
-        <h5>Output format :</h5> {{problem.outputformat}}
-    </div>
-
-    <div>
-        <h5>sample input:</h5> {{problem.sampleinput}}
-    </div>
-
-    <div>
-        <h5>sample output : </h5>{{problem.sampleoutput}}
-    </div>
-    <div>
-        <h5>explanation : </h5>{{problem.explanation}}
-    </div>
+        <h5>constraint </h5> <p>{{problem.constraint}}</p>
+        <hr>
+        <h5>input format</h5><p> {{problem.inputformat}}</p>
+        <hr>
+        <h5>output format</h5><p>{{problem.outputformat}}</p>
+        <hr>
+            <h5>sample input</h5><p>{{problem.sampleinput}}</p>
+        <hr>
+        <h5>sample output</h5><p>{{problem.sampleoutput}}</p>
+        <hr>
+        <h5>explanation</h5><p>{{problem.explanation}}</p>
+        <hr>
 
     <form action = "/practice/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
         <h5>Select a language :</h5>
@@ -143,12 +131,12 @@
        <input type="radio" id="python" name="language" onchange="my_fun('python')" value="python"/>
        <label for="python">python</label>
 
-       <br/>
-       Enter a Code : <br/><br/>
+       <hr/>
+       <h5>Enter a Code : </h5>
 
        <textarea class="codemirror-textarea" style="width:auto;height:10000px" name = "code" value="{{previous_code}}">{{previous_code}}</textarea><br/>
 
-       <button class="content" type="submit">Submit</button>
+       <button class="content btn blue darken-2" type="submit">Submit</button>
 
     </form>
 
@@ -189,6 +177,7 @@
         </tbody>
     </table>
    {% endif %}
+    </div>
     </div>
     </div>
 </div>

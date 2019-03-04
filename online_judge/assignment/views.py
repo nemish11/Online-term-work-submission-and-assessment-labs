@@ -29,6 +29,9 @@ def showWeek(request):
         c = {}
         ymax = Student.objects.all().aggregate(Max('year'))['year__max']
         ymin = Student.objects.all().aggregate(Min('year'))['year__min']
+        if ymax is None:
+            ymax = 2012
+            ymin = 2025
         c['min_year'] = ymin
         c['max_year'] = ymax
         subjectid = request.session.get('subjectid')

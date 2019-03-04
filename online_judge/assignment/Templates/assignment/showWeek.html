@@ -76,7 +76,7 @@
                     <form action = "/assignment/selectedAssignment" method="POST" > {% csrf_token %}
                       <div>
                         <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
-                        <button type="submit" class="btn green lighten-2" name="button">{{assignment.title}}</button>
+                        <button type="submit" class="buttonaslink" name="button">{{assignment.title}}</button>
                       </div>
                     </form>
                   </td>
@@ -87,14 +87,14 @@
                       <input type="hidden" name="week_id" value="{{ week.id}}"/>
                     <td>  <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
                     </td>
-                    <td> <button class="btn green lighten-2" type="submit"  name="send">All Student</button>
+                    <td> <button class="buttonaslink" type="submit"  name="send">All Student</button>
                     </td>
                   </form>
 
                     <form action = "/assignment/deleteAssignment" method="POST" > {% csrf_token %}
                       <div>
                         <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
-                        <td><button type="submit" class="btn  red lighten-1" name="button">Delete</button>
+                        <td><button type="submit" class="buttonaslink" name="button">Delete</button>
                         </td>
                       </div>
                     </form>
@@ -106,20 +106,24 @@
           {% endif %}
 
           {% if usertype == "faculty" or usertype == "admin" %}
+            <hr/>
             <div class="row">
+              <div class="col">
               <form action="/assignment/new_assignment1" method="post">{% csrf_token %}
                 <input type="hidden" name="weekid" value="{{week.id}}">
-                <button type="submit" class="btn green " name="button">add new assignment</button>
+                <button type="submit" class="buttonaslink" name="button">add new assignment</button>
               </form>
               <form action="/assignment/import_assignment1" method="post">{% csrf_token %}
                 <input type="hidden" name="weekid" value="{{week.id}}">
-                <button type="submit" class="btn green " name="button">import assignment from practice question</button>
+                <button type="submit" class="buttonaslink" name="button">import assignment from practice question</button>
               </form>
-            </div>
+
             <form action="/assignment/deleteweek" method="POST"> {% csrf_token %}
               <input type="hidden" name="weekid" value="{{week.id}}">
-              <button type="submit" class="btn  red   " name="button">Delete week</button>
+              <button type="submit" class="buttonaslink" name="button">Delete week</button>
             </form>
+            </div>
+            </div>
           {% endif %}
           </div>
         </div>
