@@ -11,7 +11,9 @@ from django.core.files.storage import FileSystemStorage
 import pandas as pd
 from assignment.models import *
 from userprofile.models import Faculty,Student
-
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 @login_required()
 def updateFaculty(request):
@@ -149,3 +151,66 @@ def shownotifications(request):
         return render(request,'userprofile/notifications.html',c)
     except:
         return HttpResponseRedirect('/userprofile/')
+
+
+@login_required()
+def change_password_done(request):
+    try:
+        if request.user.is_authenticated or request.session['usertype'] == "faculty" or request.user.is_superuser:
+            username = request.POST.get('username')
+            new_password = request.POST.get('new_password')
+            #u = User.objects.get(username=str(username))
+            u = request.user
+            u.set_password(new_password)
+            u.save()
+            messages.add_message(request, messages.WARNING, 'Password changed successfully!!')
+            return HttpResponseRedirect('/subject/')
+        else:
+            messages.add_message(request, messages.WARNING, 'you are not authorized!!')
+            return HttpResponseRedirect('/subject/')
+    except:
+        messages.add_message(request, messages.WARNING, 'Something wrong!!')
+        return HttpResponseRedirect('/usermodule/')
+
+
+@login_required()
+def change_password(request):
+    try:
+        #
+        #user = User.objects.get(username=username)
+        c = {}
+        #c['user'] = user
+        return render(request,'userprofile/change_password.html', c);
+    except:
+        c = {}
+        c['message'] = "You can't change the password..."
+        return HttpResponseRedirect('/userprofile/')
+
+
+@login_required()
+def change_password_by_faculty(request):
+    try:
+        c={}
+        return render(request,'userprofile/change_password_by_faculty.html',c)
+    except:
+        messages.add_message(request, messages.WARNING, 'Something wrong!!')
+        return HttpResponseRedirect('/usermodule/')
+
+
+@login_required()
+def change_passwordbyfaculty(request):
+    if request.session['usertype'] == "faculty" or request.user.is_superuser:
+        uname = request.POST.get('uname')
+        new_password = request.POST.get('new_password')
+        print(uname,new_password)
+        u = User.objects.filter(username=uname).update(password=new_password)
+        print(u)
+        #u.set_password(new_password)
+        #u.save()
+        c={}
+        c['message'] = 'Password changed successfully'
+        return HttpResponseRedirect('/userprofile/change_password_by_faculty')
+    else:
+        messages.add_message(request, messages.WARNING, 'Something wrong!!')
+        return HttpResponseRedirect('/usermodule/')
+

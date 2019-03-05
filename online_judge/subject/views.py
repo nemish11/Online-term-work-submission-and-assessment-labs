@@ -272,7 +272,7 @@ def request_list(request):
 @login_required()
 def set_subject_for_studentlist(request):
     try:
-        if request.session['usertype'] == 'faculty' :
+        if request.session['usertype'] == 'faculty' or request.user.is_superuser:
             subjectid = request.POST.get('subjectid')
             year = request.POST.get('year')
             request.session['studentlist_subjectid'] = subjectid
@@ -289,12 +289,12 @@ def set_subject_for_studentlist(request):
 @login_required()
 def student_list(request):
     try:
-        if request.user.groups.all()[0].name == 'faculty':
+        if request.user.groups.all()[0].name == 'faculty' or request.user.is_superuser:
             faculty = Faculty.objects.get(user=request.user)
             subjectid = request.session['studentlist_subjectid']
             year1 = request.session['studentlist_year']
             subject = Subject.objects.get(id=int(subjectid))
-            students = Request.objects.filter(faculty=faculty,  subject=subject, status="approved")
+            students = Request.objects.filter(subject=subject, status="approved")
             student = []
             for s in students:
                 if int(s.student.year) == int(year1):
