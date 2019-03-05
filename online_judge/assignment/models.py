@@ -5,7 +5,7 @@ import uuid
 # Create your models here.
 
 class Week(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     subject = models.ForeignKey(Subject,on_delete = models.CASCADE,related_name = 'week_subject')
     year = models.IntegerField()
     name = models.CharField(max_length = 50)
@@ -13,7 +13,7 @@ class Week(models.Model):
     lastdate = models.DateField()
 
 class Assignment(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     week = models.ForeignKey(Week,on_delete = models.CASCADE,related_name = 'assignment_week')
     subject = models.ForeignKey(Subject,on_delete = models.CASCADE,related_name = 'assignment_subject',null=True,blank=True)
     title = models.TextField()
