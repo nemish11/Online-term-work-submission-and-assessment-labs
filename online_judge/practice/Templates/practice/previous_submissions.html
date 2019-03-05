@@ -27,7 +27,7 @@
 
 
         <ul class="collection with-header">
-            <li class="collection-item"><a href="/practice/all_problems">back to problems</a></li>
+            <li class="collection-item"><a href="/practice/problem/?id={{problem.id}}">back to problems</a></li>
             <li class="collection-item">Your total submission <span class="secondary-content black-text"> {{total_submissions}}</span></li>
             <li class="collection-header"><h5  > Submissions Graphs </h5></li>
             <li class="collection-item">
@@ -65,7 +65,7 @@
 --->
     <hr class="style13">
     <h5>problem title : {{problem.title}}</h5>
-      <table class="highlight centered responsive-table col s8 m8 l8" >
+      <table class="highlight centered responsive-table col s12" >
           <thead class="grey lighten-1">
             <tr>
                 <th>submissionID</th>
@@ -80,7 +80,7 @@
           <tbody>
             {% for submission in submissions %}
               <tr>
-                <form action="/practice/selectedsubmission" method="POST" > {% csrf_token %}
+                <form action="/practice/submission_files" method="POST" > {% csrf_token %}
                     <input type="hidden" name="submissionid" value="{{submission.id}}" />
                     <td>{{submission.id}}</td>
                     <td>{{submission.problem.totalscore}}</td>

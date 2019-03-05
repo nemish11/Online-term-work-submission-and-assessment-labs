@@ -14,6 +14,7 @@
 
     <form action="/assignment/newassignment" method = "POST" enctype = "multipart/form-data">{% csrf_token %}
       <input type="hidden" name="weekid" value="{{week.id}}" />
+      <input type="hidden" name="subjectyear" value="{{subjectyear}}" />
       Enter a title :  <input type="text" name="title" id="title"/>
       Enter a question :  <textarea class="codemirror-textarea" name="question" id="question"></textarea>
       Enter a constraint :  <textarea class="codemirror-textarea" name="constraint" id="constraint"></textarea>

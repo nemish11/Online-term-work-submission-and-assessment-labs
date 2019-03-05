@@ -91,16 +91,31 @@
   </div>
     <div class="col s12">
           <a href="/practice/previous_submissions/?id={{problem.id}}" >back to previous submission</a>
+          <h4 class="title">{{problem.title}}</h4>
+          <hr>
+              <h5 class="heading">question </h5>
+              <p class="simple">{{problem.question}}</p>
+          <hr>
 
-          <p style='color:red;'>{{message}}</p>
-          Title :{{problem.title}}
-          question is : {{problem.question}}
-         <form action = "/practice/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
-
+          <h5>constraint </h5> <p>{{problem.constraint}}</p>
+          <hr>
+          <h5>input format</h5><p> {{problem.inputformat}}</p>
+          <hr>
+          <h5>output format</h5><p>{{problem.outputformat}}</p>
+          <hr>
+              <h5>sample input</h5><p>{{problem.sampleinput}}</p>
+          <hr>
+          <h5>sample output</h5><p>{{problem.sampleoutput}}</p>
+          <hr>
+          <h5>explanation</h5><p>{{problem.explanation}}</p>
+          <hr>
+         <form action = "/practice/submitcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
+           language : {{submission.language}} <br/>
              <h5>Your Code :</h5>
-
+             <input type="hidden" name="problemid" value="{{problem.id}}" />
+             <input type="hidden" name="language" value="{{submission.language}}" />
            <textarea class="codemirror-textarea" name = "code" value="{{previous_code}}" onload="adjustHeight(this)">{{previous_code}}</textarea>
-           <button class="content" class="btn green lighten-2" type="submit">Submit</button>
+           <button class="btn green lighten-2" type="submit" disabled>Submit</button>
 
          </form>
 
@@ -109,10 +124,10 @@
 
           <h4>Results :</h4>
           total score is : {{totalscore}} out of {{problem.totalscore}}
+          verdict : {{verdict}}
 
 
-
-      <table class="highlight centered responsive-table col s8 m8 l8" >
+      <table class="highlight centered responsive-table col s12" >
           <thead class="grey lighten-1">
             <tr>
                 <th>Inputfiles</th>

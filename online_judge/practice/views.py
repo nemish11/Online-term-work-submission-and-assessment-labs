@@ -92,7 +92,6 @@ def showproblem(request):
     try:
         problemid = request.GET.get('id')
         problem = Problem.objects.get(pk = int(problemid))
-        request.session['problemid'] = problemid
         submission = Submission.objects.filter(user = request.user,problem = problem).last()
         submission_files = Submission_files.objects.filter(submission = submission,type = 'codefile')
 
@@ -130,20 +129,10 @@ def previous_submissions(request):
     except:
         return HttpResponseRedirect('/practice/')
 
-
-def selectedsubmission(request):
-    try:
-        submissionid = request.POST.get('submissionid')
-        request.session['submissionid'] = submissionid
-        return HttpResponseRedirect('/practice/submission_files')
-    except:
-        return HttpResponseRedirect('/practice/')
-
-
 @login_required()
 def submission_files(request):
     try:
-        submissionid = request.session.get('submissionid')
+        submissionid = request.POST.get('submissionid')
         submission = Submission.objects.get(pk=int(submissionid))
         problem = submission.problem
         total_inputfiles = problem.total_inputfiles
@@ -188,6 +177,7 @@ def submission_files(request):
         c['combinedlist'] = zip(inputfiles,outputfiles,errorfiles)
 
         c['problem'] = problem
+        c['verdict'] = submission.verdict
         return render(request,'practice/submission_files.html',c)
     except:
         return HttpResponseRedirect('/practice/')
@@ -306,25 +296,12 @@ def addproblem(request):
     except:
         return HttpResponseRedirect('/practice/')
 
-
-@login_required()
-def runcode(request):
-    try:
-        code = request.POST.get('code')
-        language = request.POST.get('language')
-        request.session['selected_language'] = language
-        request.session['problemcode'] = code
-        return HttpResponseRedirect('/practice/submitcode')
-    except:
-        return HttpResponseRedirect('/practice/')
-
-
 @login_required()
 def submitcode(request):
     try:
-        problemid = request.session.get('problemid')
-        code = request.session.get('problemcode')
-        language = request.session.get('selected_language')
+        problemid = request.POST.get('problemid')
+        code = request.POST.get('code')
+        language = request.POST.get('language')
         problem = Problem.objects.get(pk = int(problemid))
         c = {}
         c['problem'] = problem

@@ -120,7 +120,8 @@
         <h5>explanation</h5><p>{{problem.explanation}}</p>
         <hr>
 
-    <form action = "/practice/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
+    <form action = "/practice/submitcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
+      <input type="hidden" name="problemid" value="{{problem.id}}" />
         <h5>Select a language :</h5>
        <input type="radio" id="c" name="language" onchange="my_fun('c')" value="c"/>
        <label for="c">c</label>

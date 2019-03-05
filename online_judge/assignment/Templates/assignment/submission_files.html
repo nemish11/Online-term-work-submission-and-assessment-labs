@@ -89,10 +89,12 @@
           {% endfor %}
       {% endif%}
     </div>
-
     <div class="col s12">
-      <a href="/assignment/showWeek"> back to week </a> |
-      <a href="/assignment/previous_submissions" >see previous submissions</a>
+      Your submission on date : {{submission.datetime}}
+      <hr/>
+      <a href="/assignment/backtoAssignment/?assignmentid={{assignment.id}}&subjectyear={{subjectyear}}">back to assignment</a> |
+      <a href="/assignment/backtoWeek/?subjectid={{assignment.week.subject.id}}&subjectyear={{subjectyear}}"> back to week </a> |
+      <a href="/assignment/previous_submissions/?assignmentid={{assignment.id}}&subjectyear={{subjectyear}}" >see previous submissions</a>
           <h4 class="title">{{assignment.title}}</h4>
       <hr>
           <h5 class="heading">question </h5>
@@ -111,12 +113,13 @@
       <hr>
       <h5>explanation</h5><p>{{assignment.explanation}}</p>
       <hr>
-        <form action = "/assignment/runcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
+        <form action = "/assignment/submitcode" method="POST" enctype = "multipart/form-data">{% csrf_token %}
 
             <h5>Your Code</h5>
-
+            <input type="hidden" name="assignmentid" value="{{assignment.id}}" />
+            <input type="hidden" name="subjectyear" value="{{subjectyear}}" />
         <textarea class="codemirror-textarea" name = "code" value="{{previous_code}}" onload="adjustHeight(this)">{{previous_code}}</textarea><br/>
-       <button class="content btn blue darken-2" type="submit">Submit</button>
+       <button class="content btn blue darken-2" type="submit" disabled>Submit</button>
 
         </form>
 
@@ -124,6 +127,7 @@
 
             <h4>Results :</h4>
         <h5>Total score is : {{totalscore}} out of {{assignment.totalscore}}</h5>
+        <h5>Verdict : {{verdict}} </h5>
       <table class="highlight centered responsive-table " >
           <thead class="grey lighten-1">
             <tr>

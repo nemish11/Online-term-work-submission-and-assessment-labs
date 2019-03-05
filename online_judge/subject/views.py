@@ -15,6 +15,9 @@ def all_subject(request):
     try:
         ymax = Student.objects.all().aggregate(Max('year'))['year__max']
         ymin = Student.objects.all().aggregate(Min('year'))['year__min']
+        if ymax is None:
+            ymax = 2016
+            ymin = 2016
         c={}
         c['min_year'] = ymin
         c['max_year'] = ymax

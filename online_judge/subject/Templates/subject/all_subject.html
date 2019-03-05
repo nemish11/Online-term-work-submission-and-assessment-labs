@@ -70,7 +70,7 @@
                                 <td>{{ s.name }}</td>
 
 
-                                    <form action="/subject/selectedsubject" method="POST" > {% csrf_token %}
+                                    <form action="/assignment/showWeek" method="POST" > {% csrf_token %}
                                       <td><input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
                                         <input type="number" name="subjectyear" min={{min_year}} max={{max_year}} value={{max_year}} required/>
                                       </td>
@@ -131,7 +131,7 @@
                             <tr>
                                 <td>{{ s.subject.subject_code }}</td>
                                 <td>{{ s.subject.name }}</td>
-                                <form action="/subject/selectedsubject" method="POST" > {% csrf_token %}
+                                <form action="/assignment/showWeek" method="POST" > {% csrf_token %}
                                   <input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.subject.id }}" />
                                     <input type="hidden" name="subjectyear" value="{{request.session.student_year}}" required/>
 
@@ -165,7 +165,7 @@
                             <tr>
                                 <td>{{ s.subject_code }}</td>
                                 <td>{{ s.name }}</td>
-                                <form action="/subject/selectedsubject" method="POST" > {% csrf_token %}
+                                <form action="/assignment/showWeek" method="POST" > {% csrf_token %}
                                   <td><input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
                                     <input type="number" name="subjectyear" min={{min_year}} max={{max_year}} value={{max_year}} required/>
                                   </td>
