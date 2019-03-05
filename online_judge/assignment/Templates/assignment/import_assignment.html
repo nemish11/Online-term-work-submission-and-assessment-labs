@@ -29,8 +29,9 @@
                     <td>{{problem.successful_submission}}</td>
                     <td>{{problem.tags}}</td>
                     <td>
-                      <form action="/assignment/importassignment" method="POST" > {% csrf_token %}
+                      <form action="/assignment/importassignment" method="GET" >
                         <input type="hidden" name="problemid" value="{{problem.id}}" />
+                        <input type="hidden" name="weekid" value="{{week.id}}" />
                         <button type="submit"> select </button>
                       </form>
                     <!--<td><a href = "/assignment/importassignment/?id={{problem.id}}">select</a></td>-->

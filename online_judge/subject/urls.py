@@ -15,7 +15,6 @@ urlpatterns = [
     url(r'request_list', request_list),
     url(r'approved_request', approved_request),
     url(r'removerequest',removerequest),
-    url(r'selectedsubject',selectedsubject),
     url(r'remove_student', remove_student),
     url(r'', all_subject),
 

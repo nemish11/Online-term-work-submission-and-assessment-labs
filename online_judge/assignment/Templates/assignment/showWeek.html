@@ -40,7 +40,7 @@
                 {% ifequal assignment.week.id week.id %}
                 <tr>
                   <td>
-                    <form action = "/assignment/selectedAssignment" method="POST" > {% csrf_token %}
+                    <form action = "/assignment/selectedAssignment" method="GET" >
                       <div>
                         <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
                         <button type="submit" class="buttonaslink">{{assignment.title}}</button>
@@ -73,7 +73,7 @@
 
               <tr>
                   <td>
-                    <form action = "/assignment/selectedAssignment" method="POST" > {% csrf_token %}
+                    <form action = "/assignment/showAssignment" method="GET" >
                       <div>
                         <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
                         <button type="submit" class="buttonaslink" name="button">{{assignment.title}}</button>
@@ -81,8 +81,7 @@
                     </form>
                   </td>
 
-                  <form action="/assignment/studentlist_for_assignment" method="POST" > {% csrf_token %}
-
+                  <form action="/assignment/studentlist_for_assignment" method="GET" >
                       <input type="hidden" name="assignment_id" value="{{ assignment.id }}" />
                       <input type="hidden" name="week_id" value="{{ week.id}}"/>
                     <td>  <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
@@ -91,7 +90,7 @@
                     </td>
                   </form>
 
-                    <form action = "/assignment/deleteAssignment" method="POST" > {% csrf_token %}
+                    <form action = "/assignment/deleteAssignment" method="GET" >
                       <div>
                         <input type = "hidden" name="assignmentid" value = "{{assignment.id}}" />
                         <td><button type="submit" class="buttonaslink" name="button">Delete</button>
@@ -109,16 +108,16 @@
             <hr/>
             <div class="row">
               <div class="col">
-              <form action="/assignment/new_assignment1" method="post">{% csrf_token %}
+              <form action="/assignment/new_assignment" method="GET">
                 <input type="hidden" name="weekid" value="{{week.id}}">
                 <button type="submit" class="buttonaslink" name="button">add new assignment</button>
               </form>
-              <form action="/assignment/import_assignment1" method="post">{% csrf_token %}
+              <form action="/assignment/import_assignment" method="GET">
                 <input type="hidden" name="weekid" value="{{week.id}}">
                 <button type="submit" class="buttonaslink" name="button">import assignment from practice question</button>
               </form>
 
-            <form action="/assignment/deleteweek" method="POST"> {% csrf_token %}
+            <form action="/assignment/deleteweek" method="GET">
               <input type="hidden" name="weekid" value="{{week.id}}">
               <button type="submit" class="buttonaslink" name="button">Delete week</button>
             </form>
@@ -136,7 +135,9 @@
       <li>
         <div class="collapsible-header">Add New Week </div>
         <div class="collapsible-body">
-          <form action="/assignment/addweek" method="POST" > {% csrf_token %}
+          <form action="/assignment/addweek" method="GET" >
+            <input type="hidden" name="subjectid" value="{{subject.id}}" />
+            <input type="hidden" name="subjectyear" value="{{subjectyear}}" />
             enter a name of week :<input type="text" name="weekname" id="weekname" required/>
             enter a last date of submission : <input type="date" name="lastdate" id="lastdate" required />
             <button type="submit" class="btn green " name="button">add week</button>

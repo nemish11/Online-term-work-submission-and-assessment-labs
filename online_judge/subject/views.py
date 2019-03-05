@@ -12,9 +12,12 @@ from django.db.models import Max,Min
 
 @login_required()
 def all_subject(request):
-    try:
+    #try:
         ymax = Student.objects.all().aggregate(Max('year'))['year__max']
         ymin = Student.objects.all().aggregate(Min('year'))['year__min']
+        if ymax is None:
+            ymax = 2016
+            ymin = 2012
         c={}
         c['min_year'] = ymin
         c['max_year'] = ymax
@@ -46,43 +49,44 @@ def all_subject(request):
             return render(request, 'subject/all_subject.html', c)
         else:
             return HttpResponseRedirect('/usermodule/')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/usermodule/')
 
 
 @login_required()
 def add_subject(request):
-    try:
+    #try:
         if request.user.is_superuser:
             return render(request, 'subject/all_subject.html')
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/all_subject')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
 @login_required()
 def addsubject(request):
-    try:
+    #try:
         if request.user.is_superuser:
-            name = request.POST.get("name")
-            subject_code = request.POST.get("subject_code")
+            name = request.GET.get("name")
+            subject_code = request.GET.get("subject_code")
+            #print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',name,subject_code)
             s = Subject(name=name, subject_code=subject_code,status=True)
             s.save()
             return HttpResponseRedirect('/subject/all_subject')
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/all_subject')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
 
 @login_required()
 def readd_subject(request):
-    try:
+    #try:
         if request.user.is_superuser:
             id = request.POST.get('id')
             Subject.objects.filter(id=id).update(status=True)
@@ -90,13 +94,13 @@ def readd_subject(request):
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/all_subject')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
 @login_required()
 def removesubject(request):
-    try:
+    #try:
         if request.user.is_superuser:
             name = request.POST.get('id')
             Subject.objects.filter(id=name).update(status=False)
@@ -104,13 +108,13 @@ def removesubject(request):
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/all_subject')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
 @login_required()
 def request_subject(request):
-    try:
+    #try:
         if request.user.is_superuser:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/all_subject')
@@ -119,10 +123,10 @@ def request_subject(request):
             subjects = Subject.objects.filter(status=True)
             faculty = Faculty.objects.filter(is_active=True)
             student = Student.objects.get(user=request.user)
-            try:
-                r_subject = Request.objects.filter(student=student)
-            except:
-                r_subject = None
+            #try:
+            r_subject = Request.objects.filter(student=student)
+            #except:
+                #r_subject = None
 
             slist = []
 
@@ -165,26 +169,13 @@ def request_subject(request):
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/all_subject')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
-
-@login_required()
-def selectedsubject(request):
-    try:
-        subjectid = request.POST.get('subjectid')
-        subjectyear = request.POST.get('subjectyear')
-        request.session['subjectyear'] = subjectyear
-        request.session['subjectid'] = subjectid
-        return HttpResponseRedirect('/assignment/showWeek')
-    except:
-        return HttpResponseRedirect('/subject/')
-
-
 @login_required()
 def pending_request(request):
-    try:
+    #try:
         if request.session['usertype'] == "student":
             f = request.POST.get('faculty')
             s = request.POST.get('subject')
@@ -194,10 +185,10 @@ def pending_request(request):
             fobj = Faculty.objects.get(id=f)
             sobj = Subject.objects.get(id=s)
             stuobj = Student.objects.get(user=request.user)
-            try:
-                checkobj = Request.objects.filter(faculty=fobj,student=stuobj,subject=sobj)[0]
-            except:
-                checkobj = None
+            #try:
+            checkobj = Request.objects.filter(faculty=fobj,student=stuobj,subject=sobj)[0]
+            #except:
+            #    checkobj = None
             if checkobj is not None:
                 if checkobj.status == "pending" or checkobj.status=="approved":
                     messages.add_message(request, messages.WARNING, "Subject is already requested or approved !!")
@@ -216,13 +207,13 @@ def pending_request(request):
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/request_subject')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
 @login_required()
 def removerequest(request):
-    try:
+    #try:
         if request.user.groups.all()[0].name == 'student':
             requestid = request.POST.get('id')
             Request.objects.filter(id=requestid).update(status="decline")
@@ -230,24 +221,24 @@ def removerequest(request):
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/request_subject')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
 
 @login_required()
 def request_list(request):
-    try:
+    #try:
         if request.user.is_superuser:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/all_subject')
 
         if request.user.groups.all()[0].name == 'faculty':
             faculty = Faculty.objects.get(user=request.user)
-            try:
-                req_list = Request.objects.filter(faculty=faculty, status="pending")
-            except:
-                req_list = None
+            #try:
+            req_list = Request.objects.filter(faculty=faculty, status="pending")
+            #except:
+            #    req_list = None
 
             subject = Subject.objects.filter(status=True)
 
@@ -264,14 +255,14 @@ def request_list(request):
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/all_subject')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
 
 @login_required()
 def set_subject_for_studentlist(request):
-    try:
+    #try:
         if request.session['usertype'] == 'faculty' :
             subjectid = request.POST.get('subjectid')
             year = request.POST.get('year')
@@ -281,14 +272,14 @@ def set_subject_for_studentlist(request):
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/request_subject')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
 
 @login_required()
 def student_list(request):
-    try:
+    #try:
         if request.user.groups.all()[0].name == 'faculty':
             faculty = Faculty.objects.get(user=request.user)
             subjectid = request.session['studentlist_subjectid']
@@ -307,14 +298,14 @@ def student_list(request):
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/request_list')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
 
 @login_required()
 def approved_request(request):
-    try:
+    #try:
         if request.user.groups.all()[0].name == 'faculty':
             id = request.POST.get('id')
             s = request.POST['status']
@@ -324,14 +315,14 @@ def approved_request(request):
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/request_list')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
 
 
 @login_required()
 def remove_student(request):
-    try:
+    #try:
         if request.user.groups.all()[0].name == 'faculty':
             id = int(request.POST.get('id'))
             Request.objects.filter(id=id).update(status="decline")
@@ -339,6 +330,6 @@ def remove_student(request):
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/request_list')
-    except:
+    #except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')

@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 # Create your models here.
 
 class Problem(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.TextField()
     question = models.TextField(blank=True,null=True)
     constraint = models.TextField(null=True,blank=True)
@@ -21,10 +23,12 @@ class Problem(models.Model):
     isdeleted = models.BooleanField(default=False)
 
 class Tag(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.TextField()
     problems = models.ManyToManyField(Problem)
 
 class Problem_files(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name='problemfiles_problem')
     type = models.CharField(max_length = 100)
     score = models.IntegerField(default=0)
@@ -34,6 +38,7 @@ class Problem_files(models.Model):
     filepath = models.TextField()
 
 class Submission(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Submission_user')
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name='submission_problem')
     totalscore = models.IntegerField(default=0)
@@ -45,6 +50,7 @@ class Submission(models.Model):
     commentunread = models.BooleanField(default = True,null=True,blank=True)
 
 class Submission_files(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE, related_name='submissionfiles_submission')
     type = models.CharField(max_length = 20)
     score = models.IntegerField(default=0)

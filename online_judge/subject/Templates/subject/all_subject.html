@@ -31,7 +31,7 @@
             <li>
                 <div class="collapsible-header">Add Subject</div>
                 <div class="collapsible-body">
-                    <form action="/subject/addsubject" method="POST" > {% csrf_token %}
+                    <form action="/subject/addsubject" method="GET" > {% csrf_token %}
                         <div >
                             <label for="name">Subject Name</label>
                             <input type="text" name="name" class="validate" id="name" required>
@@ -70,7 +70,7 @@
                                 <td>{{ s.name }}</td>
 
 
-                                    <form action="/subject/selectedsubject" method="POST" > {% csrf_token %}
+                                    <form action="/assignment/showWeek" method="GET" > {% csrf_token %}
                                       <td><input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
                                         <input type="number" name="subjectyear" min={{min_year}} max={{max_year}} value={{max_year}} required/>
                                       </td>
@@ -78,14 +78,14 @@
                                     </form>
 
 
-                                    <form action="/leaderboard/set_leaderboard_subject" method="POST" > {% csrf_token %}
+                                    <form action="/leaderboard/set_leaderboard_subject" method="GET" > {% csrf_token %}
                                         <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
                                             <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
                                         </td>
                                         <td><button class="btn green lighten-2" type="submit"  name="send">Leaderboard</button></td>
                                     </form>
                                  <td>
-                                    <form action="/subject/removesubject" method="POST" > {% csrf_token %}
+                                    <form action="/subject/removesubject" method="GET" > {% csrf_token %}
                                       <button class="btn red lighten-1" type="submit"  name="status" value="remove">Remove</button>
                                       <input type="hidden" value="{{ s.pk }}" name="id">
                                     </form>
@@ -100,7 +100,7 @@
         <li>
             <div class="collapsible-header">Add Subject</div>
             <div class="collapsible-body">
-                <form action="/subject/addsubject" method="POST" > {% csrf_token %}
+                <form action="/subject/addsubject" method="GET" > {% csrf_token %}
                     <div >
                         <label for="name">Subject Name</label>
                         <input type="text" name="name" class="validate" id="name" required>

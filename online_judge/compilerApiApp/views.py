@@ -19,7 +19,7 @@ def program_file(request):
 
 @login_required()
 def run_input_files(request,counter,dirname,submission,inputfiles,language,code,filename):
-    try:
+    #try:
         inputfile = inputfiles[counter-1]
         fhandler = open(inputfile,'r')
         inputfiledata = fhandler.read()
@@ -239,13 +239,13 @@ def run_input_files(request,counter,dirname,submission,inputfiles,language,code,
 
         else:
             return "NO langauage available"
-    except:
+    #except:
         return "some error"
 
 
 @login_required()
 def submit_code(request,assignment,subject,inputfiles,code):
-    try:
+    #try:
         submission = Submission(user=request.user,assignment=assignment,datetime=datetime.now(),verdict="wrong",isrunning='YES')
         submission.save()
         id = submission.id
@@ -300,5 +300,5 @@ def submit_code(request,assignment,subject,inputfiles,code):
         submission.isrunning = 'NO'
         submission.save()
         return submission
-    except:
+    #except:
         return "error in compiling your code"
