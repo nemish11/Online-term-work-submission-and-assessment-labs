@@ -35,7 +35,7 @@
                         <td>{{ submission.datetime }}</td>
                         <td>{{ submission.verdict }}</td>
                         <td>
-                            <form action = "/assignment/selectedsubmission" method="POST" > {% csrf_token %}
+                            <form action = "/assignment/submission_files" method="POST" > {% csrf_token %}
                                 <div>
                                     <input type="hidden" name="submissionid" value="{{submission.id}}"/>
 

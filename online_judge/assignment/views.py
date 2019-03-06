@@ -511,9 +511,9 @@ def previous_submissions(request):
 def submission_files(request):
     #try:
         submissionid = request.POST.get('submissionid')
-        subjectyear = request.POST.get('subjectyear')
         submission = Submission.objects.get(pk=int(submissionid))
         assignment = submission.assignment
+        subjectyear = assignment.week.year
         total_inputfiles = assignment.total_inputfiles
         submission_files = Submission_files.objects.filter(submission=submission)
 
@@ -768,7 +768,7 @@ def student_all_submission(request):
         c['submission_list'] = submission_list
         c['week'] = week
         c['assignment'] = assignment
-        c['username'] = user
+        c['user'] = user
         return render(request,'assignment/student_all_submission.html',c)
     #except:
         return HttpResponseRedirect('/assignment/showWeek')
