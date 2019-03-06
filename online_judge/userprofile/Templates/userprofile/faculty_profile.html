@@ -51,6 +51,7 @@
             <li class="collection-item">Date of birth : <span class="secondary-content black-text">{{request.user.faculty.dob}}</span></li>
             <li class="collection-item">Phone NO : <span class="secondary-content black-text">{{request.user.faculty.phone_no}}</span></li>
             <li class="collection-item"><a href="/userprofile/updateFaculty">Edit Profile</a></li>
+            <li class="collection-item"><a href="/userprofile/change_password">Change Password</a></li>
             <hr class="style13">
 
             <li class="collection-header"><h5> Submissions Details </h5></li>
@@ -71,20 +72,16 @@
 <script type="text/javascript">
   google.charts.load('current', {'packages':['corechart']});
   google.charts.setOnLoadCallback(drawChart);
-
   function drawChart() {
-
     var data = google.visualization.arrayToDataTable([
       ['Task', 'Accuracy'],
       ['fully accepted',{{accepted}}],
       ['wrong',{{wrong}}],
       ['partially accepted',{{partially_accepted}}]
     ]);
-
     var options = {
       title: ''
     };
-
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
     chart.draw(data, options);
   }

@@ -264,7 +264,7 @@ def submit_code(request,assignment,subject,inputfiles,code):
         #inputfilecount = 3#request.POST.get['inputfilecount']
         if language == 'c' or language == 'C':
             codefile = dirname + "/codefile.c"
-        elif language == 'C++' or language == 'c++':
+        elif language == 'C++' or language == 'c++' or language == 'cpp' or language == 'Cpp':
             codefile = dirname + "/codefile.cpp"
         elif language == 'python' or language == 'Python':
             codefile = dirname + "/codefile.py"

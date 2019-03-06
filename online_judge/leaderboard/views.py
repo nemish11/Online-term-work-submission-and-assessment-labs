@@ -69,7 +69,7 @@ def initialize_leaderboard_cache(request):
         leaderboard = Leaderboard.objects.filter(subject=subject, year=year).values('subject', 'week', 'student').annotate(Sum('maxscore'))
 
         student_list = set()
-        week_list = Week.objects.filter(subject=subject, isdeleted=False)
+        week_list = Week.objects.filter(subject=subject, isdeleted=False,year=int(year))
         for l in leaderboard:
             student_list.add(l['student'])
         subject_rank_name = "rank:"+str(year)+':'+str(subjectid)
@@ -86,8 +86,8 @@ def initialize_leaderboard_cache(request):
         r.hset("ranklist", subject_rank_name, subject_rank_name)
         r.hset("leaderboard", str(year)+':'+str(subjectid), str(year)+':'+str(subjectid))
 
-        r.expire(subject_rank_name, 100000)
-        r.expire(str(year)+':'+str(subjectid), 100000)
+        r.expire(subject_rank_name, 120)
+        r.expire(str(year)+':'+str(subjectid), 120)
 
         for l in leaderboard:
             name = str(year)+':'+str(l['subject'])+':'+str(l['student'])
@@ -116,7 +116,7 @@ def get_leaderboard(request):
         subjectid = request.session.get('leaderboard_subjectid')
         subject = Subject.objects.get(id=subjectid)
         year = request.session.get('leaderboard_year')
-        weeks = Week.objects.filter(subject=subject, isdeleted=False)
+        weeks = Week.objects.filter(subject=subject, isdeleted=False,year=int(year))
         week = {}
         for w in weeks:
             week[w.id] = w.name
@@ -222,7 +222,7 @@ def update_cache_week(subjectid):
             if r.exists(hash_key):
                 r.expire(hash_key, 10)
             if r.exists(set_key):
-                r.expire(set_key,10)
+                r.expire(set_key, 10)
 
         return
     except:
