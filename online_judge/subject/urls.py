@@ -3,7 +3,7 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    url(r'set_subject_for_studentlist',set_subject_for_studentlist),
+    #url(r'set_subject_for_studentlist',set_subject_for_studentlist),
     url(r'student_list',student_list),
     url(r'readd_subject', readd_subject),
     url(r'all_subject', all_subject),
@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'request_list', request_list),
     url(r'approved_request', approved_request),
     url(r'removerequest',removerequest),
-    url(r'selectedsubject',selectedsubject),
+    #url(r'selectedsubject',selectedsubject),
     url(r'remove_student', remove_student),
     url(r'', all_subject),
 

@@ -92,7 +92,7 @@
                         <td>
                             <form action="/subject/removerequest" method="POST" >{% csrf_token%}
                                 <button type="submit" class="btn green lighten-2" name="remove_s">Remove Request</button>
-                                <input type="hidden" name="id" value="{{ s.pk }}">
+                                <input type="hidden" name="requestid" value="{{ s.pk }}">
                             </form>
                         </td>
                     </tr>

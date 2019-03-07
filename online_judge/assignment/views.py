@@ -20,7 +20,7 @@ from online_judge.settings import *
 from compilerApiApp.views import submit_code
 import filecmp
 from leaderboard.models import Leaderboard
-from leaderboard.views import update_cache_week
+from leaderboard.views import update_cache_week,update_cache
 from django.db.models import Max,Min
 
 @login_required()
@@ -96,7 +96,7 @@ def addweek(request):
         subject = Subject.objects.get(pk=int(subjectid))
         week = Week(name=weekname,subject=subject,lastdate=lastdate,year=int(subjectyear))
         week.save()
-        #update_cache_week(subjectid)
+        update_cache_week(request,subjectid,week.year)
         c = {}
         ymax = Student.objects.all().aggregate(Max('year'))['year__max']
         ymin = Student.objects.all().aggregate(Min('year'))['year__min']
@@ -133,7 +133,7 @@ def deleteweek(request):
         week = Week.objects.get(pk = int(weekid))
         week.isdeleted = True
         week.save()
-        #update_cache_week(subjectid)
+        update_cache_week(request,subjectid,week.year)
         c = {}
         ymax = Student.objects.all().aggregate(Max('year'))['year__max']
         ymin = Student.objects.all().aggregate(Min('year'))['year__min']
@@ -709,9 +709,11 @@ def submitcode(request):
                 leaderboard = leaderboard[0]
                 leaderboard.maxscore = max(leaderboard.maxscore,scoreA)
                 leaderboard.save()
+                update_cache(request, leaderboard)
             else:
                 leaderboard = Leaderboard(subject = assignment.subject, year = studentA.year, assignment=assignment, student = studentA, week = assignment.week, maxscore = scoreA)
                 leaderboard.save()
+                update_cache(request, leaderboard)
 
         c['combinedlist'] = zip(inputfiles,outputfiles,errorfiles)
         return render(request,'assignment/showAssignment.html',c)

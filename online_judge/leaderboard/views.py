@@ -25,7 +25,7 @@ def connection():
     return r
 
 
-@login_required()
+'''@login_required()
 def set_leaderboard_subject(request):
     try:
         r = connection()
@@ -43,7 +43,7 @@ def set_leaderboard_subject(request):
             return HttpResponseRedirect('/leaderboard/get_leaderboard')
     except:
         return HttpResponseRedirect('/subject/')
-
+'''
 
 @login_required()
 def flush_RedisDB(request):
@@ -63,9 +63,9 @@ def flush_RedisDB(request):
 def initialize_leaderboard_cache(request):
     try:
         r = connection()
-        subjectid = request.session.get('leaderboard_subjectid')
+        subjectid = request.POST.get('subjectid')
         subject = Subject.objects.get(id=subjectid)
-        year = request.session.get('leaderboard_year')
+        year = request.POST.get('year')
         leaderboard = Leaderboard.objects.filter(subject=subject, year=year).values('subject', 'week', 'student').annotate(Sum('maxscore'))
 
         student_list = set()
@@ -113,9 +113,14 @@ def initialize_leaderboard_cache(request):
 def get_leaderboard(request):
     try:
         r = connection()
-        subjectid = request.session.get('leaderboard_subjectid')
+        subjectid = request.POST.get('subjectid')
         subject = Subject.objects.get(id=subjectid)
-        year = request.session.get('leaderboard_year')
+        year = request.POST.get('year')
+
+        hash_key = str(year) + ':' + str(subjectid)
+        if not r.exists(hash_key):
+            initialize_leaderboard_cache(request)
+
         weeks = Week.objects.filter(subject=subject, isdeleted=False,year=int(year))
         week = {}
         for w in weeks:
@@ -188,7 +193,7 @@ def get_leaderboard(request):
         return HttpResponseRedirect('/subject/all_subject')
 
 
-def update_cache(leaderboard):
+def update_cache(request,leaderboard):
     try:
         r = connection()
         student_id = leaderboard.student.id
@@ -210,19 +215,16 @@ def update_cache(leaderboard):
         return HttpResponseRedirect('/subject/all_subject')
 
 
-def update_cache_week(subjectid):
+def update_cache_week(request,subjectid,year):
     try:
         r = connection()
-        ymax = Student.objects.all().aggregate(Max('year'))['year__max']
-        ymin = Student.objects.all().aggregate(Min('year'))['year__min']
-        for year in range(ymin,ymax+1):
-            hash_key = str(year)+':'+str(subjectid)
-            set_key = "rank:"+str(year)+':'+str(subjectid)
 
-            if r.exists(hash_key):
-                r.expire(hash_key, 10)
-            if r.exists(set_key):
-                r.expire(set_key, 10)
+        hash_key = str(year)+':'+str(subjectid)
+        set_key = "rank:"+str(year)+':'+str(subjectid)
+        if r.exists(hash_key):
+            r.expire(hash_key, 10)
+        if r.exists(set_key):
+            r.expire(set_key, 10)
 
         return
     except:

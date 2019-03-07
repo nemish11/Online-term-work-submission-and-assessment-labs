@@ -87,8 +87,8 @@ def addsubject(request):
 def readd_subject(request):
     try:
         if request.user.is_superuser:
-            id = request.POST.get('id')
-            Subject.objects.filter(id=id).update(status=True)
+            subjectid = request.POST.get('subjectid')
+            Subject.objects.filter(id=subjectid).update(status=True)
             return HttpResponseRedirect('/subject/all_subject')
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
@@ -101,7 +101,7 @@ def readd_subject(request):
 def removesubject(request):
     try:
         if request.user.is_superuser:
-            name = request.POST.get('id')
+            name = request.POST.get('subjectid')
             Subject.objects.filter(id=name).update(status=False)
             return HttpResponseRedirect('/subject/all_subject')
         else:
@@ -173,8 +173,8 @@ def request_subject(request):
         return HttpResponseRedirect('/subject/all_subject')
 
 
-@login_required()
-def selectedsubject(request):
+'''@login_required()
+def selectedsubject(request): #not required
     try:
         subjectid = request.POST.get('subjectid')
         subjectyear = request.POST.get('subjectyear')
@@ -183,6 +183,7 @@ def selectedsubject(request):
         return HttpResponseRedirect('/assignment/showWeek')
     except:
         return HttpResponseRedirect('/subject/')
+'''
 
 
 @login_required()
@@ -227,7 +228,7 @@ def pending_request(request):
 def removerequest(request):
     try:
         if request.user.groups.all()[0].name == 'student':
-            requestid = request.POST.get('id')
+            requestid = request.GET.get('requestid')
             Request.objects.filter(id=requestid).update(status="decline")
             return HttpResponseRedirect('/subject/request_subject')
         else:
@@ -272,7 +273,7 @@ def request_list(request):
         return HttpResponseRedirect('/subject/all_subject')
 
 
-@login_required()
+'''@login_required()
 def set_subject_for_studentlist(request):
     try:
         if request.session['usertype'] == 'faculty' :
@@ -287,15 +288,17 @@ def set_subject_for_studentlist(request):
     except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')
         return HttpResponseRedirect('/subject/all_subject')
-
+'''
 
 @login_required()
 def student_list(request):
     try:
         if request.user.groups.all()[0].name == 'faculty':
             faculty = Faculty.objects.get(user=request.user)
-            subjectid = request.session['studentlist_subjectid']
-            year1 = request.session['studentlist_year']
+            subjectid = request.GET.get('subjectid')
+            year1 = request.GET.get('year')
+            subjectid = int(subjectid)
+            year1 = int(year1)
             subject = Subject.objects.get(id=int(subjectid))
             students = Request.objects.filter(faculty=faculty,  subject=subject, status="approved")
             student = []
@@ -320,7 +323,7 @@ def approved_request(request):
     try:
         if request.user.groups.all()[0].name == 'faculty':
             id = request.POST.get('id')
-            s = request.POST['status']
+            s = request.POST.get('status')
             Request.objects.filter(id=id).update(status=s)
             messages.add_message(request, messages.INFO, "Request is "+s)
             return HttpResponseRedirect('/subject/request_list')
@@ -336,9 +339,12 @@ def approved_request(request):
 def remove_student(request):
     try:
         if request.user.groups.all()[0].name == 'faculty':
-            id = int(request.POST.get('id'))
+            id = int(request.POST.get('requestid'))
             Request.objects.filter(id=id).update(status="decline")
-            return HttpResponseRedirect('/subject/student_list')
+            req = Request.objects.filter(id=id)[0]
+            subjectid = req.subject.id
+            year = req.student.year
+            return HttpResponseRedirect('/subject/student_list/?subjectid='+str(subjectid)+'&year='+str(year))
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
             return HttpResponseRedirect('/subject/request_list')

@@ -21,8 +21,8 @@
                         <td>{{ student.student.user.username }}</td>
                         <td>
                             <form action="/subject/remove_student" method="POST" > {% csrf_token %}
-                                <button type="submit" class="btn green lighten-2" name="status" value="remove">Remove</button>
-                                <input type="hidden" value="{{ student.pk }}" name="id">
+                                <button type="submit" class="btn red lighten-2" name="status" value="remove">Remove</button>
+                                <input type="hidden" value="{{ student.pk }}" name="requestid">
                             </form>
                         </td>
                     </tr>
