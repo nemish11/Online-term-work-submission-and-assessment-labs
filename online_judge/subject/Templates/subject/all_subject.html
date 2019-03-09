@@ -64,22 +64,22 @@
                       </tr>
                     </thead>
                     <tbody >
-                        {% for s in subject_list %}
+                        {% for subject in subject_list %}
                             <tr>
-                                <td>{{ s.subject_code }}</td>
-                                <td>{{ s.name }}</td>
+                                <td>{{ subject.subject_code }}</td>
+                                <td>{{ subject.name }}</td>
 
 
                                     <form action="/assignment/showWeek" method="POST" > {% csrf_token %}
-                                      <td><input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
+                                      <td><input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ subject.id }}" />
                                         <input type="number" name="subjectyear" min={{min_year}} max={{max_year}} value={{max_year}} required/>
                                       </td>
                                       <td><button type="submit" class="btn green lighten-2" name="send">Show week</button>  </td>
                                     </form>
 
 
-                                    <form action="/leaderboard/get_leaderboard" method="POST" > {% csrf_token %}
-                                        <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
+                                    <form action="/leaderboard/showleaderboard" method="GET" > {% csrf_token %}
+                                        <td><input type="hidden" name="subjectid" value="{{ subject.id }}" />
                                             <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
                                         </td>
                                         <td><button class="btn green lighten-2" type="submit"  name="send">Leaderboard</button></td>
@@ -87,7 +87,7 @@
                                  <td>
                                     <form action="/subject/removesubject" method="POST" > {% csrf_token %}
                                       <button class="btn red lighten-1" type="submit"  name="status" value="remove">Remove</button>
-                                      <input type="hidden" value="{{ s.pk }}" name="subjectid">
+                                      <input type="hidden" value="{{ subject.pk }}" name="subjectid">
                                     </form>
                                 </td>
 
@@ -127,21 +127,21 @@
                       </tr>
                     </thead>
                     <tbody>
-                        {% for s in subject_list %}
+                        {% for subject in subject_list %}
                             <tr>
-                                <td>{{ s.subject.subject_code }}</td>
-                                <td>{{ s.subject.name }}</td>
+                                <td>{{ subject.subject.subject_code }}</td>
+                                <td>{{ subject.subject.name }}</td>
                                 <form action="/assignment/showWeek" method="POST" > {% csrf_token %}
-                                  <input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.subject.id }}" />
+                                  <input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ subject.subject.id }}" />
                                     <input type="hidden" name="subjectyear" value="{{request.session.student_year}}" required/>
 
                                   <td><button type="submit" class="btn green lighten-2" name="send">Show week</button>  </td>
                                 </form>
 
-                                    <form action="/leaderboard/get_leaderboard" method="POST" > {% csrf_token %}
-                                     <input type="hidden" name="subjectid" value="{{ s.subject.id }}" />
+                                    <form action="/leaderboard/showleaderboard" method="GET" > {% csrf_token %}
+                                     <input type="hidden" name="subjectid" value="{{ subject.subject.id }}" />
                                         <input type="hidden" name="year" value="{{request.session.student_year}}" required/>
-                                        <td><button type="submit" class="btn green lighten-2" name="send">Show Leaderboard</button></td>
+                                        <td><button type="submit" class="btn green lighten-2" name="send">Leaderboard</button></td>
                                     </form>
                             </tr>
                         {% endfor %}
@@ -161,21 +161,21 @@
                       </tr>
                     </thead>
                     <tbody>
-                        {% for s in subject_list %}
+                        {% for subject in subject_list %}
                             <tr>
-                                <td>{{ s.subject_code }}</td>
-                                <td>{{ s.name }}</td>
+                                <td>{{ subject.subject_code }}</td>
+                                <td>{{ subject.name }}</td>
                                 <form action="/assignment/showWeek" method="POST" > {% csrf_token %}
-                                  <td><input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ s.id }}" />
+                                  <td><input class="btn green lighten-2" type="hidden" name="subjectid" value="{{ subject.id }}" />
                                     <input type="number" name="subjectyear" min={{min_year}} max={{max_year}} value={{max_year}} required/>
                                   </td>
                                   <td><button type="submit" class="btn green lighten-2" name="send">Show week</button>  </td>
                                 </form>
 
-                                    <form action="/leaderboard/get_leaderboard" method="POST" > {% csrf_token %}
-                                        <td><input type="hidden" name="subjectid" value="{{ s.id }}" />
+                                    <form action="/leaderboard/showleaderboard" method="GET" > {% csrf_token %}
+                                        <td><input type="hidden" name="subjectid" value="{{ subject.id }}" />
                                         <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/></td>
-                                        <td><button type="submit" class="btn green lighten-2" name="send">Show leaderboard</button></td>
+                                        <td><button type="submit" class="btn green lighten-2" name="send">leaderboard</button></td>
                                     </form>
                             </tr>
                         {% endfor %}
@@ -202,14 +202,14 @@
                       </tr>
                     </thead>
                     <tbody>
-                        {% for s in remove_list %}
+                        {% for subject in removed_subject_list %}
                             <tr>
-                                <td>{{ s.subject_code }}</td>
-                                <td>{{ s.name }} </td>
+                                <td>{{ subject.subject_code }}</td>
+                                <td>{{ subject.name }} </td>
                                 <td>
                                     <form action="/subject/readd_subject" method="POST" > {% csrf_token %}
                                         <button type="submit" class="btn green lighten-2" name="status" value="readd">Readd</button>
-                                        <input type="hidden" value="{{ s.pk }}" name="subjectid">
+                                        <input type="hidden" value="{{ subject.pk }}" name="subjectid">
                                     </form>
                                 </td>
                             </tr>

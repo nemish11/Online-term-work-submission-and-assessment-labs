@@ -48,7 +48,7 @@ def set_leaderboard_subject(request):
 @login_required()
 def flush_RedisDB(request):
     try:
-        if request.user.is_superuser:
+        if request.user.is_superuser or request.session['usertype'] == "faculty":
             r = connection()
             r.flushall()
             return HttpResponseRedirect('/subject/')
@@ -63,9 +63,10 @@ def flush_RedisDB(request):
 def initialize_leaderboard_cache(request):
     try:
         r = connection()
-        subjectid = request.POST.get('subjectid')
+        EXPIRE_TIME = 120
+        subjectid = request.GET.get('subjectid')
         subject = Subject.objects.get(id=subjectid)
-        year = request.POST.get('year')
+        year = request.GET.get('year')
         leaderboard = Leaderboard.objects.filter(subject=subject, year=year).values('subject', 'week', 'student').annotate(Sum('maxscore'))
 
         student_list = set()
@@ -78,16 +79,18 @@ def initialize_leaderboard_cache(request):
             for w in week_list:
                 student_hash_key = str(year)+':'+str(subjectid)+':'+str(s)+':'+str(w.id)
                 r.hset(subject_hash_key, student_hash_key, 0)
+                r.expire(student_hash_key,EXPIRE_TIME)
             r.hset(str(year)+':'+str(subjectid), subject_hash_key, subject_hash_key)
 
             name = "rank:"+str(year)+':'+str(subjectid)+':'+str(s)
-
             r.zadd(subject_rank_name,{name: 0})
+            r.expire(subject_rank_name,EXPIRE_TIME)
+            r.expire(subject_hash_key,EXPIRE_TIME)
         r.hset("ranklist", subject_rank_name, subject_rank_name)
         r.hset("leaderboard", str(year)+':'+str(subjectid), str(year)+':'+str(subjectid))
 
-        r.expire(subject_rank_name, 120)
-        r.expire(str(year)+':'+str(subjectid), 120)
+        r.expire(subject_rank_name, EXPIRE_TIME)
+        r.expire(str(year)+':'+str(subjectid), EXPIRE_TIME)
 
         for l in leaderboard:
             name = str(year)+':'+str(l['subject'])+':'+str(l['student'])
@@ -110,12 +113,12 @@ def initialize_leaderboard_cache(request):
 
 
 @login_required()
-def get_leaderboard(request):
+def showleaderboard(request):
     try:
         r = connection()
-        subjectid = request.POST.get('subjectid')
+        subjectid = request.GET.get('subjectid')
         subject = Subject.objects.get(id=subjectid)
-        year = request.POST.get('year')
+        year = request.GET.get('year')
 
         hash_key = str(year) + ':' + str(subjectid)
         if not r.exists(hash_key):

@@ -31,7 +31,7 @@ def all_subject(request):
                 else:
                     rmlist.append(s)
             c['subject_list'] = subject_list
-            c['remove_list'] = rmlist
+            c['removed_subject_list'] = rmlist
             return render(request, 'subject/all_subject.html', c)
         elif request.user.groups.all()[0].name == 'faculty':
             f=Faculty.objects.get(user=request.user)
@@ -228,7 +228,7 @@ def pending_request(request):
 def removerequest(request):
     try:
         if request.user.groups.all()[0].name == 'student':
-            requestid = request.GET.get('requestid')
+            requestid = request.POST.get('requestid')
             Request.objects.filter(id=requestid).update(status="decline")
             return HttpResponseRedirect('/subject/request_subject')
         else:
@@ -249,21 +249,21 @@ def request_list(request):
         if request.user.groups.all()[0].name == 'faculty':
             faculty = Faculty.objects.get(user=request.user)
             try:
-                req_list = Request.objects.filter(faculty=faculty, status="pending")
+                request_list = Request.objects.filter(faculty=faculty, status="pending")
             except:
-                req_list = None
+                request_list = None
 
-            subject = Subject.objects.filter(status=True)
+            subjects = Subject.objects.filter(status=True)
 
             ymax = Student.objects.all().aggregate(Max('year'))['year__max']
             ymin = Student.objects.all().aggregate(Min('year'))['year__min']
 
             c = {}
-            c['req_list'] = req_list
+            c['request_list'] = request_list
             c['role'] = "faculty"
             c['min_year'] = ymin
             c['max_year'] = ymax
-            c['subjects'] = subject
+            c['subjects'] = subjects
             return render(request, 'subject/request_list.html', c)
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')
@@ -301,14 +301,14 @@ def student_list(request):
             year1 = int(year1)
             subject = Subject.objects.get(id=int(subjectid))
             students = Request.objects.filter(faculty=faculty,  subject=subject, status="approved")
-            student = []
+            student_list = []
             for s in students:
                 if int(s.student.year) == int(year1):
-                    student.append(s)
+                    student_list.append(s)
             c = {}
             c['subject'] = subject
             c['faculty'] = faculty
-            c['students'] = student
+            c['students'] = student_list
             return render(request, 'subject/student_list.html', c)
         else:
             messages.add_message(request, messages.WARNING, 'You are not authorized!!')

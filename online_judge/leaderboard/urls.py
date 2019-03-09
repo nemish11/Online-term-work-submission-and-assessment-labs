@@ -4,7 +4,7 @@ from .views import *
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    url(r'get_leaderboard', get_leaderboard),
+    url(r'showleaderboard', showleaderboard),
     url(r'flushRedis', flush_RedisDB),
-    url(r'', get_leaderboard),
+    url(r'', showleaderboard),
 ]

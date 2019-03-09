@@ -25,7 +25,7 @@ from django.db.models import Max,Min
 
 @login_required()
 def showWeek(request):
-    #try:
+    try:
         c = {}
         ymax = Student.objects.all().aggregate(Max('year'))['year__max']
         ymin = Student.objects.all().aggregate(Min('year'))['year__min']
@@ -50,12 +50,12 @@ def showWeek(request):
         c['usertype'] = usertype
         c['faculty'] = 'faculty'
         return render(request, 'assignment/showWeek.html', c)
-    #except:
+    except:
         return HttpResponseRedirect('/subject/')
 
 @login_required()
 def backtoWeek(request):
-    #try:
+    try:
         c = {}
         ymax = Student.objects.all().aggregate(Max('year'))['year__max']
         ymin = Student.objects.all().aggregate(Min('year'))['year__min']
@@ -80,12 +80,12 @@ def backtoWeek(request):
         c['usertype'] = usertype
         c['faculty'] = 'faculty'
         return render(request, 'assignment/showWeek.html', c)
-    #except:
+    except:
         return HttpResponseRedirect('/subject/')
 
 @login_required()
 def addweek(request):
-    #try:
+    try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
         c = {}
@@ -118,12 +118,12 @@ def addweek(request):
         c['usertype'] = usertype
         c['faculty'] = 'faculty'
         return render(request, 'assignment/showWeek.html', c)
-    #except:
+    except:
         return HttpResponseRedirect('/subject/')
 
 @login_required()
 def deleteweek(request):
-    #try:
+    try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
         weekid = request.POST.get('weekid')
@@ -155,12 +155,12 @@ def deleteweek(request):
         c['usertype'] = usertype
         c['faculty'] = 'faculty'
         return render(request, 'assignment/showWeek.html', c)
-    #except:
+    except:
         return HttpResponseRedirect('/subject/')
 
 @login_required()
 def deleteAssignment(request):
-    #try:
+    try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
         assignmentid = request.POST.get('assignmentid')
@@ -189,13 +189,13 @@ def deleteAssignment(request):
         c['usertype'] = usertype
         c['faculty'] = 'faculty'
         return render(request, 'assignment/showWeek.html', c)
-    #except:
-        messages.add_message(request, messages.WARNING, 'Some error occured..#try again...!!')
+    except:
+        messages.add_message(request, messages.WARNING, 'Some error occured..try again...!!')
         return HttpResponseRedirect('/assignment/showWeek')
 
 @login_required()
 def new_assignment(request):
-    #try:
+    try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
         weekid = request.POST.get('weekid')
@@ -207,12 +207,12 @@ def new_assignment(request):
         c['subject'] = subject
         c['subjectyear'] = subjectyear
         return render(request,'assignment/new_assignment.html',c)
-    #except:
+    except:
         return HttpResponseRedirect('/assignment/showWeek')
 
 @login_required()
 def import_assignment(request):
-    #try:
+    try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
         weekid = request.POST.get('weekid')
@@ -226,12 +226,12 @@ def import_assignment(request):
         c['subjectyear'] = subjectyear
         c['problems'] = problems
         return render(request,'assignment/import_assignment.html',c)
-    #except:
+    except:
         return HttpResponseRedirect('/assignment/showWeek')
 
 @login_required()
 def importassignment(request):
-    #try:
+    try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
         weekid = request.POST.get('weekid')
@@ -336,12 +336,12 @@ def importassignment(request):
         c['usertype'] = usertype
         c['faculty'] = 'faculty'
         return render(request, 'assignment/showWeek.html', c)
-    #except:
+    except:
         return HttpResponseRedirect('/subject/')
 
 @login_required()
 def newassignment(request):
-    #try:
+    try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
         weekid = request.POST.get('weekid')
@@ -426,12 +426,12 @@ def newassignment(request):
         c['usertype'] = usertype
         c['faculty'] = 'faculty'
         return render(request, 'assignment/showWeek.html', c)
-    #except:
+    except:
         return HttpResponseRedirect('/subject/')
 
 @login_required()
 def backtoAssignment(request):
-    #try:
+    try:
         c = {}
         assignmentid = request.GET.get('assignmentid')
         subjectyear = request.GET.get('subjectyear')
@@ -451,12 +451,12 @@ def backtoAssignment(request):
         c['previous_code'] = previous_code
         c['subjectyear'] = subjectyear
         return render(request,'assignment/showAssignment.html',c)
-    #except:
+    except:
         return HttpResponseRedirect('/subject/')
 
 @login_required()
 def showAssignment(request):
-    #try:
+    try:
         c = {}
         assignmentid = request.POST.get('assignmentid')
         subjectyear = request.POST.get('subjectyear')
@@ -476,13 +476,13 @@ def showAssignment(request):
         c['previous_code'] = previous_code
         c['subjectyear'] = subjectyear
         return render(request,'assignment/showAssignment.html',c)
-    #except:
+    except:
         return HttpResponseRedirect('/subject/')
 
     #    return render(request,'assignment/showAssignment.html',c)
 @login_required()
 def previous_submissions(request):
-    #try:
+    try:
         assignmentid = request.GET.get('assignmentid')
         subjectyear = request.GET.get('subjectyear')
         user = request.user
@@ -503,13 +503,13 @@ def previous_submissions(request):
         c['submissions'] = submissions
         c['subjectyear'] = subjectyear
         return render(request,'assignment/previous_submissions.html',c)
-    #except:
+    except:
         return HttpResponseRedirect('/subject/')
 
 
 @login_required()
 def submission_files(request):
-    #try:
+    try:
         submissionid = request.POST.get('submissionid')
         submission = Submission.objects.get(pk=int(submissionid))
         assignment = submission.assignment
@@ -558,12 +558,12 @@ def submission_files(request):
         c['assignment'] = assignment
         c['verdict'] = submission.verdict
         return render(request,'assignment/submission_files.html',c)
-    #except:
+    except:
         return HttpResponseRedirect('/subject/')
 
 @login_required()
 def savecomment(request):
-    #try:
+    try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
         commenttext = request.POST.get('commenttext')
@@ -574,13 +574,13 @@ def savecomment(request):
         submission.save()
         messages.add_message(request, messages.INFO, 'Comment posted sucessfully...')
         return HttpResponseRedirect('/assignment/submission_files')
-    #except:
-        messages.add_message(request, messages.WARNING, 'SOme error occured..please #try again..')
+    except:
+        messages.add_message(request, messages.WARNING, 'SOme error occured..please try again..')
         return HttpResponseRedirect('/subject/')
 
 @login_required()
 def markcomment(request):
-    #try:
+    try:
         if not request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/subject/')
         submissionid = request.session.get('submissionid')
@@ -589,12 +589,12 @@ def markcomment(request):
         submission.save()
         messages.add_message(request, messages.INFO, 'Comment mark as read sucessfully...')
         return HttpResponseRedirect('/assignment/submission_files')
-    #except:
+    except:
         return HttpResponseRedirect('/subject/')
 
 @login_required()
 def submitcode(request):
-    #try:
+    try:
         assignmentid = request.POST.get('assignmentid')
         subjectyear = request.POST.get('subjectyear')
         code = request.POST.get('code')
@@ -717,60 +717,66 @@ def submitcode(request):
 
         c['combinedlist'] = zip(inputfiles,outputfiles,errorfiles)
         return render(request,'assignment/showAssignment.html',c)
-    #except:
+    except:
         return HttpResponseRedirect('/subject/')
 
 
 @login_required()
 def studentlist_for_assignment(request):
-    #try:
-        year = request.POST.get('year')
-        week_id = request.POST.get('week_id')
-        assignment_id = request.POST.get('assignment_id')
-        week = Week.objects.get(id=week_id)
-        assignment = Assignment.objects.filter(id=assignment_id)[0]
-        submissionlist = Submission.objects.filter(assignment=assignment).order_by('user','-datetime')
-        submission_list = []
-        year = int(year)
-        userids = []
-        for submission in submissionlist:
-            student = Student.objects.filter(user = submission.user)
-            if student:
-                student = student[0]
-                if int(submission.assignment.week.year) == int(year) and str(submission.user.groups.all()[0].name) == str('student') and int(submission.assignment.week.id) == int(week_id) and int(student.year) == int(year):
-                    submission_list.append(submission)
+    try:
+        if request.session['usertype'] == "faculty" or request.session['usertype'] == "admin":
+            year = request.POST.get('year')
+            week_id = request.POST.get('week_id')
+            assignment_id = request.POST.get('assignment_id')
+            week = Week.objects.get(id=week_id)
+            assignment = Assignment.objects.filter(id=assignment_id)[0]
+            submissionlist = Submission.objects.filter(assignment=assignment).order_by('user','-datetime')
+            submission_list = []
+            year = int(year)
+            userids = []
+            for submission in submissionlist:
+                student = Student.objects.filter(user = submission.user)
+                if student:
+                    student = student[0]
+                    if int(submission.assignment.week.year) == int(year) and str(submission.user.groups.all()[0].name) == str('student') and int(submission.assignment.week.id) == int(week_id) and int(student.year) == int(year):
+                        submission_list.append(submission)
 
-        c={}
-        c['submission_list'] = submission_list
-        c['assignment'] = assignment
-        c['week'] = week
-        return render(request,'assignment/student_submission.html',c)
-    #except:
+            c={}
+            c['submission_list'] = submission_list
+            c['assignment'] = assignment
+            c['week'] = week
+            return render(request,'assignment/student_submission.html',c)
+        else:
+            return HttpResponseRedirect('/subject/')
+    except:
         return HttpResponseRedirect('/assignment/showWeek')
 
 
 @login_required()
 def student_all_submission(request):
-    #try:
-        weekid = request.POST.get('weekid')
-        weekid = int(weekid)
-        week = Week.objects.get(id=weekid)
-        userid = request.POST.get('userid')
-        user = User.objects.get(id=int(userid))
-        userid = int(userid)
-        assignment_id= request.POST.get('assignmentid')
-        assignment_id = int(assignment_id)
-        assignment = Assignment.objects.get(id=assignment_id)
-        submissions = Submission.objects.filter(assignment=assignment,user=user).order_by('-datetime')
-        submission_list = []
-        for submission in submissions:
-            if submission.assignment.week.year == week.year:
-                submission_list.append(submission)
-        c={}
-        c['submission_list'] = submission_list
-        c['week'] = week
-        c['assignment'] = assignment
-        c['user'] = user
-        return render(request,'assignment/student_all_submission.html',c)
-    #except:
+    try:
+        if request.session['usertype'] == "faculty" or request.session['usertype'] == "admin":
+            weekid = request.POST.get('weekid')
+            weekid = int(weekid)
+            week = Week.objects.get(id=weekid)
+            userid = request.POST.get('userid')
+            user = User.objects.get(id=int(userid))
+            userid = int(userid)
+            assignment_id= request.POST.get('assignmentid')
+            assignment_id = int(assignment_id)
+            assignment = Assignment.objects.get(id=assignment_id)
+            submissions = Submission.objects.filter(assignment=assignment,user=user).order_by('-datetime')
+            submission_list = []
+            for submission in submissions:
+                if submission.assignment.week.year == week.year:
+                    submission_list.append(submission)
+            c={}
+            c['submission_list'] = submission_list
+            c['week'] = week
+            c['assignment'] = assignment
+            c['user'] = user
+            return render(request,'assignment/student_all_submission.html',c)
+        else:
+            return HttpResponseRedirect('/subject/')
+    except:
         return HttpResponseRedirect('/assignment/showWeek')

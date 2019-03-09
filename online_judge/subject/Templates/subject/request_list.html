@@ -14,7 +14,7 @@
     <div class="col s12">
     <div>
     {% if role == 'faculty'%}
-        {% if not req_list|length%}
+        {% if not request_list|length%}
                 <h5>
                 No Request list..
                 </h5>
@@ -33,7 +33,7 @@
             <tbody>
 
 
-                {% for r in req_list %}
+                {% for r in request_list %}
                     <tr>
                         <td><input type="hidden" value={{ r.pk }} name="id">
                         {{ r.student.user.username }}</td>
