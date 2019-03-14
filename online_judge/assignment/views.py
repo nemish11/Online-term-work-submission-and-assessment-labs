@@ -465,7 +465,6 @@ def showAssignment(request):
 
         submission = Submission.objects.filter(user = request.user,assignment = assignment).last()
         submission_files = Submission_files.objects.filter(submission = submission,type = 'codefile')
-
         previous_code = ''
         if submission_files:
             submission_files = submission_files[0]
@@ -575,7 +574,7 @@ def savecomment(request):
         messages.add_message(request, messages.INFO, 'Comment posted sucessfully...')
         return HttpResponseRedirect('/assignment/submission_files')
     except:
-        messages.add_message(request, messages.WARNING, 'SOme error occured..please try again..')
+        messages.add_message(request, messages.WARNING, 'Some error occured..please try again..')
         return HttpResponseRedirect('/subject/')
 
 @login_required()
@@ -725,15 +724,14 @@ def submitcode(request):
 def studentlist_for_assignment(request):
     try:
         if request.session['usertype'] == "faculty" or request.session['usertype'] == "admin":
-            year = request.POST.get('year')
-            week_id = request.POST.get('week_id')
-            assignment_id = request.POST.get('assignment_id')
+            week_id = request.GET.get('week_id')
+            assignment_id = request.GET.get('assignment_id')
             week = Week.objects.get(id=week_id)
+            year = week.year
             assignment = Assignment.objects.filter(id=assignment_id)[0]
             submissionlist = Submission.objects.filter(assignment=assignment).order_by('user','-datetime')
             submission_list = []
             year = int(year)
-            userids = []
             for submission in submissionlist:
                 student = Student.objects.filter(user = submission.user)
                 if student:
@@ -756,13 +754,15 @@ def studentlist_for_assignment(request):
 def student_all_submission(request):
     try:
         if request.session['usertype'] == "faculty" or request.session['usertype'] == "admin":
-            weekid = request.POST.get('weekid')
+
+            weekid = request.GET.get('weekid')
+            userid = request.GET.get('userid')
+            assignment_id= request.GET.get('assignmentid')
+
             weekid = int(weekid)
             week = Week.objects.get(id=weekid)
-            userid = request.POST.get('userid')
             user = User.objects.get(id=int(userid))
             userid = int(userid)
-            assignment_id= request.POST.get('assignmentid')
             assignment_id = int(assignment_id)
             assignment = Assignment.objects.get(id=assignment_id)
             submissions = Submission.objects.filter(assignment=assignment,user=user).order_by('-datetime')

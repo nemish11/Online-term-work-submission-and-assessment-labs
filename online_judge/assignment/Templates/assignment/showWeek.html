@@ -62,7 +62,6 @@
               <thead class="grey lighten-1">
                 <tr>
                   <th>Show Assignment</th>
-                  <th>Select Year</th>
                   <th>Show All Students</th>
                   <th>Delete Assignment</th>
                 </tr>
@@ -82,17 +81,18 @@
                       </div>
                     </form>
                   </td>
-
-                  <form action="/assignment/studentlist_for_assignment" method="POST" > {% csrf_token %}
+                  <td>
+                      <a href="/assignment/studentlist_for_assignment/?week_id={{week.id}}&assignment_id={{ assignment.id }}">All Student submissions </a>
+                  </td>
+                    <!--    <form action="/assignment/studentlist_for_assignment" method="GET" > {% csrf_token %}
 
                       <input type="hidden" name="assignment_id" value="{{ assignment.id }}" />
                       <input type="hidden" name="week_id" value="{{ week.id}}"/>
-                    <td>  <input type="number" name="year" min={{min_year}} max={{max_year}} value={{max_year}} required/>
-                    </td>
+
                     <td> <button class="buttonaslink" type="submit"  name="send">All Student</button>
                     </td>
                   </form>
-
+              -->
                     <form action = "/assignment/deleteAssignment" method="POST" > {% csrf_token %}
                       <div>
                         <input type="hidden" name="subjectyear" value="{{subjectyear}}" />

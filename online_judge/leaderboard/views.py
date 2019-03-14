@@ -224,11 +224,11 @@ def update_cache_week(request,subjectid,year):
 
         hash_key = str(year)+':'+str(subjectid)
         set_key = "rank:"+str(year)+':'+str(subjectid)
-        if r.exists(hash_key):
+        '''if r.exists(hash_key):
             r.expire(hash_key, 10)
         if r.exists(set_key):
-            r.expire(set_key, 10)
-
+            r.expire(set_key, 10)'''
+        r.flushall()
         return
     except:
         messages.add_message(request, messages.WARNING, 'Something wrong!!')

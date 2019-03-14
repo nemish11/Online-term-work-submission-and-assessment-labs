@@ -15,6 +15,7 @@
 	</script>
 
     <div class="col s12">
+        <a href="/assignment/backtoWeek/?subjectid={{assignment.week.subject.id}}&subjectyear={{week.year}}"> back to week </a>
         <h5>Week : {{ week.name}}</h5>
         <h5>Assignment : {{ assignment.title }}</h5>
 
@@ -38,7 +39,9 @@
                         <td>{{ submission.datetime }}</td>
                         <td>{{ submission.verdict }}</td>
                         <td>
-                            <form action = "/assignment/student_all_submission" method="POST" > {% csrf_token %}
+                            <a href="/assignment/student_all_submission/?weekid={{week.id}}&assignmentid={{ assignment.id }}&userid={{submission.user.id}}">Student's all submissions </a>
+
+                            <!--<form action = "/assignment/student_all_submission" method="GET" > {% csrf_token %}
                                 <div>
                                     <input type="hidden" name="weekid" value="{{week.id}}"/>
                                     <input type="hidden" name="assignmentid" value="{{assignment.id}}"/>
@@ -46,7 +49,7 @@
 
                                     <button type="submit" class="buttonaslink" name="button">All Submissions</button>
                                 </div>
-                            </form>
+                            </form>-->
                         </td>
                     </tr>
                 {% endfor %}

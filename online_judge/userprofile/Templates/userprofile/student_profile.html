@@ -12,37 +12,7 @@
          <script>
 				Materialize.toast('{{message}}', 3000);
 		  </script>
-    </div><!--<table class="highlight centered responsive-table col s8 m8 l8" >
-    <thead>
-      <tr>
-          <th>Role</th>
-          <th>username</th>
-          <th>first name</th>
-          <th>last name</th>
-          <th>Roll No</th>
-          <th>date of birth</th>
-          <th>emailId</th>
-          <th>phone no</th>
-          <th>Year</th>
-          <th> - </th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-              <td> Student </td>
-              <td>{{request.user.username}}</td>
-              <td>{{request.user.first_name}}</td>
-              <td>{{request.user.last_name}}</td>
-              <td>{{request.user.student.roll_no}}
-              <td>{{request.user.student.dob}}</td>
-              <td>{{request.user.email}}</td>
-              <td>{{request.user.student.phone_no}}</td>
-              <td>{{request.user.student.year}}</td>
-              <td><a href = "/userprofile/updateStudent">edit profile</a></td>
-          </tr>
-    </tbody>
-</table>
--->
+    </div>
      <div class="col s12">
         <ul class="collection with-header">
             <li class="collection-header"><h5>{{ request.user.username }}</h5></li>
@@ -55,7 +25,6 @@
             <li class="collection-item">Date of birth : <span class="secondary-content black-text">{{request.user.student.dob}}</span></li>
             <li class="collection-item">Phone NO : <span class="secondary-content black-text">{{request.user.student.phone_no}}</span></li>
             <li class="collection-item"><a href="/userprofile/updateStudent">Edit Profile</a></li>
-            <li class="collection-item"><a href="/userprofile/change_password">Change Password</a></li>
             <hr class="style13">
 
             <li class="collection-header"><h5> Submissions Details </h5></li>
@@ -65,7 +34,7 @@
 
             <li class="collection-header"><h5  > Submissions Graphs </h5></li>
             <li class="collection-item">
-                <div id="piechart" style="width: 600px; height: 500px;"></div>
+                <div id="piechart" style="width: 600px; height: 600px;"></div>
             </li>
         </ul>
      </div >
