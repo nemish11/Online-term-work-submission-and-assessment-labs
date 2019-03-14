@@ -12,29 +12,36 @@ from assignment.models import Week,Submission,Assignment,Assignment_files,Submis
 from datetime import datetime
 from online_judge.settings import *
 
-@login_required()
-def allstudents(request):
-    try:
-        #print(request.session.get('usertype'))
-        if request.session.get('usertype') == 'student':
-            return HttpResponseRedirect('/admin/')
-        c = {}
-        allstudents = Student.objects.all()
-        c['allstudents'] = allstudents
-        return render(request,'searchuser/allstudents.html',c)
-    except:
-        return HttpResponseRedirect('/subject/')
 
 @login_required()
-def selectedstudent(request):
+def sortby(request):
     try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
-        studentid = request.POST.get('studentid')
-        request.session['selectedstudentfp'] = studentid
-        return HttpResponseRedirect('/searchuser/fullprofile')
+        year = request.GET.get('selectedyear')
+
+        return HttpResponseRedirect('/searchuser/sortedstudent/?sortbyyear='+year)
     except:
-        messages.add_message(request, messages.WARNING, 'some error occured..please try again..!!')
+        messages.add_message(request, messages.WARNING, 'please enter a correct details..!!')
+        return HttpResponseRedirect('/searchuser/')
+
+
+@login_required()
+def sortedstudent(request):
+    try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        year = request.GET.get('sortbyyear')
+        students = Student.objects.filter(year = int(year))
+        c = {}
+        c['students'] = students
+        if len(students) <= 0:
+            messages.add_message(request, messages.INFO, 'No students in year '+year)
+        else:
+            messages.add_message(request, messages.INFO, 'below listed sorted student!!!')
+        return render(request,'searchuser/allstudents.html',c)
+    except:
+        messages.add_message(request, messages.WARNING, 'Some Error occured..please try again..!!')
         return HttpResponseRedirect('/searchuser/')
 
 @login_required()
@@ -42,7 +49,7 @@ def fullprofile(request):
     try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
-        studentid = request.session.get('selectedstudentfp')
+        studentid = request.GET.get('studentid')
         student = Student.objects.get(pk = int(studentid))
         c = {}
         all_submissions = Submission.objects.filter(user = student.user)
@@ -59,57 +66,23 @@ def fullprofile(request):
         messages.add_message(request, messages.WARNING, 'some error occured..please try again..!!')
         return HttpResponseRedirect('/searchuser/')
 
+
 @login_required()
 def allsubmissions(request):
     try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
-        studentid = request.session.get('selectedstudentfp')
+        studentid = request.GET.get('studentid')
         student = Student.objects.get(pk = int(studentid))
         c = {}
-        all_submissions = Submission.objects.filter(user = student.user)
+        all_submissions = Submission.objects.filter(user = student.user).order_by('assignment','-totalscore')
         c['submissions'] = all_submissions
+        c['studentid'] = studentid
+        c['year'] = student.year
+        c['username'] = student.user.username
         return render(request,'searchuser/all_submissions.html',c)
     except:
         return HttpResponseRedirect('/searchuser/')
-
-@login_required()
-def sortedstudent(request):
-    try:
-        if request.session.get('usertype') == 'student':
-            return HttpResponseRedirect('/admin/')
-        year = request.session.get('sortbyyear')
-        students = Student.objects.filter(year = int(year))
-        c = {}
-        c['students'] = students
-        messages.add_message(request, messages.INFO, 'below listed sorted student!!!')
-        return render(request,'searchuser/sortby.html',c)
-    except:
-        messages.add_message(request, messages.WARNING, 'Some Error occured..please try again..!!')
-        return HttpResponseRedirect('/searchuser/')
-
-@login_required()
-def sortby(request):
-    try:
-        if request.session.get('usertype') == 'student':
-            return HttpResponseRedirect('/admin/')
-        year = request.POST.get('selectedyear')
-        request.session['sortbyyear'] = year
-        return HttpResponseRedirect('/searchuser/sortedstudent')
-    except:
-        messages.add_message(request, messages.WARNING, 'please enter a correct details..!!')
-        return HttpResponseRedirect('/searchuser/')
-
-@login_required()
-def selectedsubmission(request):
-    try:
-        if request.session.get('usertype') == 'student':
-            return HttpResponseRedirect('/admin/')
-        submissionid = request.POST.get('submissionid')
-        request.session['submissionid'] = submissionid
-        return HttpResponseRedirect('/searchuser/submission_files')
-    except:
-        return HttpResponseRedirect('/subject/')
 
 
 @login_required()
@@ -117,7 +90,8 @@ def submission_files(request):
     try:
         if request.session.get('usertype') == 'student':
             return HttpResponseRedirect('/admin/')
-        submissionid = request.session.get('submissionid')
+        submissionid = request.GET.get('submissionid')
+        studentid = request.GET.get('studentid')
         submission = Submission.objects.get(pk=int(submissionid))
         assignment = submission.assignment
         total_inputfiles = assignment.total_inputfiles
@@ -127,7 +101,9 @@ def submission_files(request):
         c['totalscore'] = submission.totalscore
         c['submission'] = submission
         c['true'] = True
-
+        c['studentid'] = studentid
+        c['year'] = assignment.week.year
+        c['username'] = submission.user.username
         inputfiles = ["" for i in range(total_inputfiles)]
         outputfiles = ["" for i in range(total_inputfiles)]
         errorfiles = ["" for i in range(total_inputfiles)]
@@ -165,3 +141,44 @@ def submission_files(request):
         return render(request,'searchuser/submission_files.html',c)
     except:
         return HttpResponseRedirect('/subject/')
+
+
+@login_required()
+def allstudents(request):
+    try:
+        #print(request.session.get('usertype'))
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        c = {}
+        allstudents = Student.objects.all()
+        c['allstudents'] = allstudents
+        return render(request,'searchuser/allstudents.html',c)
+    except:
+        return HttpResponseRedirect('/subject/')
+
+'''@login_required()
+def selectedstudent(request):
+    try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        studentid = request.POST.get('studentid')
+        request.session['selectedstudentfp'] = studentid
+        return HttpResponseRedirect('/searchuser/fullprofile')
+    except:
+        messages.add_message(request, messages.WARNING, 'some error occured..please try again..!!')
+        return HttpResponseRedirect('/searchuser/')
+'''
+
+
+'''@login_required()
+def selectedsubmission(request):
+    try:
+        if request.session.get('usertype') == 'student':
+            return HttpResponseRedirect('/admin/')
+        submissionid = request.GET.get('submissionid')
+        request.session['submissionid'] = submissionid
+        return HttpResponseRedirect('/searchuser/submission_files')
+    except:
+        return HttpResponseRedirect('/subject/')
+'''
+

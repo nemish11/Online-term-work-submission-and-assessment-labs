@@ -20,43 +20,55 @@
     <div class="col s12">
         <h5>please fill details for sort the students..</h5>
 
-        <form action = "/searchuser/sortby" method="POST" > {% csrf_token %}
+        <form action = "/searchuser/sortby" method="GET" > {% csrf_token %}
             year : <input type = "number" name="selectedyear" min="2015" max="2099" required/>
                    <button type="submit" class="btn green lighten-2" value="submit">search</button>
         </form>
         <hr>
-        <h5>all students :</h5>
-        <table class="highlight centered responsive-table " >
-            <thead class="grey lighten-1">
-              <tr>
-                <th>No.</th>
-                <th>username</th>
-                <th>full name</th>
-                <th>email id</th>
-                <th>phone_no</th>
-                <th>year</th>
-                <th>Student profile</th>
-              </tr>
-            </thead>
-            <tbody>
-                {% for student in allstudents %}
-                    <tr>
-                      <td>{{student.id}}</td>
-                      <td>{{student.user.username}}</td>
-                      <td>{{student.user.first_name}} {{student.user.last_name}}</td>
-                      <td>{{student.user.email}}</td>
-                      <td>{{student.phone_no}}</td>
-                      <td>{{student.year}}</td>
-                      <td>
-                        <form action="/searchuser/selectedstudent" method="POST" > {% csrf_token %}
-                          <input type="hidden" name="studentid" value="{{student.id}}" />
-                          <button class="btn green lighten-2" type="submit">see profile</button>
-                        </form>
-                      </td>
-                    </tr>
+        {% if not students|length %}
+            {% if messages %}
+                {% for m in messages %}
+                    <script>
+                        Materialize.toast('{{ m }}', 3000);
+                    </script>
                 {% endfor %}
-            </tbody>
-        </table>
+            {% endif%}
+        {% else%}
+            <h5>all students :</h5>
+            <table class="highlight centered responsive-table " >
+                <thead class="grey lighten-1">
+                  <tr>
+                    <th>No.</th>
+                    <th>username</th>
+                    <th>full name</th>
+                    <th>email id</th>
+                    <th>phone_no</th>
+                    <th>year</th>
+                    <th>Student profile</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                          <td>{{student.id}}</td>
+                          <td>{{student.user.username}}</td>
+                          <td>{{student.user.first_name}} {{student.user.last_name}}</td>
+                          <td>{{student.user.email}}</td>
+                          <td>{{student.phone_no}}</td>
+                          <td>{{student.year}}</td>
+                          <td>
+                              <a href="/searchuser/fullprofile/?studentid={{student.id}}">See Profile </a>
+
+                            <!--<form action="/searchuser/selectedstudent" method="POST" > {% csrf_token %}
+                              <input type="hidden" name="studentid" value="{{student.id}}" />
+                              <button class="btn green lighten-2" type="submit">see profile</button>
+                            </form>-->
+                          </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

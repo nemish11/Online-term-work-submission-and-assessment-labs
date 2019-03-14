@@ -1,3 +1,4 @@
+
 {%load static%}
 <html>
 <head>
@@ -18,9 +19,16 @@
 </head>
 
 <body>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems, options);
+  });
+
+</script>
 		<nav>
 				<div class="nav-wrapper teal ">
-						<ul id="nav-mobile" class="right">
+						<ul id="nav-mobile" class="right  hide-on-med-and-down">
 							 <li><a href="/subject/all_subject" class="waves-effect waves-light">Home</a> </li>
 							 <li><a href="/practice/" class="waves-effect waves-light">Practice</a></li>
 							 {% if request.user.is_superuser %}
@@ -43,11 +51,47 @@
 								<li><a href="/userprofile/profile" class="waves-effect waves-light ">Profile</a></li>
 								<li><a href="/usermodule/logout" class="waves-effect waves-light">Logout</a> </li>
 						</ul>
+
+
 				</div>
 		</nav>
 
+	<!--<ul class="sidenav" id="mobile-demo">
+							<li><a href="/subject/all_subject" class="waves-effect waves-light">Home</a> </li>
+							 <li><a href="/practice/" class="waves-effect waves-light">Practice</a></li>
+							 {% if request.user.is_superuser %}
+									 <li><a href="/subject/add_subject" class="waves-effect waves-light">Add subject</a> </li>
+									 <li><a href="/usermodule/add_faculty" class="waves-effect waves-light">Add Faculty</a> </li>
+									 <li><a href="/usermodule/add_student" class="waves-effect waves-light ">Add Student</a></li>
+									 <li><a href="/searchuser/" class="waves-effect waves-light">Search user</a></li>
+									 <li><a href="/userprofile/change_password_by_faculty" class="waves-effect waves-light">Change user's password </a></li>
+							 {% endif %}
+									 {% ifequal request.session.usertype "faculty" %}
+											 <li><a href="/subject/request_list" class="waves-effect waves-light ">Request List</a></li>
+											 <li><a href="/searchuser/" class="waves-effect waves-light">Search user</a></li>
+									 {% endifequal %}
+									 {% ifequal request.session.usertype "student" %}
+											 <li><a href="/subject/request_subject" class="waves-effect waves-light ">Request Subject</a></li>
+											 <li><a href="/userprofile/shownotifications" class="waves-effect waves-light ">Notifications</a></li>
+									 {% endifequal %}
 
- {% block body %}
- {% endblock %}
+
+								<li><a href="/userprofile/profile" class="waves-effect waves-light ">Profile</a></li>
+								<li><a href="/usermodule/logout" class="waves-effect waves-light">Logout</a> </li>
+						</ul>-->
+	{% block body %}
+	{% endblock %}
+
+	<footer class="page-footer teal">
+		<div class="container">
+			<div class="row center">
+				<div class="col">
+					<div><h5 class="center-align">Developed By</h5></div>
+					<div style="font-size: 24"><h5 class="center-align">Nemish Sangani & Chintan Rokad</h5></div>
+
+				</div>
+			</div>
+		</div>
+	</footer>
 
 </body></html>

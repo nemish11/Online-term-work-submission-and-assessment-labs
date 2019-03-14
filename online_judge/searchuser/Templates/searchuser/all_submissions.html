@@ -1,34 +1,39 @@
 {% extends "userprofile/base.html" %}
 {% block body%}
 <div class="row container z-depth-3">
+    <div class="col s12">
+        <a href = "/searchuser/sortedstudent/?sortbyyear={{ year }}" >back to student list</a> >>
+        <a href="/searchuser/fullprofile/?studentid={{studentid}}">back to Profile </a>
+    </div>
     <div class="col s12 m12 l12">
+
     <h5>all submissions :</h5>
     <table class="highlight centered responsive-table col s12 m12 l12" >
         <thead class="grey lighten-1">
           <tr>
-              <th>submissionID</th>
-              <th>subject</th>
-              <th>totalscore</th>
-              <th>userscore</th>
-              <th>date and time</th>
-              <th>verdict</th>
-              <th>isrunning</th>
+              <th>Index</th>
+              <th>SubmissionID</th>
+              <th>Subject</th>
+              <th>Assignment</th>
+              <th>Totalscore</th>
+              <th>Userscore</th>
+              <th>Date and time</th>
+              <th>Verdict</th>
               <th>In details</th>
           </tr>
         </thead>
         <tbody>
           {% for submission in submissions %}
             <tr>
-              <form action="/searchuser/selectedsubmission" method="POST" > {% csrf_token %}
-                  <input type="hidden" name="submissionid" value="{{submission.id}}" />
+                  <td>{{ forloop.counter }}</td>
                   <td>{{submission.id}}</td>
                   <td>{{submission.assignment.subject.name}}</td>
+                  <td>{{submission.assignment.title}}</td>
                   <td>{{submission.assignment.totalscore}}</td>
                   <td>{{submission.totalscore}}</td>
                   <td>{{submission.datetime}}</td>
                   <td>{{submission.verdict}}</td>
-                  <td>{{submission.isrunning}}</td>
-                  <td><button class="btn green lighten-2" type="submit">see details</button></td>
+                  <td><a href="/searchuser/submission_files/?submissionid={{submission.id}}&studentid={{studentid}}">See Details </a></td>
               </form>
               </tr>
          {% endfor %}

@@ -63,7 +63,7 @@ def flush_RedisDB(request):
 def initialize_leaderboard_cache(request):
     try:
         r = connection()
-        EXPIRE_TIME = 120
+        EXPIRE_TIME = 300
         subjectid = request.GET.get('subjectid')
         subject = Subject.objects.get(id=subjectid)
         year = request.GET.get('year')
@@ -222,9 +222,9 @@ def update_cache_week(request,subjectid,year):
     try:
         r = connection()
 
-        hash_key = str(year)+':'+str(subjectid)
+        '''hash_key = str(year)+':'+str(subjectid)
         set_key = "rank:"+str(year)+':'+str(subjectid)
-        '''if r.exists(hash_key):
+        if r.exists(hash_key):
             r.expire(hash_key, 10)
         if r.exists(set_key):
             r.expire(set_key, 10)'''

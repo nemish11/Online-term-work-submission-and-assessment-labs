@@ -91,14 +91,35 @@
     </div>
 
     <div class="col s12">
-        <a href="/searchuser/allsubmissions" >back to all submission</a>
+        <a href = "/searchuser/sortedstudent/?sortbyyear={{ year }}" >back to student list</a> >>
+        <a href="/searchuser/fullprofile/?studentid={{ studentid }}">back to Profile </a> >>
+        <a href="/searchuser/allsubmissions/?studentid={{ studentid }}" >back to all submission</a>
 
-        <p style='color:red;'>{{message}}</p>
-        <h5>Title :</h5><p>{{assignment.title}}</p>
-        <h5>Question</h5> <p>{{assignment.question}}</p>
+        <h5>User {{ username }}</h5>
+        <hr>
+        <h4 class="title">{{assignment.title}}</h4>
+        <hr>
+            <h5 class="heading">question </h5><p class="simple">{{assignment.question}}</p>
+        <hr>
+            <h5 class="heading">constraint </h5> <p>{{assignment.constraint}}</p>
+        <hr>
+            <h5 class="heading">input format</h5><p> {{assignment.inputformat}}</p>
+        <hr>
+            <h5 class="heading">output format</h5><p>{{assignment.outputformat}}</p>
+        <hr>
+            <h5 class="heading">sample input</h5><p>{{assignment.sampleinput}}</p>
+        <hr>
+            <h5 class="heading">sample output</h5><p>{{assignment.sampleoutput}}</p>
+        <hr>
+            <h5 class="heading">explanation</h5><p>{{assignment.explanation}}</p>
+        <hr>
 
 
-            <h5>Your Code</h5>
+
+
+
+
+        <h5>Your Code</h5>
 
         <textarea class="codemirror-textarea" name = "code" value="{{previous_code}}" onload="adjustHeight(this)">{{previous_code}}</textarea><br/>
 
